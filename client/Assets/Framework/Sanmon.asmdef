@@ -1,0 +1,18 @@
+{
+    "name": "Sanmon",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f51ebe6a0ceec4240a699833d6309b23",
+        "GUID:2a81c6962524d424a8ef5072bd3b0fa0",
+        "GUID:eda24d0aab54f5b438658d4dd8c9b96a"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

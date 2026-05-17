@@ -1,0 +1,17 @@
+{
+    "name": "Game.Console",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9b8bbe395183ae145ac2c52074562df4",
+        "GUID:fb754146c15414e40a789095f5212cbb"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
