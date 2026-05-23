@@ -6,7 +6,7 @@ using Sanmon.Module;
 using Sanmon.Note;
 using Sanmon.Syztem;
 
-namespace Game.Logic
+namespace GameScripts
 {
     public static class Game
     {
