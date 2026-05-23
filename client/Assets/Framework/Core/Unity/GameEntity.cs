@@ -11,6 +11,7 @@ namespace Sanmon.Core
         IGetModule
     {
         private readonly HashSet<EntityBase> mEntities = new HashSet<EntityBase>();
+        private readonly List<EntityBase> mRemoveCache = new List<EntityBase>();
         
         internal void Init()
         {
@@ -34,20 +35,23 @@ namespace Sanmon.Core
         public void Recycle<T>(T entity) where T : EntityBase
         {
             entity.Clear();
-            mEntities.Remove(entity);
+            mRemoveCache.Add(entity);
         }
         
         public void Recycle<T>(IEnumerable<T> entity) where T : EntityBase
         {
             foreach (var e in entity)
             {
-                mEntities.Remove(e);
+                mRemoveCache.Add(e);
             }
         }
         
         internal void OnUpdate(float dt)
         {
-            
+            foreach (var e in mEntities)
+            {
+                e.Update(dt);
+            }
         }
 
         internal void OnLateUpdate(float dt)

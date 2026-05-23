@@ -15,16 +15,22 @@ namespace Game.Config
 public partial class Tables
 {
     public GameGlobal GameGlobal {get; }
+    /// <summary>
+    /// 实体效果-100
+    /// </summary>
+    public Logic.TbEffect TbEffect {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
         GameGlobal = new GameGlobal(loader("gameglobal"));
+        TbEffect = new Logic.TbEffect(loader("logic_tbeffect"));
         ResolveRef();
     }
     
     private void ResolveRef()
     {
         GameGlobal.ResolveRef(this);
+        TbEffect.ResolveRef(this);
     }
 }
 
