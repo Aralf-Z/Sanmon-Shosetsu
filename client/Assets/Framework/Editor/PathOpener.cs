@@ -1,16 +1,29 @@
 using System.IO;
 using UnityEditor;
+using UnityEngine;
 
 namespace Framework.Editor
 {
-    public class PathOpener
+    internal class PathOpener
     {
-        private const string kTitle = "Path";
+        private static readonly string projectPath = Directory.GetParent(Directory.GetParent(Application.dataPath)!.FullName)!.FullName;
         
-        [MenuItem("Path/Open Save Path")]
+        [MenuItem("Path/表格配置")]
+        public static void OpenTableConfigPath()
+        {
+            Application.OpenURL("file://" + Path.Combine(projectPath, "config"));
+        }
+        
+        [MenuItem("Path/表格")]
+        public static void OpenTablePath()
+        {
+            Application.OpenURL("file://" + Path.Combine(projectPath, "config/_tables"));
+        }
+        
+        [MenuItem("Path/存档")]
         public static void OpenSavePath()
         {
-            
+            Application.OpenURL("file://" + Application.persistentDataPath);
         }
     }
 }
