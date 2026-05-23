@@ -1,9 +1,9 @@
 {
-    "name": "Game",
+    "name": "Game.Logic",
     "rootNamespace": "",
     "references": [
         "GUID:9b8bbe395183ae145ac2c52074562df4",
-        "GUID:75fd842399e2c824e98d9de4ea0952b4"
+        "GUID:eda24d0aab54f5b438658d4dd8c9b96a"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
