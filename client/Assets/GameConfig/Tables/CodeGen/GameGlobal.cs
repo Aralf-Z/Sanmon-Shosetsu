@@ -31,7 +31,7 @@ public partial class GameGlobal
     /// <summary>
     /// 版本
     /// </summary>
-     public vector4 Version => _data.Version;
+     public UnityEngine.Vector4 Version => _data.Version;
     
     public void ResolveRef(Tables tables)
     {

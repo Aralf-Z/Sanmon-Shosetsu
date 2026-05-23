@@ -17,7 +17,7 @@ public sealed partial class Global : Luban.BeanBase
 {
     public Global(JSONNode _buf) 
     {
-        { if(!_buf["version"].IsObject) { throw new SerializationException(); }  Version = global::Game.Config.vector4.Deserializevector4(_buf["version"]);  }
+        { if(!_buf["version"].IsObject) { throw new SerializationException(); }  Version = ExternalTypeUtil.NewVector4(global::Game.Config.vector4.Deserializevector4(_buf["version"]));  }
     }
 
     public static Global DeserializeGlobal(JSONNode _buf)
@@ -28,7 +28,7 @@ public sealed partial class Global : Luban.BeanBase
     /// <summary>
     /// 版本
     /// </summary>
-    public readonly vector4 Version;
+    public readonly UnityEngine.Vector4 Version;
    
     public const int __ID__ = 2135814083;
     public override int GetTypeId() => __ID__;
