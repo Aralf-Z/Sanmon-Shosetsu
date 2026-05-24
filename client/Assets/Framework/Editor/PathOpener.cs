@@ -8,6 +8,12 @@ namespace Framework.Editor
     {
         private static readonly string projectPath = Directory.GetParent(Directory.GetParent(Application.dataPath)!.FullName)!.FullName;
         
+        [MenuItem("Path/项目根目录")]
+        public static void OpenProjectPath()
+        {
+            Application.OpenURL("file://" + projectPath);
+        }
+        
         [MenuItem("Path/表格配置")]
         public static void OpenTableConfigPath()
         {
