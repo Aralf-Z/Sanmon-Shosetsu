@@ -14,7 +14,7 @@ namespace GameConsole.GameUI
             public int alternativeCommandCount = 8;
             public bool outputWithTime = true;
             public bool recordFailedCommand = true;
-            public bool receiveEngineMessage = true;
+            public bool receiveEngineMessage = false;
             public bool outputVmExceptionStack = false;
 
             public float infoShowDelay = .5f;

@@ -10,6 +10,7 @@ namespace GameConsole.Extension
     {
         public Command Command { get; private set; }
         public bool IsCheatIgnore { get; private set; }
+        public string Alias { get; private set; }
         public IReadOnlyList<ParamDefine> ParameterDefines => mParameterDefines;
         public IReadOnlyList<ParamInfo> ParameterInfos => mParameterInfos;
         public IReadOnlyList<MacroAttribute> Macro => mMacro;
@@ -28,22 +29,24 @@ namespace GameConsole.Extension
                 {
                     case ParamDefineAttribute paramDefine: HandleParamDefines(paramDefine); break;
                     case CheatIgnoreAttribute cheatIgnore: HandleCheatIgnore(cheatIgnore); break;
-                    case ParamAliasAttribute alias: HandleParamInfos(alias, command.methodInfo); break;
+                    case MethodAliasAttribute alias: HandleAliasInfos(alias, command.methodInfo); break;
                     case MacroAttribute macro: HandleMacro(macro); break;
                     case CommandAttribute cmd: break;
                     default: Debug.Log($"attribute {attribute.GetType().FullName} is unhandleable."); break;
                 }
             }
             
-            if(mParameterInfos == null) HandleParamInfos(null, command.methodInfo);
+            if(mParameterInfos == null) HandleAliasInfos(null, command.methodInfo);
         }
 
-        private void HandleParamInfos(ParamAliasAttribute alias, MethodInfo methodInfo)
+        private void HandleAliasInfos(MethodAliasAttribute alias, MethodInfo methodInfo)
         {
             var @params = methodInfo.GetParameters();
-
+            
+            Alias = alias?.methodAlias ?? methodInfo.Name;
             mParameterInfos = new();
-            if (alias == null)
+            
+            if (alias?.ParamAlias == null)
             {
                 foreach (var paramInfo in @params)
                 {
@@ -56,7 +59,7 @@ namespace GameConsole.Extension
                 for (var i = 0; i < @params.Length; i++)
                 {
                     var paramInfo = @params[i];
-                    var aliasName = alias.alias[i];
+                    var aliasName = alias.ParamAlias[i];
                     mParameterInfos.Add(new ParamInfo(paramInfo.Name,  aliasName, paramInfo.ParameterType
                         , paramInfo.HasDefaultValue ? paramInfo.DefaultValue?.ToString() : null));
                 }
@@ -90,6 +93,7 @@ namespace GameConsole.Extension
 
         private void HandleMacro(MacroAttribute attribute)
         {
+            //todo cheat macro
             mMacro = new();
         }
     }

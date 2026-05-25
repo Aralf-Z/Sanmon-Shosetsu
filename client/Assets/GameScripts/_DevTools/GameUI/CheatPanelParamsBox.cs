@@ -14,7 +14,15 @@ namespace GameConsole.GameUI
         private Action<Command, string> mOnSubmitAct;
         private SimplePool<CheatPanelParam> mParamPool;
         private CommandWrapper mCommandWrapper;
-        
+
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                Hide();
+            }
+        }
+
         public void Init(Action<Command, string> onSubmit)
         {
             mOnSubmitAct = onSubmit;

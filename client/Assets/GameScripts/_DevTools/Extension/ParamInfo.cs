@@ -3,23 +3,25 @@ using System.Collections.Generic;
 
 namespace GameConsole.Extension
 {
-    public class ParamAliasAttribute: Attribute
+    public class MethodAliasAttribute: Attribute
     {
-        public IReadOnlyList<string> alias;
+        public readonly string methodAlias;
+        public IReadOnlyList<string> ParamAlias => mParamAlias;
 
-        private string[] mAlias;
+        private readonly string[] mParamAlias;
 
         /// <summary>
         /// 字段信息
         /// </summary>
-        /// <param name="alias">
-        /// 别名，按顺序以"|"分隔 <para> 注意：如果一定要填，就要对齐所有的参数，不然会解析错位 </para></param>
-        public ParamAliasAttribute(string alias)
+        /// <param name="methodAlias"> 方法别名 </param>
+        /// <param name="paramAlias"> 参数别名，按顺序以"|"分隔，要对齐所有的参数，不然会解析错位 </param>
+        public MethodAliasAttribute(string methodAlias, string paramAlias = null)
         {
-            mAlias = string.IsNullOrEmpty(alias) ? new string[]{} : alias.Split('|');
+            this.methodAlias = methodAlias;
+            mParamAlias = string.IsNullOrEmpty(paramAlias) ? null : paramAlias.Split('|');
         }
     }
-    
+
     public class ParamInfo
     {
         public readonly string name;

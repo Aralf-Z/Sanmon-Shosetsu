@@ -4,6 +4,6 @@ namespace GameConsole.Implementor
 {
     public static class DefaultProperty
     {
-       
+        
     }
-}   
+}

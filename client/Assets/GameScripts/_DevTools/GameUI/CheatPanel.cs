@@ -43,11 +43,19 @@ namespace GameConsole.GameUI
                     .OrderBy(x => x.Name)
                     .ToDictionary(x => $"{x.tag}_{x.name}_{x.description}", c => new CommandWrapper(c));
 
-                mCommandByTag = mCommandMap.Values
-                    .GroupBy(cw => cw.Command.tag)
-                    .ToDictionary(
-                        g => string.IsNullOrEmpty(g.Key) ? kAllTag : g.Key,
-                        g => g.ToList());
+                mCommandByTag = new Dictionary<string, List<CommandWrapper>>()
+                {
+                    [kAllTag] = new (),
+                };
+                foreach (var cw in mCommandMap.Values)
+                {
+                    var tagName = string.IsNullOrEmpty(cw.Command.tag) ? kAllTag : cw.Command.tag;
+                    
+                    if (mCommandByTag.TryGetValue(tagName, out var commandList))
+                        commandList.Add(cw);
+                    else
+                        mCommandByTag.Add(tagName, new List<CommandWrapper>(){cw});
+                }
 
                 mCheatPool = new SimplePool<CheatPanelCheat>(cheatTemplate, x => x.Init(OnClickSubmit));
                 mTaggerPool = new SimplePool<Tagger>(singleTagger, x => x.Init(OnClickTagger));
@@ -74,6 +82,7 @@ namespace GameConsole.GameUI
         private void OnDisable()
         {
             submenuBox.Hide();
+            paramsBox.Hide();
         }
         
         public void SetConsole(ConsoleController<LogType> console)
@@ -171,8 +180,6 @@ namespace GameConsole.GameUI
         {
             //todo 分析采用什么模式、记录历史等等
             
-            Debug.Log($"执行命令 {commandWrapper.Command.name}");
-
             if (commandWrapper.ParameterDefines.Count > 0)
             {
                 submenuBox.Show(commandWrapper);

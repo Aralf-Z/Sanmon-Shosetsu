@@ -10,7 +10,6 @@ namespace GameConsole.GameUI
 {
     public class CheatPanelCheat : MonoBehaviour
     , IPointerEnterHandler
-    , IPointerExitHandler
     {
         [SerializeField] private Button submitBtn;
         [SerializeField] private Text nameText;
@@ -32,7 +31,7 @@ namespace GameConsole.GameUI
         public void SetCommand(CommandWrapper commandWrapper)
         {
             CommandWrapper = commandWrapper;
-            nameText.text = commandWrapper.Command.name;
+            nameText.text = commandWrapper.Alias;
         }
 
         private void OnSubmit()
@@ -47,18 +46,16 @@ namespace GameConsole.GameUI
             if (mTimer <= 0f)
             {
                 info.Show(this);
+                mTimer = float.MaxValue;
             }
         }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
-            mTimer = Config.InfoShowDelay;
-        }
-
-
-        public void OnPointerExit(PointerEventData eventData)
-        {
-            info.TryHide();
+            if (Config.ShowInfo)
+            {
+                mTimer = Config.InfoShowDelay;
+            }
         }
     }
 }

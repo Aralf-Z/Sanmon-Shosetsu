@@ -25,6 +25,14 @@ namespace GameConsole.GameUI
         private CommandWrapper mCommandWrapper;
         private Dictionary<Command, int> mCommandPage = new ();
         
+        private void Update()
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                Hide();
+            }
+        }
+        
         public void Init(Action<Command, string> onSubmit)
         {
             mOnSubmit = onSubmit;
@@ -49,15 +57,7 @@ namespace GameConsole.GameUI
         {
             gameObject.SetActive(false);
         }
-
-        private void Update()
-        {
-            if (Input.GetMouseButtonDown(1))
-            {
-                Hide();
-            }
-        }
-
+        
         private void OnSubmit(string param)
         {
             mOnSubmit?.Invoke(mCommandWrapper.Command, param);
