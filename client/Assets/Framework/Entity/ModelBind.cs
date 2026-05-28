@@ -2,7 +2,7 @@ using System;
 using Sanmon.Core;
 using UnityEngine;
 
-namespace Sanmon.Entity
+namespace Sanmon.Entities
 {
     public class ModelBind: MonoBehaviour
         , IGetEntity

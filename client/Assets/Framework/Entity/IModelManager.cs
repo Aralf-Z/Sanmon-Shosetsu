@@ -1,4 +1,4 @@
-namespace Sanmon.Entity
+namespace Sanmon.Entities
 {
     public abstract class ModelManager: ComponentBase
     {

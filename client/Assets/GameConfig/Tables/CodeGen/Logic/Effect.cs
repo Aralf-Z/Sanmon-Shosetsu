@@ -19,6 +19,7 @@ public sealed partial class Effect : Luban.BeanBase
     {
         { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
         { if(!_buf["order"].IsNumber) { throw new SerializationException(); }  Order = _buf["order"]; }
+        { if(!_buf["parameters"].IsObject) { throw new SerializationException(); }  Parameters = global::Game.Config.Logic.EffectParamBase.DeserializeEffectParamBase(_buf["parameters"]);  }
     }
 
     public static Effect DeserializeEffect(JSONNode _buf)
@@ -34,12 +35,14 @@ public sealed partial class Effect : Luban.BeanBase
     /// 执行序列
     /// </summary>
     public readonly int Order;
+    public readonly Logic.EffectParamBase Parameters;
    
     public const int __ID__ = 444811873;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {
+        Parameters?.ResolveRef(tables);
     }
 
     public override string ToString()
@@ -47,6 +50,7 @@ public sealed partial class Effect : Luban.BeanBase
         return "{ "
         + "id:" + Id + ","
         + "order:" + Order + ","
+        + "parameters:" + Parameters + ","
         + "}";
     }
 }

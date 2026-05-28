@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Sanmon.Entity;
+using Sanmon.Entities;
 using UnityEngine;
 
 namespace Sanmon.Core
@@ -10,8 +10,8 @@ namespace Sanmon.Core
     public class GameEntity : MonoBehaviour,
         IGetModule
     {
-        private readonly HashSet<EntityBase> mEntities = new HashSet<EntityBase>();
-        private readonly List<EntityBase> mRemoveCache = new List<EntityBase>();
+        private readonly HashSet<Entity> mEntities = new HashSet<Entity>();
+        private readonly List<Entity> mRemoveCache = new List<Entity>();
         
         internal void Init()
         {
@@ -23,22 +23,25 @@ namespace Sanmon.Core
             
         }
         
-        //todo 场景中被标记为Entity时可能需要一个注册接口
-        
-        public T Require<T>() where T : EntityBase, new ()
+        public Entity Require()
         {
-            var en = new T();
-            mEntities.Add(en);
+            var en = new Entity();
+            Register(en);
             return en;
         }
 
-        public void Recycle<T>(T entity) where T : EntityBase
+        public void Register(Entity entity)
+        {
+            mEntities.Add(entity);
+        }
+        
+        public void Recycle(Entity entity)
         {
             entity.Clear();
             mRemoveCache.Add(entity);
         }
         
-        public void Recycle<T>(IEnumerable<T> entity) where T : EntityBase
+        public void Recycle(IEnumerable<Entity> entity)
         {
             foreach (var e in entity)
             {
@@ -56,7 +59,12 @@ namespace Sanmon.Core
 
         internal void OnLateUpdate(float dt)
         {
+            foreach (var e in mRemoveCache)
+            {
+                mEntities.Remove(e);
+            }
             
+            mRemoveCache.Clear();
         }
 
         internal void OnFixedUpdate(float dt)

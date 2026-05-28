@@ -1,8 +1,8 @@
-namespace Sanmon.Entity
+namespace Sanmon.Entities
 {
     public abstract class ComponentBase
     {
-        public EntityBase Host { get; internal set; }
+        public Entity Host { get; internal set; }
         
         /// <summary>
         /// 被添加时

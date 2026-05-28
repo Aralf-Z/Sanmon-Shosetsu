@@ -1,6 +1,23 @@
 [
   {
-    "id": 100111222,
-    "order": 1
+    "id": 100000001,
+    "order": 10,
+    "parameters": {
+      "$type": "EffectAttack"
+    }
+  },
+  {
+    "id": 100000002,
+    "order": 5,
+    "parameters": {
+      "$type": "EffectHurt"
+    }
+  },
+  {
+    "id": 100000003,
+    "order": 2,
+    "parameters": {
+      "$type": "EffectInputMove"
+    }
   }
 ]

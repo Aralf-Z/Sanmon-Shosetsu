@@ -3,7 +3,7 @@ using Sanmon.Core;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Sanmon.Entity
+namespace Sanmon.Entities
 {
     public class WorldModel: ComponentBase
         , IGetModule
@@ -41,6 +41,18 @@ namespace Sanmon.Entity
             }
             
             Go.name = name;
+            Bind = Go.AddComponent<ModelBind>();
+            Bind.Bind(this);
+            Evt_OnLoaded?.Invoke();
+        }
+        
+        public void SetModel(GameObject go, string newName = null)
+        {
+            Go = go;
+            if (!string.IsNullOrEmpty(newName))
+            {
+                Go.name = name =  newName;
+            }
             Bind = Go.AddComponent<ModelBind>();
             Bind.Bind(this);
             Evt_OnLoaded?.Invoke();

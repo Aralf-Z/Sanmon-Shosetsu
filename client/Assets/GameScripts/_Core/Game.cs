@@ -10,13 +10,10 @@ namespace GameScripts
 {
     public static class Game
     {
-        private class MyGame: IGetModule
-        , IGetEntity
-        , IGetSystem
-        , IGetNote
-        {
-            
-        }
+        private class MyGame : IGetModule
+            , IGetEntity
+            , IGetSystem
+            , IGetNote { }
         
         private static readonly MyGame game = new MyGame();
 
@@ -29,6 +26,8 @@ namespace GameScripts
         public static GameSystem Systems => game.System();
 
         public static GameNote Notes => game.Note();
+        
+        public static GameEntity Entity => game.Entity();
         
         public static T Sys<T>() where T: SystemBase => Systems.Get<T>();
         

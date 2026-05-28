@@ -1,31 +1,27 @@
 using System;
 using System.Collections.Generic;
 using Sanmon.Utility.Set;
-using UnityEngine;
-using UnityEngine.PlayerLoop;
 
-namespace Sanmon.Entity
+namespace Sanmon.Entities
 {
-    public abstract class EntityBase
+    public class Entity
     {
         internal readonly Dictionary<Type, ComponentBase> mComponents = new();
         internal readonly DualBufferSet<EffectBase> mEffects = new();
         
         public IReadOnlyCollection<ComponentBase> Components => mComponents.Values;
-        
-        protected internal abstract string Tag { get; set; }
 
-        protected internal virtual void Update(float dt)
+        protected internal void Update(float dt)
         {
             
         }
         
-        protected internal virtual void LateUpdate(float dt)
+        protected internal void LateUpdate(float dt)
         {
             
         }
         
-        protected internal virtual void FixedUpdate(float dt)
+        protected internal void FixedUpdate(float dt)
         {
             mEffects.Update(dt);
         }

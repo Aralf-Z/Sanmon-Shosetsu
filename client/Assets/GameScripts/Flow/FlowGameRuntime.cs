@@ -1,6 +1,7 @@
 using System;
 using Sanmon.Core;
 using Sanmon.Helper;
+using UnityEngine.SceneManagement;
 
 namespace GameScripts
 {
@@ -15,23 +16,17 @@ namespace GameScripts
 
         protected override void Enter()
         {
-            mTimer = 5f;
-            Logger.LogInfo($"Enter game at {DateTime.Now:HH:mm:ss}", "flow");
+            SceneManager.LoadScene("GameRuntime");
         }
 
         protected override void Check(float dt)
         {
-            mTimer -= dt;
-            if (mTimer <= 0f)
-            {
-                Logger.LogInfo($"Game is running. Ticked at {DateTime.Now:HH:mm:ss}", "flow");
-                mTimer = 5f;
-            }
+            
         }
 
         protected override void Exit()
         {
-            Logger.LogInfo($"Exit game at {DateTime.Now:HH:mm:ss}", "flow");
+            
         }
     }
 }

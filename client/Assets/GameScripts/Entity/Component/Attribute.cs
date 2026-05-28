@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Sanmon.Entity;
+using Sanmon.Entities;
 using Sanmon.Utility.Value;
 
 namespace GameScripts
@@ -15,9 +15,11 @@ namespace GameScripts
         
         public SumValue this[string name] => mAttri.GetValueOrDefault(name, SumValue.Default);
 
-        public void AddValue(string name, float value)
+        public SumValue AddValue(string name, float value)
         {
-            mAttri.Add(name, new SumValue(value));
+            var sum = new SumValue(value);
+            mAttri.Add(name, sum);
+            return sum;
         }
         
         public void RemoveValue(string name)
