@@ -11,6 +11,7 @@
 /client/Builds/
 /client/Logs/
 /client/UserSettings/
+/client/Assets/Test
 
 *.log
 

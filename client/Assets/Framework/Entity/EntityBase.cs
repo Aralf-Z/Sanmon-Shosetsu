@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Sanmon.Utility.Set;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
 
@@ -8,8 +9,7 @@ namespace Sanmon.Entity
     public abstract class EntityBase
     {
         internal readonly Dictionary<Type, ComponentBase> mComponents = new();
-        internal readonly List<HashSet<EffectBase>> mEffects = new();
-        private readonly Dictionary<int, List<EffectBase>> mRemovedEffectCache = new();
+        internal readonly DualBufferSet<EffectBase> mEffects = new();
         
         public IReadOnlyCollection<ComponentBase> Components => mComponents.Values;
         
@@ -27,19 +27,7 @@ namespace Sanmon.Entity
         
         protected internal virtual void FixedUpdate(float dt)
         {
-            // for (var i = 0; i < mEffects.Count; i++)
-            // {
-            //     var effects = mEffects[i];
-            //     foreach (var effect in effects)
-            //     {
-            //         effect.Update(dt);
-            //         if (effect.Status is EmEffectStatus.Finished)
-            //         {
-            //             if(mRemovedEffectCache)
-            //             mRemovedEffectCache.Add();
-            //         }
-            //     }
-            // }
+            mEffects.Update(dt);
         }
         
         /// <summary>
@@ -110,7 +98,17 @@ namespace Sanmon.Entity
             return mComponents.ContainsKey(typeof(T));
         }
         
+        /// <summary>
+        /// 添加效果
+        /// </summary>
+        /// <param name="effect"></param>
+        public void AddEffect(EffectBase effect) => mEffects.Add(effect);
         
+        /// <summary>
+        /// 一处效果
+        /// </summary>
+        /// <param name="effect"></param>
+        public void RemoveEffect(EffectBase effect) => mEffects.Remove(effect);
         
         public void Clear()
         {

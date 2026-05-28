@@ -1,5 +1,6 @@
 using Game.Config.Logic;
 using Sanmon.Core;
+using Sanmon.Utility.Set;
 
 namespace Sanmon.Entity
 {
@@ -8,16 +9,17 @@ namespace Sanmon.Entity
     /// </summary>
     public abstract class EffectBase: 
         IGetModule
+        , IBufferItem
     {
         public abstract int ConfigId { get; protected set; }
-        
         public Effect Config => this.Module().Config.Tables.TbEffect[ConfigId];
+        public EmBufferStatus Status { get; private set; }
+        public int Order => Config.Order;
         
-        public EmEffectStatus Status { get; protected set; } = EmEffectStatus.None;
-        
-        protected internal virtual void Update(float dt)
-        {
-            
-        }
+        public abstract void OnAdd();
+        public abstract void OnUpdate(float dt);
+        public abstract void OnRemove();
+
+        public void SetStatus(EmBufferStatus status) => Status = status;
     }
 }
