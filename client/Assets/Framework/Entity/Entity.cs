@@ -93,18 +93,25 @@ namespace Sanmon.Entities
         {
             return mComponents.ContainsKey(typeof(T));
         }
-        
+
         /// <summary>
         /// 添加效果
         /// </summary>
         /// <param name="effect"></param>
-        public void AddEffect(EffectBase effect) => mEffects.Add(effect);
-        
+        public void AddEffect(EffectBase effect)
+        {
+            effect.Host = this;
+            mEffects.Add(effect);
+        }
+
         /// <summary>
-        /// 一处效果
+        /// 移出效果
         /// </summary>
         /// <param name="effect"></param>
-        public void RemoveEffect(EffectBase effect) => mEffects.Remove(effect);
+        public void RemoveEffect(EffectBase effect)
+        {
+            mEffects.Remove(effect);
+        }
         
         public void Clear()
         {

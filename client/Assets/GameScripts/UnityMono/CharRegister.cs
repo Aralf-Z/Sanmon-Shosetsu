@@ -26,6 +26,11 @@ namespace GameScripts
             res.Add("hp", hp, hp.Value);
             
             Game.Entity.Register(self);
+
+            if (name == "Player")
+            {
+                self.AddEffect(new EfInputMove());
+            }
         }
     }
 
@@ -39,8 +44,8 @@ namespace GameScripts
             
             if(!EditorApplication.isPlaying) return;
             
-            GUILayout.Label($"hp: {charRegister.attri["hp"]}/{charRegister.res["hp"]}");
-            GUILayout.Label($"atk: {charRegister.attri["atk"]}");
+            GUILayout.Label($"hp: {charRegister.attri["hp"].Value}/{charRegister.res["hp"]}");
+            GUILayout.Label($"atk: {charRegister.attri["atk"].Value}");
         }
     }
 }

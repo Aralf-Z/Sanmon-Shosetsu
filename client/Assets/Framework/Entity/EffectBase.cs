@@ -11,6 +11,7 @@ namespace Sanmon.Entities
         IGetModule
         , IBufferItem
     {
+        public Entity Host { get; internal set; }
         public abstract int ConfigId { get; }
         public Effect Config => this.Module().Config.Tables.TbEffect[ConfigId];
         public EmBufferStatus Status { get; private set; }

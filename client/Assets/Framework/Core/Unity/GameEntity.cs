@@ -69,7 +69,10 @@ namespace Sanmon.Core
 
         internal void OnFixedUpdate(float dt)
         {
-            
+            foreach (var e in mEntities)
+            {
+                e.FixedUpdate(dt);
+            }
         }
     }
 }
