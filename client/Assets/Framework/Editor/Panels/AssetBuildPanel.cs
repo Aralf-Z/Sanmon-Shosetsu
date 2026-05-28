@@ -24,21 +24,6 @@ namespace Sanmon.Editor
             {
                 GUILayout.FlexibleSpace();
                 GUI.backgroundColor = Color.green;
-
-                if (GUILayout.Button("测试", EditorStyles.miniButton, GUILayout.Width(150)))
-                {
-                    var config = PlayModeConfig.instance;
-                    
-                    Debug.Log(config);
-                    Debug.Log(config.name);
-                    Debug.Log(config.isActive);
-                    Debug.Log(config.entryScene);
-                    
-                    Helper.Logger.LogDebug("你好");
-                    LoggerConfig.Save();
-                    
-                    config.isActive = !config.isActive;
-                }
                 
                 if (GUILayout.Button("构建Resources资源目录", EditorStyles.miniButton, GUILayout.Width(150)))
                 {

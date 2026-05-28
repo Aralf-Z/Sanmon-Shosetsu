@@ -3,11 +3,12 @@ using UnityEngine;
 
 namespace Sanmon.Editor
 {
-    [CreateAssetMenu]
-    [FilePath("Editor/PlayMode.asset", FilePathAttribute.Location.ProjectFolder)]
-    public class PlayModeConfig : ScriptableSingleton<PlayModeConfig>
+    public class PlayModeConfig : EditorDevConfig<PlayModeConfig>
     {
-        [SerializeField] public bool isActive;
-        [SerializeField] public SceneAsset entryScene;  // Play 时切换到的入口场景
+        public bool enable = true;
+    
+        [Header("启动场景")] public SceneAsset startScene;
+    
+        [Header("是否恢复原场景")] public bool restorePreviousScene = true;
     }
 }

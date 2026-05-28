@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Sanmon.Editor
 {
     /// <summary>
-    /// Editor：路径在 $"Assets/Editor/DevConfig/{typeof(T).Name}.asset", 会自动生成无需创建
+    /// Editor：路径在 $"Assets/Editor/Sanmon/{typeof(T).Name}.asset", 会自动生成无需创建
     /// </summary>
     public abstract class EditorDevConfig<T>: ScriptableObject where T : ScriptableObject
     {
