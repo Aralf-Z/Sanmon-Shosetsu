@@ -27,20 +27,7 @@ namespace Sanmon.Core
             
             var dt = Time.deltaTime;
             
-            
-            gameEntity.OnUpdate(dt);
-            gameModule.OnUpdate(dt);
-        }
-        
-        private void LateUpdate()
-        {
-            if(!Instance) return;
-            
-            var dt = Time.deltaTime;
-            
-            gameEntity.OnLateUpdate(dt);
-            gameModule.OnLateUpdate(dt);
-            gameFlow.OnUpdate(dt);
+            FrameUpdater.Ins.FrameUpdate(dt);
         }
         
         private void FixedUpdate()
@@ -49,8 +36,9 @@ namespace Sanmon.Core
             
             var dt = Time.fixedDeltaTime;
             
-            gameEntity.OnFixedUpdate(dt);
-            gameModule.OnFixedUpdate(dt);
+            gameEntity.OnLogicUpdate(dt);
+            gameModule.OnLogicUpdate(dt);
+            gameFlow.OnLogicUpdate(dt);
         }
 
         public void ShutDown()

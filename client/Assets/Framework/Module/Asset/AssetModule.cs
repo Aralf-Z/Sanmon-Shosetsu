@@ -20,7 +20,7 @@ namespace Sanmon.Module
             mAssetMap = null;
         }
         
-        void IModule.OnUpdate(float dt)
+        void IModule.OnLogicUpdate(float dt)
         {
             
         }

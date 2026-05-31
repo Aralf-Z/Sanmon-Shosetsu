@@ -27,7 +27,7 @@ namespace Sanmon.Core
             curFlow.Enter();
         }
         
-        internal void OnUpdate(float dt)
+        internal void OnLogicUpdate(float dt)
         {
             curFlow.Check(dt);
         }

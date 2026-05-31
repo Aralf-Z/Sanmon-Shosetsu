@@ -12,6 +12,7 @@ namespace Sanmon.Core
     {
         private readonly HashSet<Entity> mEntities = new HashSet<Entity>();
         private readonly List<Entity> mRemoveCache = new List<Entity>();
+        private readonly List<Entity> mAddCache = new List<Entity>();
         
         internal void Init()
         {
@@ -32,7 +33,7 @@ namespace Sanmon.Core
 
         public void Register(Entity entity)
         {
-            mEntities.Add(entity);
+            mAddCache.Add(entity);
         }
         
         public void Recycle(Entity entity)
@@ -48,31 +49,20 @@ namespace Sanmon.Core
                 mRemoveCache.Add(e);
             }
         }
-        
-        internal void OnUpdate(float dt)
+
+        internal void OnLogicUpdate(float dt)
         {
             foreach (var e in mEntities)
-            {
-                e.Update(dt);
-            }
-        }
-
-        internal void OnLateUpdate(float dt)
-        {
-            foreach (var e in mRemoveCache)
-            {
-                mEntities.Remove(e);
-            }
+                e.LogicUpdate(dt);
             
+            foreach (var e in mAddCache)
+                mEntities.Add(e);
+            
+            foreach (var e in mRemoveCache)
+                mEntities.Remove(e);
+            
+            mAddCache.Clear();
             mRemoveCache.Clear();
-        }
-
-        internal void OnFixedUpdate(float dt)
-        {
-            foreach (var e in mEntities)
-            {
-                e.FixedUpdate(dt);
-            }
         }
     }
 }

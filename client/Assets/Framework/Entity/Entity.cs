@@ -10,18 +10,8 @@ namespace Sanmon.Entities
         internal readonly DualBufferSet<EffectBase> mEffects = new();
         
         public IReadOnlyCollection<ComponentBase> Components => mComponents.Values;
-
-        protected internal void Update(float dt)
-        {
-            
-        }
         
-        protected internal void LateUpdate(float dt)
-        {
-            
-        }
-        
-        protected internal void FixedUpdate(float dt)
+        protected internal void LogicUpdate(float dt)
         {
             mEffects.Update(dt);
         }

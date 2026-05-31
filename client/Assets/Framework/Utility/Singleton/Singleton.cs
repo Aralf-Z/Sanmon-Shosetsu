@@ -7,7 +7,7 @@ namespace Sanmon.Utility.Singleton
     public abstract class Singleton<T> where T : new()
     {
         private static T sInstance;
-        public static T Instance => sInstance ??= new T();
+        public static T Ins => sInstance ??= new T();
         protected Singleton() { }
     }
 }

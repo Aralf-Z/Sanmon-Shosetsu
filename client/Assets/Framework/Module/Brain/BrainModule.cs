@@ -29,7 +29,7 @@ namespace Sanmon.Module
             
         }
 
-        public void OnUpdate(float dt)
+        public void OnLogicUpdate(float dt)
         {
             
         }

@@ -27,7 +27,7 @@ namespace Sanmon.Module
             
         }
 
-        void IModule.OnUpdate(float dt)
+        void IModule.OnLogicUpdate(float dt)
         {
             
         }

@@ -22,7 +22,8 @@ namespace GameScripts
 
         public override void OnUpdate(float dt)
         {
-            mTrans.position += mInput.Move * dt * mSpeed;
+            mTrans.position += mInput.move * dt * mSpeed;
+            mInput.move = Vector3.zero;
         }
 
         public override void OnRemove()

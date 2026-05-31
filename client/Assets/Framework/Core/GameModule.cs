@@ -38,22 +38,12 @@ namespace Sanmon.Core
         {
             IsInited = false;
         }
-        
-        internal void OnUpdate(float dt)
-        {
-            
-        }
 
-        internal void OnLateUpdate(float dt)
-        {
-            
-        }
-
-        internal void OnFixedUpdate(float dt)
+        internal void OnLogicUpdate(float dt)
         {
             foreach (var module in modules)
             {
-                module.OnUpdate(dt);
+                module.OnLogicUpdate(dt);
             }
         }
     }

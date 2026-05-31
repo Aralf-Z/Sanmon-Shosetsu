@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: PlayModeConfig
   m_EditorClassIdentifier: 
   enable: 1
-  startScene: {fileID: 0}
+  startScene: {fileID: 102900000, guid: 7a6a9dd61a1861c44ae60ae1fdbbc08c, type: 3}
   restorePreviousScene: 1
