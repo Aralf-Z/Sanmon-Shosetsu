@@ -16,19 +16,19 @@ namespace Sanmon.Core
         public UIModule UI { get; private set; }
         public ConfigModule Config { get; private set; }
         
-        private List<IModule> modules = new();
+        private List<IModule> _modules = new();
         
         internal void Init()
         {
-            modules = new List<IModule>();
+            _modules = new List<IModule>();
             Asset = GetComponentInChildren<AssetModule>();
-            modules.Add(Asset);
+            _modules.Add(Asset);
             UI = GetComponentInChildren<UIModule>();
-            modules.Add(UI);
+            _modules.Add(UI);
             Config = GetComponentInChildren<ConfigModule>();
-            modules.Add(Config);
+            _modules.Add(Config);
             
-            foreach (var module in modules.OrderBy(m => m.InitOrder))
+            foreach (var module in _modules.OrderBy(m => m.InitOrder))
             {
                 module.Init();
             }
@@ -41,7 +41,7 @@ namespace Sanmon.Core
 
         internal void OnLogicUpdate(float dt)
         {
-            foreach (var module in modules)
+            foreach (var module in _modules)
             {
                 module.OnLogicUpdate(dt);
             }

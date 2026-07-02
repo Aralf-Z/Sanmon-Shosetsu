@@ -14,13 +14,13 @@ namespace Sanmon.Entities
         public Entity Host { get; internal set; }
         public abstract int ConfigId { get; }
         public Effect Config => this.Module().Config.Tables.TbEffect[ConfigId];
-        public EmBufferStatus Status { get; private set; }
+        public BufferStatus Status { get; private set; }
         public int Order => Config.Order;
         
         public abstract void OnAdd();
         public abstract void OnUpdate(float dt);
         public abstract void OnRemove();
 
-        public void SetStatus(EmBufferStatus status) => Status = status;
+        public void SetStatus(BufferStatus status) => Status = status;
     }
 }

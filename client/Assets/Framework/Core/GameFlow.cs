@@ -9,7 +9,7 @@ namespace Sanmon.Core
     /// </summary>
     public class GameFlow: MonoBehaviour
     {
-        private readonly Dictionary<Type, FlowBase> mFlowMap = new ();
+        private readonly Dictionary<Type, FlowBase> _flowMap = new ();
 
         public FlowBase curFlow;
         
@@ -20,10 +20,10 @@ namespace Sanmon.Core
             foreach (var flow in flows)
             {
                 flow.Init();
-                mFlowMap.Add(flow.GetType(), flow);
+                _flowMap.Add(flow.GetType(), flow);
             }
             
-            curFlow = mFlowMap[typeof(FlowGameInit)];
+            curFlow = _flowMap[typeof(FlowGameInit)];
             curFlow.Enter();
         }
         

@@ -13,16 +13,16 @@ using Luban.SimpleJSON;
 
 namespace Game.Config
 {
-public sealed partial class Global : Luban.BeanBase
+public sealed partial class TbGlobal : Luban.BeanBase
 {
-    public Global(JSONNode _buf) 
+    public TbGlobal(JSONNode _buf) 
     {
         { if(!_buf["version"].IsObject) { throw new SerializationException(); }  Version = ExternalTypeUtil.NewVector4(global::Game.Config.vector4.Deserializevector4(_buf["version"]));  }
     }
 
-    public static Global DeserializeGlobal(JSONNode _buf)
+    public static TbGlobal DeserializeTbGlobal(JSONNode _buf)
     {
-        return new Global(_buf);
+        return new TbGlobal(_buf);
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ public sealed partial class Global : Luban.BeanBase
     /// </summary>
     public readonly UnityEngine.Vector4 Version;
    
-    public const int __ID__ = 2135814083;
+    public const int __ID__ = -715958319;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)

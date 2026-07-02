@@ -6,15 +6,15 @@ namespace Sanmon.Core
 {
     public class FrameUpdater: Singleton<FrameUpdater>
     {
-        private List<Action<float>> mUpdaters = new List<Action<float>>();
+        private readonly List<Action<float>> _updaters = new List<Action<float>>();
         
-        public void AddUpdater(Action<float> updater) => mUpdaters.Add(updater);
+        public void Add(Action<float> updater) => _updaters.Add(updater);
         
-        public void RemoveUpdater(Action<float> updater) => mUpdaters.Remove(updater);
+        public void Remove(Action<float> updater) => _updaters.Remove(updater);
         
         internal void FrameUpdate(float dt)
         {
-            foreach (var updater in mUpdaters)
+            foreach (var updater in _updaters)
             {
                 updater?.Invoke(dt);
             }

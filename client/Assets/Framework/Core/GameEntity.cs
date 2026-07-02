@@ -10,9 +10,9 @@ namespace Sanmon.Core
     public class GameEntity : MonoBehaviour,
         IGetModule
     {
-        private readonly HashSet<Entity> mEntities = new HashSet<Entity>();
-        private readonly List<Entity> mRemoveCache = new List<Entity>();
-        private readonly List<Entity> mAddCache = new List<Entity>();
+        private readonly HashSet<Entity> _entities = new HashSet<Entity>();
+        private readonly List<Entity> _removeCache = new List<Entity>();
+        private readonly List<Entity> _addCache = new List<Entity>();
         
         internal void Init()
         {
@@ -33,36 +33,36 @@ namespace Sanmon.Core
 
         public void Register(Entity entity)
         {
-            mAddCache.Add(entity);
+            _addCache.Add(entity);
         }
         
         public void Recycle(Entity entity)
         {
             entity.Clear();
-            mRemoveCache.Add(entity);
+            _removeCache.Add(entity);
         }
         
         public void Recycle(IEnumerable<Entity> entity)
         {
             foreach (var e in entity)
             {
-                mRemoveCache.Add(e);
+                _removeCache.Add(e);
             }
         }
 
         internal void OnLogicUpdate(float dt)
         {
-            foreach (var e in mEntities)
+            foreach (var e in _entities)
                 e.LogicUpdate(dt);
             
-            foreach (var e in mAddCache)
-                mEntities.Add(e);
+            foreach (var e in _addCache)
+                _entities.Add(e);
             
-            foreach (var e in mRemoveCache)
-                mEntities.Remove(e);
+            foreach (var e in _removeCache)
+                _entities.Remove(e);
             
-            mAddCache.Clear();
-            mRemoveCache.Clear();
+            _addCache.Clear();
+            _removeCache.Clear();
         }
     }
 }

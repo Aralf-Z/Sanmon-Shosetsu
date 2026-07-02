@@ -12,7 +12,7 @@ namespace Sanmon.Core
     /// </summary>
     public class GameSystem: MonoBehaviour
     {
-        private Dictionary<Type, SystemBase> mSystems = new Dictionary<Type, SystemBase>();
+        private readonly Dictionary<Type, SystemBase> _systems = new Dictionary<Type, SystemBase>();
         
         internal bool IsInited { get; private set; }
         
@@ -27,7 +27,7 @@ namespace Sanmon.Core
                 {
                     var system = (SystemBase)Activator.CreateInstance(type);
                     system.Init();
-                    mSystems.Add(type, system);
+                    _systems.Add(type, system);
                     count++;
                     Logger.LogInfo($"create system '{type.FullName}'", "system");
                 }
@@ -43,6 +43,6 @@ namespace Sanmon.Core
             IsInited = false;
         }
 
-        public T Get<T>() where T : SystemBase => mSystems[typeof(T)] as T;
+        public T Get<T>() where T : SystemBase => _systems[typeof(T)] as T;
     }
 }

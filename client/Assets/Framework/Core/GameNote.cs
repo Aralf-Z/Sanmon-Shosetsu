@@ -12,9 +12,9 @@ namespace Sanmon.Core
     /// </summary>
     public class GameNote: MonoBehaviour
     {
-        private readonly Dictionary<Type, NoteBase> mNotes = new Dictionary<Type, NoteBase>();
+        private readonly Dictionary<Type, NoteBase> _notes = new Dictionary<Type, NoteBase>();
         
-        public IReadOnlyCollection<NoteBase> Notes => mNotes.Values;
+        public IReadOnlyCollection<NoteBase> Notes => _notes.Values;
         
         internal bool IsInited { get; private set; }
         
@@ -29,7 +29,7 @@ namespace Sanmon.Core
                 {
                     var note = (NoteBase)Activator.CreateInstance(type);
                     note.Init();
-                    mNotes.Add(type, note);
+                    _notes.Add(type, note);
                     count++;
                     Logger.LogInfo($"create note '{type.FullName}'", "note");
                 }
@@ -45,6 +45,6 @@ namespace Sanmon.Core
             IsInited = false;
         }
 
-        public T Get<T>() where T : NoteBase => mNotes[typeof(T)] as T;
+        public T Get<T>() where T : NoteBase => _notes[typeof(T)] as T;
     }
 }

@@ -1,3 +1,4 @@
+using Sanmon.Core;
 using Sanmon.Entities;
 using UnityEngine;
 
@@ -7,28 +8,33 @@ namespace GameScripts
     {
         public override int ConfigId => 100000003;
 
-        private InputDetector mInput;
-
+        private Vector3 mMove;
         private float mSpeed = 3f;
 
         private Transform mTrans;
         
         public override void OnAdd()
         {
-            mInput = new GameObject("Input").AddComponent<InputDetector>();
-            mTrans = Host.GetComponent<WorldModel>().Transform;
-            mInput.transform.SetParent(mTrans);
+            FrameUpdater.Ins.Add(Update);
         }
 
         public override void OnUpdate(float dt)
         {
-            mTrans.position += mInput.move * dt * mSpeed;
-            mInput.move = Vector3.zero;
+            mTrans.position += mMove * dt * mSpeed;
+            mMove = Vector3.zero;
         }
 
         public override void OnRemove()
         {
-            
+            FrameUpdater.Ins.Remove(Update);
+        }
+        
+        private void Update(float dt)
+        {
+            if (mMove == Vector3.zero)
+            {
+                mMove = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            }
         }
     }
 }

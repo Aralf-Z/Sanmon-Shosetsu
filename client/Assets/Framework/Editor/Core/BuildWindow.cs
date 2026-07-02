@@ -14,7 +14,7 @@ namespace Sanmon.Editor
         [MenuItem("Tools/Build Window #B", false, 2)]
         private static void OpenSelf()
         {
-            var w = GetWindow<BuildWindow>("BuildWindow", true, WindowDefine.DockedWindowTypes);
+            var w = GetWindow<BuildWindow>("BuildWindow", true, WindowDefine.DOCKED_WINDOW_TYPES);
             w.maxSize = new Vector2(900, 900);
             w.minSize = new Vector2(630, 450);
         }

@@ -19,73 +19,73 @@ namespace Sanmon.Utility.Set
     /// <typeparam name="T"></typeparam>
     public class DualBufferSet<T> where T : IBufferItem
     {
-        private readonly Dictionary<int, HashSet<T>> mMainSet = new ();
-        private readonly List<int> mOrder = new ();
-        private readonly List<T> mAddCache = new ();
-        private readonly List<T> mRemoveCache = new ();
+        private readonly Dictionary<int, HashSet<T>> _mainSet = new ();
+        private readonly List<int> _order = new ();
+        private readonly List<T> _addCache = new ();
+        private readonly List<T> _removeCache = new ();
         
         public void Add(T item)
         {
-            item.SetStatus(EmBufferStatus.PendingAdd);
-            mAddCache.Add(item);
+            item.SetStatus(BufferStatus.PendingAdd);
+            _addCache.Add(item);
             item.OnAdd();
         }
         
         public void Remove(T item)
         {
-            item.SetStatus(EmBufferStatus.PendingRemove);
-            mRemoveCache.Add(item);
+            item.SetStatus(BufferStatus.PendingRemove);
+            _removeCache.Add(item);
             item.OnRemove();
         }
 
         public void Clear()
         {
-            mMainSet.Clear();
-            mOrder.Clear();
-            mAddCache.Clear();
-            mRemoveCache.Clear();
+            _mainSet.Clear();
+            _order.Clear();
+            _addCache.Clear();
+            _removeCache.Clear();
         }
         
         public void Update(float dt)
         {
             var needOrder = false;
             
-            foreach (var order in mOrder)
+            foreach (var order in _order)
             {
-                var items = mMainSet[order];
+                var items = _mainSet[order];
 
                 foreach (var item in items)
                 {
-                    if(item.Status is EmBufferStatus.Running)
+                    if(item.Status is BufferStatus.Running)
                         item.OnUpdate(dt);
                 
-                    if(item.Status is EmBufferStatus.Dirty)
+                    if(item.Status is BufferStatus.Dirty)
                         Remove(item);
                 }
             }
 
-            foreach (var item in mAddCache)
+            foreach (var item in _addCache)
             {
-                if (mMainSet.TryGetValue(item.Order, out var set))
+                if (_mainSet.TryGetValue(item.Order, out var set))
                     set.Add(item);
                 else
                 {
-                    item.SetStatus(EmBufferStatus.Running);
-                    mMainSet.Add(item.Order, new HashSet<T> { item });
-                    mOrder.Add(item.Order);
+                    item.SetStatus(BufferStatus.Running);
+                    _mainSet.Add(item.Order, new HashSet<T> { item });
+                    _order.Add(item.Order);
                     needOrder =  true;
                 }
             }
 
-            foreach (var item in mRemoveCache)
+            foreach (var item in _removeCache)
             {
-                mMainSet[item.Order].Remove(item);
+                _mainSet[item.Order].Remove(item);
             }
             
-            if(needOrder) mOrder.Sort();
+            if(needOrder) _order.Sort();
             
-            mAddCache.Clear();
-            mRemoveCache.Clear();
+            _addCache.Clear();
+            _removeCache.Clear();
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Sanmon.Editor
     [InitializeOnLoad]
     public static class PlayModeSceneBootstrap
     {
-        private const string kSceneSetupKey = "SANMON_SCENE_SETUP";
+        private const string SCENE_SETUP_KEY = "SANMON_SCENE_SETUP";
         
         static PlayModeSceneBootstrap()
         {
@@ -42,7 +42,7 @@ namespace Sanmon.Editor
             // 记录当前 Scene Setup（支持多场景）
             var setup = EditorSceneManager.GetSceneManagerSetup();
             string json = JsonUtility.ToJson(new SceneSetupWrapper(setup));
-            EditorPrefs.SetString(kSceneSetupKey, json);
+            EditorPrefs.SetString(SCENE_SETUP_KEY, json);
     
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
             {
@@ -59,7 +59,7 @@ namespace Sanmon.Editor
             if (!PlayModeConfig.Ins.restorePreviousScene)
                 return;
     
-            string json = EditorPrefs.GetString(kSceneSetupKey, "");
+            string json = EditorPrefs.GetString(SCENE_SETUP_KEY, "");
             if (string.IsNullOrEmpty(json))
                 return;
     

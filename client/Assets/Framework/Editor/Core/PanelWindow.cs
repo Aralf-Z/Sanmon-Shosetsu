@@ -8,13 +8,13 @@ namespace Sanmon.Editor
 {
     public class PanelWindow : EditorWindow
     {
-        private PanelBase[] mPanels;
-        private Vector2 mScrollBtn;
+        private PanelBase[] _panels;
+        private Vector2 _scrollBtn;
 
         [MenuItem("Tools/Panel Window #Z", false, 1)]
         private static void OpenSelf()
         {
-            var w = GetWindow<PanelWindow>("ConfigPanelWindow", true, WindowDefine.DockedWindowTypes);
+            var w = GetWindow<PanelWindow>("ConfigPanelWindow", true, WindowDefine.DOCKED_WINDOW_TYPES);
             w.maxSize = new Vector2(900, 900);
             w.minSize = new Vector2(630, 450);
         }
@@ -33,18 +33,18 @@ namespace Sanmon.Editor
                 panels.Add(panel);
             }
 
-            mPanels = new PanelBase[panels.Count];
-            mPanels = panels.OrderBy(p => p.Priority).ToArray();
+            _panels = new PanelBase[panels.Count];
+            _panels = panels.OrderBy(p => p.Priority).ToArray();
         }
 
         private void OnGUI()
         {
-            mScrollBtn = GUILayout.BeginScrollView(mScrollBtn, GUILayout.Width(position.width), GUILayout.Height(position.height));
+            _scrollBtn = GUILayout.BeginScrollView(_scrollBtn, GUILayout.Width(position.width), GUILayout.Height(position.height));
             
             var titleFont = new GUIStyle {fontSize = 15, normal = new GUIStyleState{textColor = Color.cyan}};
             var curWinRect = position;
 
-            foreach (var p in mPanels)
+            foreach (var p in _panels)
             {
                 using (new GUILayout.VerticalScope("HelpBox"))
                 {

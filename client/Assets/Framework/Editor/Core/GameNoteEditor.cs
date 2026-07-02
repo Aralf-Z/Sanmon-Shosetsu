@@ -10,31 +10,31 @@ namespace Sanmon.Editor
     public class GameNoteEditor : UnityEditor.Editor
     , IGetNote
     {
-        private GameNote mNote;
+        private GameNote _note;
 
-        private NodeBase mRootNode;
-        private Collector mCollector;
+        private NodeBase _rootNode;
+        private Collector _collector;
         
-        private TreeViewState mViewState;
-        private InspectorTreeView mView;
+        private TreeViewState _viewState;
+        private InspectorTreeView _view;
         
         private void OnEnable()
         {
-            mNote = (GameNote)target;
-            mCollector = new Collector("notes");
+            _note = (GameNote)target;
+            _collector = new Collector("notes");
 
             Refresh();
         }
         
         private void Refresh()
         {
-            mRootNode = mCollector.Collect(mNote.Notes);
-            mViewState = new TreeViewState();
-            mView = new InspectorTreeView(mViewState, mRootNode);
+            _rootNode = _collector.Collect(_note.Notes);
+            _viewState = new TreeViewState();
+            _view = new InspectorTreeView(_viewState, _rootNode);
             
-            mView.ExpandAll();
+            _view.ExpandAll();
             
-            // foreach (var VARIABLE in mView.ViewRoot.children)
+            // foreach (var VARIABLE in _view.ViewRoot.children)
             // {
             //     
             // }
@@ -44,7 +44,7 @@ namespace Sanmon.Editor
         {
             var rect = GUILayoutUtility.GetRect(0, 1000, 0, 900);
 
-            mView.OnGUI(rect);
+            _view.OnGUI(rect);
 
             if (GUILayout.Button("Refresh"))
             {

@@ -13,7 +13,7 @@ namespace GameScripts
         
         private readonly Dictionary<string, SumValue> mAttri = new ();
         
-        public SumValue this[string name] => mAttri.GetValueOrDefault(name, SumValue.Default);
+        public SumValue this[string name] => mAttri.GetValueOrDefault(name, SumValue.DEFAULT);
 
         public SumValue AddValue(string name, float value)
         {

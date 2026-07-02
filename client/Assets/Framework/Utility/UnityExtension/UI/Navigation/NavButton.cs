@@ -12,12 +12,12 @@ namespace Sanmon.Utility.UnityExtension
         public int Index { get; set; }
         public bool onFocusInvoke = false;
         
-        private bool mIsFocused;
+        private bool _isFocused;
 
         public override void OnPointerEnter(PointerEventData eventData)
         {
             if (!interactable) return;
-            if (mIsFocused) return;
+            if (_isFocused) return;
 
             NavSet.Focus(Index);
             DoStateTransition(SelectionState.Highlighted, true);
@@ -28,7 +28,7 @@ namespace Sanmon.Utility.UnityExtension
             if (!interactable) return;
             
             NavSet.Unfocus(Index);
-            DoStateTransition(mIsFocused ? SelectionState.Highlighted : SelectionState.Normal, true);
+            DoStateTransition(_isFocused ? SelectionState.Highlighted : SelectionState.Normal, true);
             
             // base.OnPointerExit(eventData);
         }
@@ -40,13 +40,13 @@ namespace Sanmon.Utility.UnityExtension
 
         public override void OnDeselect(BaseEventData eventData)
         {
-            if (mIsFocused) return;
+            if (_isFocused) return;
             base.OnDeselect(eventData);
         }
 
         public override void OnSelect(BaseEventData eventData)
         {
-            if (!mIsFocused) return;
+            if (!_isFocused) return;
             base.OnSelect(eventData);
         }
 
@@ -66,7 +66,7 @@ namespace Sanmon.Utility.UnityExtension
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public void OnFocused()
         {
-            mIsFocused = true;
+            _isFocused = true;
 
             DoStateTransition(SelectionState.Highlighted, true);
 
@@ -75,7 +75,7 @@ namespace Sanmon.Utility.UnityExtension
 
         public void OnUnfocused()
         {
-            mIsFocused = false;
+            _isFocused = false;
             
             DoStateTransition(interactable ? SelectionState.Normal : SelectionState.Disabled, true);
         }

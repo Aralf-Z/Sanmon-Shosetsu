@@ -6,24 +6,24 @@ namespace Framework.Editor
 {
     internal class PathOpener
     {
-        private static readonly string projectPath = Directory.GetParent(Directory.GetParent(Application.dataPath)!.FullName)!.FullName;
+        private static readonly string PROJECT_PATH = Directory.GetParent(Directory.GetParent(Application.dataPath)!.FullName)!.FullName;
         
         [MenuItem("Path/项目根目录")]
         public static void OpenProjectPath()
         {
-            Application.OpenURL("file://" + projectPath);
+            Application.OpenURL("file://" + PROJECT_PATH);
         }
         
         [MenuItem("Path/表格配置")]
         public static void OpenTableConfigPath()
         {
-            Application.OpenURL("file://" + Path.Combine(projectPath, "config"));
+            Application.OpenURL("file://" + Path.Combine(PROJECT_PATH, "config"));
         }
         
         [MenuItem("Path/表格")]
         public static void OpenTablePath()
         {
-            Application.OpenURL("file://" + Path.Combine(projectPath, "config/_tables"));
+            Application.OpenURL("file://" + Path.Combine(PROJECT_PATH, "config/_tables"));
         }
         
         [MenuItem("Path/存档")]

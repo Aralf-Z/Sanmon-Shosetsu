@@ -8,21 +8,21 @@ namespace Sanmon.Utility.UnityExtension
     {
         [SerializeField] private List<string> triggers = new List<string>() { "default" };
 
-        private Animator mAnimator;
+        private Animator _animator;
 
         private void Awake()
         {
-            mAnimator = GetComponent<Animator>();
+            _animator = GetComponent<Animator>();
         }
 
         public void Switch(string trigger)
         {
-            mAnimator.SetTrigger(trigger);
+            _animator.SetTrigger(trigger);
         }
 
         public void Switch(int triggerHash)
         {
-            mAnimator.SetTrigger(triggerHash);
+            _animator.SetTrigger(triggerHash);
         }
     }
 }

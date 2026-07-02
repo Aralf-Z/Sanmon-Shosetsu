@@ -8,7 +8,7 @@ namespace Sanmon.Editor
 {
     internal class AssetEditorProcessor : AssetPostprocessor
     {
-        private const string kResourcesFileHeader = "Assets/Resources/";
+        private const string RESOURCES_FILE_HEADER = "Assets/Resources/";
         
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
@@ -37,8 +37,8 @@ namespace Sanmon.Editor
         {
             foreach (var t in importedAssets)
             {
-                if (!t.StartsWith(kResourcesFileHeader)) continue;
-                var subPath = t[kResourcesFileHeader.Length..];
+                if (!t.StartsWith(RESOURCES_FILE_HEADER)) continue;
+                var subPath = t[RESOURCES_FILE_HEADER.Length..];
                 var subS = subPath.Split('.');
                 if (subS.Length == 1) continue;
                 var assetName = AssetDatabase.LoadAssetAtPath<Object>(t).name;
@@ -51,8 +51,8 @@ namespace Sanmon.Editor
         {
             foreach (var t in deletedAssets)
             {
-                if (!t.StartsWith(kResourcesFileHeader)) continue;
-                var subPath = t[kResourcesFileHeader.Length..];
+                if (!t.StartsWith(RESOURCES_FILE_HEADER)) continue;
+                var subPath = t[RESOURCES_FILE_HEADER.Length..];
                 var subS = subPath.Split('.');
                 if (subS.Length == 1) continue;
                 var subSplitStr = subS[0].Split('/');

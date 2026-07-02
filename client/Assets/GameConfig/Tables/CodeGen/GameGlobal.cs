@@ -16,15 +16,15 @@ namespace Game.Config
 public partial class GameGlobal
 {
 
-     private readonly Global _data;
+     private readonly TbGlobal _data;
 
-     public Global Data => _data;
+     public TbGlobal Data => _data;
 
     public GameGlobal(JSONNode _buf)
     {
         int n = _buf.Count;
         if (n != 1) throw new SerializationException("table mode=one, but size != 1");
-        { if(!_buf[0].IsObject) { throw new SerializationException(); }  _data = global::Game.Config.Global.DeserializeGlobal(_buf[0]);  }
+        { if(!_buf[0].IsObject) { throw new SerializationException(); }  _data = global::Game.Config.TbGlobal.DeserializeTbGlobal(_buf[0]);  }
     }
 
 

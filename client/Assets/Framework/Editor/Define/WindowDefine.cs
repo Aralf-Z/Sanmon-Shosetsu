@@ -11,7 +11,7 @@ namespace Sanmon.Editor
         /// <summary>
         /// 停靠窗口类型集合
         /// </summary>
-        public static readonly Type[] DockedWindowTypes =
+        public static readonly Type[] DOCKED_WINDOW_TYPES =
         {
             typeof(PanelWindow),
             typeof(BuildWindow),

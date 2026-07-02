@@ -1,6 +1,6 @@
 namespace Sanmon.Utility.Set
 {
-    public enum EmBufferStatus
+    public enum BufferStatus
     {
         /// <summary>
         /// 无状态，处于该状态才能被添加

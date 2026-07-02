@@ -9,40 +9,40 @@ namespace Sanmon.Utility.UnityExtension.Editor
     [CustomEditor(typeof(AnimationTabber))]
     public class AnimationTabberEditor : UnityEditor.Editor
     {
-        private AnimationTabber mAs;
-        private SerializedObject mAsSo;
+        private AnimationTabber _as;
+        private SerializedObject _asSo;
 
-        private string mNewName;
-        private SerializedProperty mTriggers;
+        private string _newName;
+        private SerializedProperty _triggers;
 
         private void OnEnable()
         {
-            mAs = (AnimationTabber)target;
-            mAsSo = new SerializedObject(mAs);
-            mTriggers = mAsSo.FindProperty("triggers");
+            _as = (AnimationTabber)target;
+            _asSo = new SerializedObject(_as);
+            _triggers = _asSo.FindProperty("triggers");
         }
 
         public override void OnInspectorGUI()
         {
             var changed = false;
-            var animator = mAs.GetComponent<Animator>();
+            var animator = _as.GetComponent<Animator>();
 
             //triggers Name
             using (var v = new EditorGUILayout.VerticalScope())
             {
                 //rename and delete
-                for (var i = 0; i < mTriggers.arraySize; i++)
+                for (var i = 0; i < _triggers.arraySize; i++)
                 {
                     using (new EditorGUILayout.HorizontalScope())
                     {
-                        var trigger = mTriggers.GetArrayElementAtIndex(i).stringValue;
+                        var trigger = _triggers.GetArrayElementAtIndex(i).stringValue;
                         var newTrigger = EditorGUILayout.DelayedTextField("name: ", trigger);
 
                         if (newTrigger != trigger)
                         {
                             if (IsTriggerValid(newTrigger))
                             {
-                                mTriggers.GetArrayElementAtIndex(i).stringValue = newTrigger;
+                                _triggers.GetArrayElementAtIndex(i).stringValue = newTrigger;
                                 if (animator && animator.runtimeAnimatorController)
                                 {
                                     var controller = (AnimatorController)animator.runtimeAnimatorController;
@@ -59,7 +59,7 @@ namespace Sanmon.Utility.UnityExtension.Editor
 
                         if (GUILayout.Button("X", Styles.NormalButtonStyle, GUILayout.Width(50)))
                         {
-                            mTriggers.DeleteArrayElementAtIndex(i);
+                            _triggers.DeleteArrayElementAtIndex(i);
                             if (animator && animator.runtimeAnimatorController)
                             {
                                 var controller = (AnimatorController)animator.runtimeAnimatorController;
@@ -74,20 +74,20 @@ namespace Sanmon.Utility.UnityExtension.Editor
                 //add new
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    mNewName = EditorGUILayout.TextField("name: ", mNewName);
+                    _newName = EditorGUILayout.TextField("name: ", _newName);
 
                     if (GUILayout.Button("add new", Styles.NormalButtonStyle, GUILayout.Width(100)))
                     {
-                        if (IsTriggerValid(mNewName))
+                        if (IsTriggerValid(_newName))
                         {
                             if (animator && animator.runtimeAnimatorController)
                             {
                                 var controller = (AnimatorController)animator.runtimeAnimatorController;
-                                AddTriggerableTransition(mNewName, controller);
+                                AddTriggerableTransition(_newName, controller);
                             }
 
-                            mTriggers.InsertArrayElementAtIndex(mTriggers.arraySize);
-                            mTriggers.GetArrayElementAtIndex(mTriggers.arraySize - 1).stringValue = mNewName;
+                            _triggers.InsertArrayElementAtIndex(_triggers.arraySize);
+                            _triggers.GetArrayElementAtIndex(_triggers.arraySize - 1).stringValue = _newName;
                             changed = true;
                         }
                         else
@@ -107,15 +107,15 @@ namespace Sanmon.Utility.UnityExtension.Editor
                 {
                     var triggers = new List<string>();
 
-                    for (var i = 0; i < mTriggers.arraySize; i++)
+                    for (var i = 0; i < _triggers.arraySize; i++)
                     {
-                        var element = mTriggers.GetArrayElementAtIndex(i).stringValue;
+                        var element = _triggers.GetArrayElementAtIndex(i).stringValue;
                         triggers.Add(element);
                     }
 
                     if (!animator)
                     {
-                        animator = mAs.gameObject.AddComponent<Animator>();
+                        animator = _as.gameObject.AddComponent<Animator>();
                     }
 
                     var controller = animator.runtimeAnimatorController
@@ -130,7 +130,7 @@ namespace Sanmon.Utility.UnityExtension.Editor
 
             if (changed)
             {
-                mAsSo.ApplyModifiedProperties();
+                _asSo.ApplyModifiedProperties();
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
             }
@@ -140,9 +140,9 @@ namespace Sanmon.Utility.UnityExtension.Editor
         {
             if (string.IsNullOrEmpty(triggerName)) return false;
 
-            for (var i = 0; i < mTriggers.arraySize; i++)
+            for (var i = 0; i < _triggers.arraySize; i++)
             {
-                if (triggerName == mTriggers.GetArrayElementAtIndex(i).stringValue)
+                if (triggerName == _triggers.GetArrayElementAtIndex(i).stringValue)
                 {
                     return false;
                 }
