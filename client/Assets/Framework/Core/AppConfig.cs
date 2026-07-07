@@ -13,33 +13,33 @@ namespace Sanmon.Core
         {
             get
             {
-                if (instance == null)
+                if (_instance == null)
                 {
                     var fileName = $"{typeof(T).Name}.json";
                     var path = Path.Combine(PathHelper.ConfigPath, fileName);
                     if (File.Exists(path))
                     {
                         var file = File.ReadAllText(path);
-                        instance = JsonHelper.DeserializeObject<T>(file);
+                        _instance = JsonHelper.DeserializeObject<T>(file);
                     }
                     else
                     {
-                        instance = new T();
+                        _instance = new T();
                         Save();
                     }
                 }
                 
-                return instance;
+                return _instance;
             }
         }
         
-        private static T instance;
+        private static T _instance;
 
         public static void Save()
         {
             var fileName = $"{typeof(T).Name}.json";
             var path = Path.Combine(PathHelper.ConfigPath, fileName);
-            var json = JsonHelper.SerializeObject(instance);
+            var json = JsonHelper.SerializeObject(_instance);
             File.WriteAllText(path, json);
 #if UNITY_EDITOR
             UnityEditor.AssetDatabase.Refresh();            

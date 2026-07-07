@@ -13,17 +13,17 @@ namespace Sanmon.Editor
         {
             get
             {
-                if (sInstance == null)
+                if (_instance == null)
                 {
                     var cfgGuids = AssetDatabase.FindAssets("t:" + typeof(T).Name);
                     switch (cfgGuids.Length)
                     {
                         case 0:
-                            sInstance = CreateInstance<T>();
-                            AssetDatabase.CreateAsset(sInstance, $"Assets/Editor/Sanmon/{sInstance.GetType().Name}.asset");
+                            _instance = CreateInstance<T>();
+                            AssetDatabase.CreateAsset(_instance, $"Assets/Editor/Sanmon/{_instance.GetType().Name}.asset");
                             break;
                         case 1:
-                            sInstance = AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(cfgGuids[0]));
+                            _instance = AssetDatabase.LoadAssetAtPath<T>(AssetDatabase.GUIDToAssetPath(cfgGuids[0]));
                             break;
                         default:
                             throw new DevConfigException("more than one instance of " + typeof(T).Name +
@@ -31,10 +31,10 @@ namespace Sanmon.Editor
                     }
                 }
                 
-                return sInstance;
+                return _instance;
             }
         }
         
-        private static T sInstance;
+        private static T _instance;
     }
 }
