@@ -9,17 +9,17 @@ namespace GameScripts
     {
         public Entity self;
         
-        public Resource res;
+        public CmResource res;
         
-        public Attribute attri;
+        public CmAttribute attri;
         
         private void Awake()
         {
             self = new Entity();
             
-            attri = self.AddComponent<Attribute>();
-            res = self.AddComponent<Resource>();
-            self.AddComponent<WorldModel>().SetModel(gameObject);
+            attri = self.AddComponent<CmAttribute>();
+            res = self.AddComponent<CmResource>();
+            self.AddComponent<CmWorldModel>().SetModel(gameObject);
             
             var hp = attri.AddValue("hp", 100);
             attri.AddValue("atk", 10);

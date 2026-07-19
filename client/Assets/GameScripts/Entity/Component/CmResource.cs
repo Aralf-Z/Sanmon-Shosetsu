@@ -11,7 +11,7 @@ namespace GameScripts
     /// 依赖于Attribute组件, 初始化顺序应低于Attribute. 
     /// 默认随着上限变化, 上限变小则不会超过上限，上限变大时，增加上限变化值
     /// </summary>
-    public class Resource: ComponentBase
+    public class CmResource: ComponentBase
     {
         private class ResourceInfo
         {
@@ -35,13 +35,12 @@ namespace GameScripts
         public float this[string name] => mRes.GetValueOrDefault(name)?.value ?? 0f;
         
         /// <summary> float: preValue, float: nowValue </summary>
-        public event Action<string, float, float> Evt_ValueChanged;
+        public event Action<string, float, float> e_ValueChanged;
         
         public void Add(string key, SumValue maxValue, float value)
         {
             mRes.Add(key, new ResourceInfo(key, maxValue, value));
             mValueMap.Add(maxValue, key);
-            maxValue.Evt_ValueChanged += OnMaxChanged;
         }
 
         public void Remove(string key)
@@ -49,7 +48,6 @@ namespace GameScripts
             var info = mRes[key];
             mRes.Remove(key);
             mValueMap.Remove(info.maxValue);
-            info.maxValue.Evt_ValueChanged -= OnMaxChanged;
         }
 
         public void Change(string key, float value)
@@ -57,26 +55,7 @@ namespace GameScripts
             var info = mRes[key];
             var preValue = info.value;
             info.value = Mathf.Clamp(value, 0, info.maxValue.Value);
-            Evt_ValueChanged?.Invoke(key, preValue, info.value);
-        }
-        
-        private void OnMaxChanged(SumValue sumValue, float preValue, float preRatio)
-        {
-            var key = mValueMap[sumValue];
-            var dt =  sumValue.Value - preValue;
-            var res = mRes[key];
-            var resPreValue = res.value;
-            
-            if (dt > 0)
-            {
-                res.value = resPreValue + dt;
-            }
-            else
-            {
-                res.value = Mathf.Clamp(resPreValue + dt, 0, sumValue.Value);
-            }
-            
-            Evt_ValueChanged?.Invoke(key, preValue, res.value);
+            e_ValueChanged?.Invoke(key, preValue, info.value);
         }
     }
 }

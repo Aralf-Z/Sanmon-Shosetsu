@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace Sanmon.Entities
 {
-    public class WorldModel: ComponentBase
+    public class CmWorldModel: ComponentBase
         , IGetModule
         , IGetEntity
     {
@@ -21,9 +21,21 @@ namespace Sanmon.Entities
             set => Go.transform.position = value;
         }
 
+        public Vector3 Scale
+        {
+            get => Go.transform.localScale;
+            set => Go.transform.localScale = value;
+        }
+
+        public Quaternion Rotation
+        {
+            get => Go.transform.rotation;
+            set => Go.transform.rotation = value;
+        }
+        
         public string name = string.Empty;
 
-        public event Action Evt_OnLoaded;
+        public event Action e_onLoaded;
 
         public void TryLoad()
         {
@@ -43,7 +55,7 @@ namespace Sanmon.Entities
             Go.name = name;
             Bind = Go.AddComponent<ModelBind>();
             Bind.Bind(this);
-            Evt_OnLoaded?.Invoke();
+            e_onLoaded?.Invoke();
         }
         
         public void SetModel(GameObject go, string newName = null)
@@ -55,7 +67,7 @@ namespace Sanmon.Entities
             }
             Bind = Go.AddComponent<ModelBind>();
             Bind.Bind(this);
-            Evt_OnLoaded?.Invoke();
+            e_onLoaded?.Invoke();
         }
     }
 }

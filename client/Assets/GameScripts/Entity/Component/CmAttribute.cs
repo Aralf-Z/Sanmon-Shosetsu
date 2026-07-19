@@ -7,7 +7,7 @@ namespace GameScripts
     /// <summary>
     /// 属性组件，string key, 如果存在性能瓶颈可修改枚举key
     /// </summary>
-    public class Attribute: ComponentBase
+    public class CmAttribute: ComponentBase
     {
         public IReadOnlyDictionary<string, SumValue> Attri => mAttri;
         

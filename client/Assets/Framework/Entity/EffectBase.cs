@@ -5,7 +5,7 @@ using Sanmon.Utility.Set;
 namespace Sanmon.Entities
 {
     /// <summary>
-    /// 这是实体运行时的逻辑类，可以做到逻辑的拆除和添加
+    /// 这是实体运行时的逻辑类，可以做到逻辑的拆除和添加，Ef前缀
     /// </summary>
     public abstract class EffectBase: 
         IGetModule

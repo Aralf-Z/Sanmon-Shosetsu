@@ -23,7 +23,7 @@ namespace Sanmon.Utility.Value
         public IReadOnlyCollection<SourceValue> SourceRatios => _sourceRatios;
 
         /// <summary> float: preValue, float: preRatio </summary>
-        public event Action<SumValue, float, float> Evt_ValueChanged;
+        public event Action<SumValue, float, float> e_ValueChanged;
         
         public SumValue(float value)
         {
@@ -37,7 +37,7 @@ namespace Sanmon.Utility.Value
             _sourceValues.Add(value);
             _sourceValuesSum += value.Value;
             Value = _sourceValuesSum * Ratio;
-            Evt_ValueChanged?.Invoke(this, preValue, preRatio);
+            e_ValueChanged?.Invoke(this, preValue, preRatio);
         }
 
         public void RemoveValue(SourceValue value)
@@ -47,7 +47,7 @@ namespace Sanmon.Utility.Value
             _sourceValues.Remove(value);
             _sourceValuesSum -= value.Value;
             Value = _sourceValuesSum * Ratio;
-            Evt_ValueChanged?.Invoke(this, preValue, preRatio);
+            e_ValueChanged?.Invoke(this, preValue, preRatio);
         }
         
         public void AddRatio(SourceValue value)
@@ -57,7 +57,7 @@ namespace Sanmon.Utility.Value
             _sourceRatios.Add(value);
             _sourceRatiosSum += value.Value;
             Value = _sourceRatiosSum * Ratio;
-            Evt_ValueChanged?.Invoke(this, preValue, preRatio);
+            e_ValueChanged?.Invoke(this, preValue, preRatio);
         }
 
         public void RemoveRatio(SourceValue value)
@@ -67,7 +67,7 @@ namespace Sanmon.Utility.Value
             _sourceRatios.Remove(value);
             _sourceRatiosSum -= value.Value;
             Value = _sourceRatiosSum * Ratio;
-            Evt_ValueChanged?.Invoke(this, preValue, preRatio);
+            e_ValueChanged?.Invoke(this, preValue, preRatio);
         }
     }
 }

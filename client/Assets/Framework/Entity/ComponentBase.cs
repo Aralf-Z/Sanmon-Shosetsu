@@ -1,5 +1,8 @@
 namespace Sanmon.Entities
 {
+    /// <summary>
+    /// 这是实体运行时的数据类，Cm前缀
+    /// </summary>
     public abstract class ComponentBase
     {
         public Entity Host { get; internal set; }
