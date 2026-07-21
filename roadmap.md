@@ -3,9 +3,8 @@
 ## 🧩 核心模块(Module)
 
 ### 资源管理 (Asset)
-- [ ] 加载移出 Resource 加载，脱离运行包
-- [ ] 评估：采用 YooAsset?
-- [ ] 评估：采用 Qf.ResKit?
+- [x] 加载移出 Resource 加载，脱离运行包
+- [x] 评估：采用 YooAsset
 
 ### 配置系统 (Config)
 - [ ] Table Luban 的可视化工具（Unity 参考：[LubanYoki](https://github.com/HinataYoki/LubanKit)；跨平台：Avalonia）

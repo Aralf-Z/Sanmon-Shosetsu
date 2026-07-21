@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "com.code-philosophy.luban": "file:../CustomPackages/LubanRuntime",
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.tuyoogame.yooasset": "file:../CustomPackages/YooAsset",
     "com.unity.collab-proxy": "2.12.4",
     "com.unity.feature.development": "1.0.1",
     "com.unity.textmeshpro": "3.0.7",
@@ -37,5 +40,6 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": []
 }

@@ -18,12 +18,12 @@ namespace Sanmon.Helper
         {
             "#FFFFFF",//白色
             "#FFFFFF",//白色
-            "#FF0000",//红色
             "#FFFF00",//黄色
+            "#FF0000",//红色
             "#00FFFF",//蓝绿色
         };
         
-        public bool logTimeStamp = true;
+        public bool logTimeStamp = false;
         public Level level = Level.Debug;
         
         

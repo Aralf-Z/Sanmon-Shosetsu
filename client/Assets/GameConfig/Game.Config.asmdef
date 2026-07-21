@@ -2,7 +2,7 @@
     "name": "Game.Config",
     "rootNamespace": "",
     "references": [
-        "GUID:2a81c6962524d424a8ef5072bd3b0fa0"
+        "GUID:06ccb4eebd339014ea75ec12fece493c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

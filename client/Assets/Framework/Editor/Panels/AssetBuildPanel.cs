@@ -62,7 +62,7 @@ namespace Sanmon.Editor
             }
             catch (Exception e)
             {
-                Helper.Logger.LogInfo($"资源路径配置失败:{e.Message}","Asset");
+                Helper.Logger.LogError($"资源路径配置失败:{e.Message}","Asset");
                 throw;
             }
             finally

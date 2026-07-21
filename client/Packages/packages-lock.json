@@ -1,5 +1,29 @@
 {
   "dependencies": {
+    "com.code-philosophy.luban": {
+      "version": "file:../CustomPackages/LubanRuntime",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {}
+    },
+    "com.cysharp.unitask": {
+      "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "ceac8d6946b1125fe782cd171fbcb245b567dbf9"
+    },
+    "com.tuyoogame.yooasset": {
+      "version": "file:../CustomPackages/YooAsset",
+      "depth": 0,
+      "source": "local",
+      "dependencies": {
+        "com.unity.scriptablebuildpipeline": "1.21.25",
+        "com.unity.modules.assetbundle": "1.0.0",
+        "com.unity.modules.unitywebrequest": "1.0.0",
+        "com.unity.modules.unitywebrequestassetbundle": "1.0.0"
+      }
+    },
     "com.unity.collab-proxy": {
       "version": "2.12.4",
       "depth": 0,
@@ -62,6 +86,13 @@
     },
     "com.unity.performance.profile-analyzer": {
       "version": "1.2.3",
+      "depth": 1,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.scriptablebuildpipeline": {
+      "version": "1.21.25",
       "depth": 1,
       "source": "registry",
       "dependencies": {},

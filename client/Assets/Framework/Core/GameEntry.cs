@@ -13,7 +13,6 @@ namespace Sanmon.Core
 
         private void Start()
         {
-            DontDestroyOnLoad(gameObject);
             DontDestroyOnLoad(gameApplication);
             
             StartCoroutine(StartGame());
