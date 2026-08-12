@@ -743,7 +743,7 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    Android: 
+    Android: ZLUA_LUA_5_5
     EmbeddedLinux: 
     GameCoreScarlett: 
     GameCoreXboxOne: 
@@ -752,13 +752,14 @@ PlayerSettings:
     PS4: 
     PS5: 
     QNX: 
+    Server: ZLUA_LUA_5_5
     Stadia: 
-    Standalone: 
+    Standalone: ZLUA_LUA_5_5
     VisionOS: 
     WebGL: 
     Windows Store Apps: 
     XboxOne: 
-    iPhone: 
+    iPhone: ZLUA_LUA_5_5
     tvOS: 
   additionalCompilerArguments: {}
   platformArchitecture: {}

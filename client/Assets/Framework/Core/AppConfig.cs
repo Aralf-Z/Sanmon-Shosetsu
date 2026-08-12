@@ -36,7 +36,7 @@ namespace Sanmon.Core
         
         private static T _instance;
 
-        public static void Save()
+        private static void Save()
         {
             var fileName = $"{ToSnakeCase(typeof(T).Name)}.json";
             var path = Path.Combine(PathHelper.ConfigPath, fileName);
@@ -47,7 +47,7 @@ namespace Sanmon.Core
 #endif
         }
         
-        public static string ToSnakeCase(string input)
+        private static string ToSnakeCase(string input)
         {
             if (string.IsNullOrEmpty(input)) return input;
 
