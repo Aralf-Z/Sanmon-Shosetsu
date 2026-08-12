@@ -6,6 +6,13 @@
       "source": "local",
       "dependencies": {}
     },
+    "com.code-philosophy.zlua": {
+      "version": "https://github.com/focus-creative-games/zlua.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "fe9a903a6f6106bb5b998c0e2509bc32afdf3be2"
+    },
     "com.cysharp.unitask": {
       "version": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
       "depth": 0,

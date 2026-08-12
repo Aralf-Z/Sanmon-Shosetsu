@@ -1,8 +1,9 @@
 {
   "dependencies": {
     "com.code-philosophy.luban": "file:../CustomPackages/LubanRuntime",
-    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.tuyoogame.yooasset": "file:../CustomPackages/YooAsset",
+    "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
+    "com.code-philosophy.zlua": "https://github.com/focus-creative-games/zlua.git",
     "com.unity.collab-proxy": "2.12.4",
     "com.unity.feature.development": "1.0.1",
     "com.unity.textmeshpro": "3.0.7",

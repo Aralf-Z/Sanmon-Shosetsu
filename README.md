@@ -26,5 +26,8 @@ Special thanks to:
 
 - [UnityCommandLineInterface](https://github.com/529324416/UnityCommandLineInterface) 
 - [luban datable](https://github.com/focus-creative-games/luban)
+- [zlua](https://github.com/focus-creative-games/zlua)
+- [YooAsset](https://github.com/tuyoogame/YooAsset)
+- [UniTask](https://github.com/Cysharp/UniTask)
 
 Many parts of the implementation have been rewritten or heavily modified to better fit the architecture and design philosophy of Sanmon.
