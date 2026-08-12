@@ -11,7 +11,10 @@
 /client/Builds/
 /client/Logs/
 /client/UserSettings/
+
+#My Assets ignore
 /client/Assets/Test
+/client/Assets/Plugins/Nuget
 
 *.log
 
