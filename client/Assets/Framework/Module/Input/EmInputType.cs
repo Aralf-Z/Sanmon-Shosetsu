@@ -1,6 +1,6 @@
 namespace Sanmon.Module
 {
-    public enum EmInputTickType
+    public enum InputTickType
     {
         Down,
         Hold,

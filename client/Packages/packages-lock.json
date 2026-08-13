@@ -27,6 +27,20 @@
       "dependencies": {},
       "hash": "acc1c7bc9ea34c33b830e40316fca52553878d29"
     },
+    "com.marijnzwemmer.unity-toolbar-extender": {
+      "version": "https://github.com/marijnz/unity-toolbar-extender.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "395236f9a7a057d2362857e5bb4f3f9a808a9627"
+    },
+    "com.redbluegames.mulligan": {
+      "version": "https://github.com/redbluegames/unity-mulligan-renamer.git?path=/Assets/RedBlueGames/MulliganRenamer",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "b70c9d347d08658303cd174e422f4d7e92e767a0"
+    },
     "com.tuyoogame.yooasset": {
       "version": "file:../CustomPackages/YooAsset",
       "depth": 0,

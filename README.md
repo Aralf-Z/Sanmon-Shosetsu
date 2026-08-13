@@ -29,5 +29,10 @@ Special thanks to:
 - [zlua](https://github.com/focus-creative-games/zlua)
 - [YooAsset](https://github.com/tuyoogame/YooAsset)
 - [UniTask](https://github.com/Cysharp/UniTask)
+- [MulliganRenamer](https://github.com/redbluegames/unity-mulligan-renamer.git?path=/Assets/RedBlueGames/MulliganRenamer)
+- [unity-toolbar-extender](https://github.com/marijnz/unity-toolbar-extender)
+- [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity)
+  - [zlinq](https://github.com/Cysharp/ZLinq)
+  - [Newtonsoft](https://www.newtonsoft.com/json)
 
 Many parts of the implementation have been rewritten or heavily modified to better fit the architecture and design philosophy of Sanmon.

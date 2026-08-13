@@ -7,6 +7,5 @@ namespace Sanmon.Module
         public const int CONFIG = 20;
         public const int UI = 100;
         public const int CAMERA = 200;
-        public const int BRAIN = 100000;
     }
 }

@@ -4,7 +4,7 @@ namespace Sanmon.Module
 {
     public class InputBehaviour
     {
-        public EmInputTickType type;
+        public InputTickType type;
         
         public Action onTicked;
     }
