@@ -13,8 +13,6 @@
 /client/UserSettings/
 
 #My Assets ignore
-/client/Assets/Test
-/client/Assets/Temp
 /client/Assets/Plugins/Nuget
 
 *.log
