@@ -4,6 +4,7 @@
     "com.code-philosophy.zlua": "https://github.com/focus-creative-games/zlua.git",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",
     "com.github-glitchenzo.nugetforunity": "https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity",
+    "com.redbluegames.mulligan": "https://github.com/redbluegames/unity-mulligan-renamer.git?path=/Assets/RedBlueGames/MulliganRenamer",
     "com.tuyoogame.yooasset": "file:../CustomPackages/YooAsset",
     "com.unity.collab-proxy": "2.12.4",
     "com.unity.feature.development": "1.0.1",
