@@ -105,6 +105,9 @@ InitTestScene*.unity*
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
 
-# My igonre
+# My ignore
 /.idea
 /[Aa]ssets/Plugins/NuGet*
+/[Aa]ssets/Temp/*
+/[Aa]ssets/Test/*
+/[Aa]ssets/Samples/*
