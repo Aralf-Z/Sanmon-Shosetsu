@@ -1,6 +1,7 @@
 using System.IO;
 using Sanmon.Helper;
 using UnityEngine;
+using YooAsset;
 
 namespace Sanmon.Module
 {
@@ -11,8 +12,10 @@ namespace Sanmon.Module
 
         void IModule.Init()
         {
-            var file = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, MAP_FILE_NAME));
-            mAssetMap = JsonHelper.DeserializeObject<AssetMap>(file);
+            YooAssets.Initialize();
+            
+            var package = YooAssets.CreatePackage(DEFAULT_PACKAGE);
+            
         }
 
         void IModule.Deinit()
@@ -24,9 +27,11 @@ namespace Sanmon.Module
         {
             
         }
-        
-        public const string MAP_FILE_NAME = "asset_map.json";
 
+        public const string DEFAULT_PACKAGE = "DefaultPackage";
+
+        public EPlayMode playMode = EPlayMode.EditorSimulateMode;
+        
         private AssetMap mAssetMap;
         
         public T LoadSync<T>(string assetName) where T : Object
