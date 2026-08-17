@@ -20,8 +20,8 @@ namespace GameScripts
 
         public override void OnUpdate(float dt)
         {
-            mTrans.position += mMove * dt * mSpeed;
-            mMove = Vector3.zero;
+            // mTrans.position += mMove * dt * mSpeed;
+            // mMove = Vector3.zero;
         }
 
         public override void OnRemove()

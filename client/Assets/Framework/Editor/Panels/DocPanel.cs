@@ -23,20 +23,6 @@ namespace Sanmon.Editor
                 
                 GUILayout.Space(5);
                 
-                if (GUILayout.Button("DOTween Doc", GUILayout.Width(100)))
-                {
-                    Application.OpenURL("http://dotween.demigiant.com/documentation.php#creatingTweener");
-                }
-                
-                GUILayout.Space(5);
-                
-                if (GUILayout.Button("Luban Doc", GUILayout.Width(100)))
-                {
-                    Application.OpenURL("https://luban.doc.code-philosophy.com/docs/manual/excel");
-                }
-                
-                GUILayout.Space(5);
-                
                 if (GUILayout.Button("UniTask Doc", GUILayout.Width(100)))
                 {
                     Application.OpenURL("https://github.com/Cysharp/UniTask?tab=readme-ov-file#getting-started");

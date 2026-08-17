@@ -13,5 +13,9 @@ MonoBehaviour:
   m_Name: PlayModeConfig
   m_EditorClassIdentifier: 
   enable: 1
-  startScene: {fileID: 102900000, guid: 7a6a9dd61a1861c44ae60ae1fdbbc08c, type: 3}
+  saveOnPlay: 1
   restorePreviousScene: 1
+  scenes:
+  - scene: {fileID: 102900000, guid: 7a6a9dd61a1861c44ae60ae1fdbbc08c, type: 3}
+    name: "\u542F\u52A8"
+    tips: 123123123123
