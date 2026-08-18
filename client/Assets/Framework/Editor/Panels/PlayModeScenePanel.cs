@@ -35,33 +35,35 @@ namespace Sanmon.Editor
             
             EditorGUIUtility.labelWidth = 50;
 
-            var deleteIndex = -1;
-            
-            for (var i = 0; i < PlayModeConfig.Ins.scenes.Count; i++)
-            {
-                GUILayout.Space(10);
-                var pms = PlayModeConfig.Ins.scenes[i];
-                using (new GUILayout.HorizontalScope())
-                {
-                    pms.scene = (SceneAsset)EditorGUILayout.ObjectField("场景：", pms.scene, typeof(SceneAsset), false);
-                    GUILayout.Space(20);
-                    pms.name = EditorGUILayout.TextField("名称：", pms.name);
-                    if (GUILayout.Button("X", GUILayout.Width(20)))
-                        deleteIndex = i;
-                }
-                pms.tips =  EditorGUILayout.TextField("备注：", pms.tips);
-            }
+            var scene = PlayModeConfig.Ins.scenes;
 
-            if (deleteIndex >= 0)
+            if (scene.Count == 0)
             {
-                PlayModeConfig.Ins.scenes.RemoveAt(deleteIndex);
+                GUILayout.Label("暂无场景快捷启动设置");
+            }
+            else
+            {
+                for (var i = 0; i < PlayModeConfig.Ins.scenes.Count; i++)
+                {
+                    GUILayout.Space(10);
+                    var pms = PlayModeConfig.Ins.scenes[i];
+                    using (new GUILayout.HorizontalScope())
+                    {
+                        pms.scene = (SceneAsset)EditorGUILayout.ObjectField("场景：", pms.scene, typeof(SceneAsset), false);
+                        GUILayout.Space(20);
+                        pms.name = EditorGUILayout.TextField("名称：", pms.name);
+                        if (GUILayout.Button("X", GUILayout.Width(25)))
+                            PlayModeConfig.Ins.scenes.RemoveAt(i--);
+                    }
+                    pms.tips =  EditorGUILayout.TextField("备注：", pms.tips);
+                }
             }
             
             GUILayout.Space(12);
             
             if (GUILayout.Button("+新场景", GUILayout.Width(80)))
             {
-                var copy = PlayModeConfig.Ins.scenes.Count > 0 ? PlayModeConfig.Ins.scenes[^1] : new PlayModeScene();
+                var copy = PlayModeConfig.Ins.scenes.Count > 0 ? PlayModeConfig.Ins.scenes[^1] : new PlayModeScene(){name = "新场景"};
                 PlayModeConfig.Ins.scenes.Add(new PlayModeScene()
                 {
                     scene = copy.scene,

@@ -2,19 +2,12 @@ using System;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityToolbarExtender;
 
 namespace Sanmon.Editor
 {
-    [InitializeOnLoad]
-    public class LeftButtonPlayMode
+    public static class LeftButtonPlayMode
     {
-        static LeftButtonPlayMode()
-        {
-            ToolbarExtender.LeftToolbarGUI.Add(OnToolbarGUI);
-        }
-
-        static void OnToolbarGUI()
+        public static void OnToolbarGUI()
         {
             GUILayout.FlexibleSpace();
 
@@ -45,7 +38,7 @@ namespace Sanmon.Editor
 
         private static void OnPlayModeChanged(PlayModeStateChange mode)
         {
-            if (mode == PlayModeStateChange.ExitingPlayMode)
+            if (mode == PlayModeStateChange.EnteredEditMode)
                 ExitPlayMode();
         }
 
@@ -109,6 +102,8 @@ namespace Sanmon.Editor
             {
                 EditorSceneManager.RestoreSceneManagerSetup(wrapper.sceneSetups);
             }
+            
+            EditorPrefs.SetString(SCENE_SETUP_KEY, "");
         }
         
         // Unity 的 SceneSetup 不能直接序列化，需要包一层

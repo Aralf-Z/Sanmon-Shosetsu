@@ -2,7 +2,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace Framework.Editor
+namespace Sanmon.Editor
 {
     internal class PathOpener
     {
