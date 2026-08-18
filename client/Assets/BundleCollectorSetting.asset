@@ -12,7 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 511096a4e511f65408e3fd7e062facaf, type: 3}
   m_Name: BundleCollectorSetting
   m_EditorClassIdentifier: 
-  ShowPackageView: 0
-  ShowEditorAlias: 0
-  UniqueBundleName: 0
-  Packages: []
+  ShowPackageView: 1
+  ShowEditorAlias: 1
+  UniqueBundleName: 1
+  Packages:
+  - PackageName: DefaultPackage
+    PackageDesc: "\u9ED8\u8BA4\u5305"
+    EnableAddressable: 0
+    SupportExtensionless: 1
+    LocationToLower: 0
+    IncludeAssetGUID: 0
+    AutoCollectShaders: 1
+    IgnoreRuleName: NormalIgnoreRule
+    Groups:
+    - GroupName: Prefab
+      GroupDesc: "\u9884\u5236\u4F53"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GameAsset/prefab
+        CollectorGUID: d57c5e764ab396d4ebdc2a2d58ac0fbd
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackGroup
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 

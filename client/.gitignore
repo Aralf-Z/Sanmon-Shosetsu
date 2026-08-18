@@ -106,7 +106,11 @@ InitTestScene*.unity*
 /[Aa]ssets/[Ss]ceneDependencyCache*
 
 # My ignore
+
 /.idea
+
+/[Bb]undles/
+
 /[Aa]ssets/Plugins/NuGet*
 /[Aa]ssets/Temp/*
 /[Aa]ssets/Test/*

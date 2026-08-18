@@ -100,7 +100,7 @@ namespace YooAsset.Editor
         /// <param name="message">日志内容</param>
         public static void Error(string message)
         {
-            Debug.LogError(message);
+                Debug.LogError(message);
             if (s_enableLog)
             {
                 WriteLog("ERROR", message);
