@@ -10,16 +10,19 @@ namespace Sanmon.Module
         , IGetModule
     {
         int IModule.InitOrder => InitOrderDefine.UI;
-
+        bool IModule.IsInit => _isInit;
+        
         void IModule.Init()
         {
-            foreach (EmUIOrder order in Enum.GetValues(typeof(EmUIOrder)))
+            foreach (UIOrder order in Enum.GetValues(typeof(UIOrder)))
             {
-                var orderName = Enum.GetName(typeof(EmUIOrder), order);
+                var orderName = Enum.GetName(typeof(UIOrder), order);
                 var canvas = transform.Find(orderName).GetComponent<Canvas>();
                 canvas.sortingOrder = (int)order;
                 mOrdersRoot.Add(order, canvas.transform);
             }
+            
+            _isInit = true;
         }
 
         void IModule.Deinit()
@@ -32,7 +35,8 @@ namespace Sanmon.Module
             
         }
         
-        private readonly Dictionary<EmUIOrder, Transform> mOrdersRoot = new();//层级根节点
+        private bool _isInit;
+        private readonly Dictionary<UIOrder, Transform> mOrdersRoot = new();//层级根节点
         private readonly Dictionary<Type, UIWindow> mCachedWindows = new();//缓存的window
         private readonly Dictionary<Type, UIWindow> mOpeningWindows = new();//打开中的window
         

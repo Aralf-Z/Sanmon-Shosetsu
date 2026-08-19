@@ -7,7 +7,7 @@ namespace Sanmon.Core
     /// </summary>
     public class FlowGameClose: FlowBase
     {
-        private static GameApplication App => GameApplication.Instance;
+        private static GameApplication App => GameApplication.instance;
         
         protected internal override void Init() { }
 

@@ -6,6 +6,6 @@ namespace Sanmon.Module
     public abstract class UIWindow: UIElement
         , IUIWindow
     {
-        public abstract EmUIOrder Order { get; }
+        public abstract UIOrder Order { get; }
     }
 }

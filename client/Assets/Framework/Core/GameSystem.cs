@@ -14,7 +14,7 @@ namespace Sanmon.Core
     {
         private readonly Dictionary<Type, SystemBase> _systems = new Dictionary<Type, SystemBase>();
         
-        internal bool IsInited { get; private set; }
+        internal bool IsInit { get; private set; }
         
         internal void Init()
         {
@@ -35,12 +35,12 @@ namespace Sanmon.Core
             
             Logger.LogInfo($"systems loaded '{count}'.", "system");
             
-            IsInited = true;
+            IsInit = true;
         }
 
         internal void Destroy()
         {
-            IsInited = false;
+            IsInit = false;
         }
 
         public T Get<T>() where T : SystemBase => _systems[typeof(T)] as T;

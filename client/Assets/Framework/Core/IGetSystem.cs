@@ -9,7 +9,7 @@ namespace Sanmon.Core
     {
         public static GameSystem System(this IGetSystem getSystem)
         {
-            return GameApplication.Instance.gameSystem;
+            return GameApplication.instance.gameSystem;
         }
     }
 }

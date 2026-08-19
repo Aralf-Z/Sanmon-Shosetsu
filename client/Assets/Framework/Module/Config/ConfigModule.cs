@@ -17,6 +17,7 @@ namespace Sanmon.Module
         public static string CodeFilePath => Path.Combine(Application.dataPath, "Script/Table/CodeGen");
         
         int IModule.InitOrder => InitOrderDefine.CONFIG;
+        bool IModule.IsInit => _isInit;
 
         public Tables Tables { get; private set; }
         
@@ -70,6 +71,7 @@ namespace Sanmon.Module
                     : new Func<string, JSONNode>(LoadJson);
             
                 Tables = (Tables)tablesCtor.Invoke(new object[] {loader});
+                _isInit = true;
             }
             catch (Exception e)
             {
@@ -88,6 +90,8 @@ namespace Sanmon.Module
         {
             
         }
+        
+        private bool _isInit;
         
         private ByteBuf LoadByteBuf(string file)
         {

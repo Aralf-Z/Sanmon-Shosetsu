@@ -10,18 +10,20 @@ namespace Sanmon.Core
     public class GameEntity : MonoBehaviour,
         IGetModule
     {
+        internal bool IsInit { get; private set; }
+        
         private readonly HashSet<Entity> _entities = new HashSet<Entity>();
         private readonly List<Entity> _removeCache = new List<Entity>();
         private readonly List<Entity> _addCache = new List<Entity>();
         
         internal void Init()
         {
-
+            IsInit = true;
         }
 
         internal void Destroy()
         {
-            
+            IsInit = false;
         }
         
         public Entity Require()

@@ -9,7 +9,7 @@ namespace Sanmon.Core
     {
         [SerializeField] public FlowBase nextFlow;
 
-        protected static GameFlow Flow => GameApplication.Instance.gameFlow;
+        protected static GameFlow Flow => GameApplication.instance.gameFlow;
 
         protected internal abstract void Init();
         protected internal abstract void Enter();

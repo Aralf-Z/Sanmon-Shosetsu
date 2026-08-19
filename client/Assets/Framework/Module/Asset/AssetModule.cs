@@ -4,7 +4,6 @@ using System.IO;
 using Sanmon.Helper;
 using UnityEngine;
 using YooAsset;
-using Logger = Sanmon.Helper.Logger;
 using Object = UnityEngine.Object;
 
 namespace Sanmon.Module
@@ -13,12 +12,14 @@ namespace Sanmon.Module
         IModule
     {
         int IModule.InitOrder => InitOrderDefine.ASSET;
+        bool IModule.IsInit => _isInit;
 
         void IModule.Init()
         {
-            Logger.LogInfo($"YooAsset Version: 3.0.5", "Asset");
+            _logger = new AssetLogger();
+            _logger.Log("YooAsset Version: 3.0.5");
             
-            YooAssets.Initialize();
+            YooAssets.Initialize(_logger);
             
             StartCoroutine(InitPackage());
         }
@@ -39,7 +40,9 @@ namespace Sanmon.Module
         public EPlayMode playMode = EPlayMode.EditorSimulateMode;
 
         private ResourcePackage _package;
-
+        private AssetLogger _logger;
+        private bool _isInit;
+        
         public T LoadSync<T>(string location) where T : Object
         {
             return _package.LoadAssetSync<T>(location).AssetObject as T;
@@ -70,13 +73,13 @@ namespace Sanmon.Module
             yield return operation;
             
             if(operation.Status is EOperationStatus.Succeeded)
-                Debug.Log("LoadPackageManifestAsync Done");
+                _logger.Log("LoadPackageManifestAsync Done");
             else
-                Debug.LogError($"LoadPackageManifestAsync Error: {operation.Error}");
+                _logger.LogError($"LoadPackageManifestAsync Error: {operation.Error}");
             
             if (initializationOperation.Status == EOperationStatus.Succeeded)
             {
-                Debug.Log("资源包初始化成功！");
+                _logger.Log("资源包初始化成功！");
                 var gop1 = LoadSync<GameObject>("Assets/GameAsset/prefab/Capsule.prefab");
                 var gop2 = LoadSync<GameObject>("Assets/GameAsset/prefab/Capsule");
                 
@@ -87,7 +90,9 @@ namespace Sanmon.Module
                 go2.transform.localPosition = new Vector3(3, 3, 3);
             }
             else 
-                Debug.LogError($"资源包初始化失败：{initializationOperation.Error}");
+                _logger.LogError($"资源包初始化失败：{initializationOperation.Error}");
+
+            _isInit = true;
         }
         
         //todo 图集等

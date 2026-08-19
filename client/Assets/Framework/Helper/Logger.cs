@@ -18,7 +18,7 @@ namespace Sanmon.Helper
         private static void Log(string message, string title = null, string color = "#FFFFFF")
         {
             var timeStamp = Config.logTimeStamp ? $"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}:{DateTime.Now.Millisecond:000}] " : "";
-            Debug.Log($"{timeStamp}<color={color}>{(title == null ? "" : $"[{title}]  ")}{message}</color>");
+            Debug.Log($"{timeStamp}<color={color}>{(title == null ? "" : $"<{title}>  ")}{message}</color>");
         }
         
         /// <summary>

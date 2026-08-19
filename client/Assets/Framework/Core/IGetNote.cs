@@ -9,7 +9,7 @@ namespace Sanmon.Core
     {
         public static GameNote Note(this IGetNote getNote)
         {
-            return GameApplication.Instance.gameNote;
+            return GameApplication.instance.gameNote;
         }
     }
 }

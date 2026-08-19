@@ -1,6 +1,6 @@
 namespace Sanmon.Module
 {
-    public enum EmUIOrder
+    public enum UIOrder
     {
         /// <summary>
         /// 背景界面

@@ -8,7 +8,7 @@ namespace Sanmon.Core
     /// </summary>
     public class GameApplication: MonoBehaviour
     {
-        public static GameApplication Instance;
+        public static GameApplication instance;
         
         [SerializeField] internal GameNote gameNote;
         [SerializeField] internal GameEntity gameEntity;
@@ -18,13 +18,13 @@ namespace Sanmon.Core
 
         public void StartGame()
         {
-            Instance = this;
+            instance = this;
             gameFlow.Init();
         }
         
         private void Update()
         {
-            if(!Instance) return;
+            if(!instance) return;
             
             var dt = Time.deltaTime;
             
@@ -33,7 +33,7 @@ namespace Sanmon.Core
         
         private void FixedUpdate()
         {
-            if(!Instance) return;
+            if(!instance) return;
             
             var dt = Time.fixedDeltaTime;
             

@@ -8,7 +8,7 @@ namespace Sanmon.Core
     /// </summary>
     public class FlowGameInit: FlowBase
     {
-        private static GameApplication App => GameApplication.Instance;
+        private static GameApplication App => GameApplication.instance;
 
         private DateTime _timer;
         
@@ -17,21 +17,39 @@ namespace Sanmon.Core
         protected internal override void Enter()
         {
             _timer = DateTime.Now;
-            Logger.LogInfo("初始化游戏模块", "流程");
+            
+            Logger.LogInfo("初始化游戏", "初始化");
+            
             App.gameModule.Init();
-            App.gameEntity.Init();
-            App.gameNote.Init();
-            App.gameSystem.Init();
         }
 
         protected internal override void Check(float dt)
         {
+            if(!App.gameModule.IsInit) return;
+            
+            Logger.LogInfo("'Module'初始化完成", "初始化");
+            App.gameEntity.Init();
+            
+            if(!App.gameEntity.IsInit) return;
+            
+            Logger.LogInfo("'Entity'初始化完成", "初始化");
+            App.gameNote.Init();
+            
+            if(!App.gameNote.IsInit) return;
+            
+            Logger.LogInfo("'Note'初始化完成", "初始化");
+            App.gameSystem.Init();
+            
+            if(!App.gameSystem.IsInit) return;
+            
+            Logger.LogInfo("'System'初始化完成", "初始化");
+            
             NextFlow();
         }
 
         protected override void Exit()
         {
-            Logger.LogInfo($"初始化游戏模块结束, 耗时 [{(DateTime.Now - _timer).TotalMilliseconds / 1000:F5}s]", "流程");
+            Logger.LogInfo($"初始化游戏模块结束, 耗时 [{(DateTime.Now - _timer).TotalMilliseconds / 1000:F5}s]", "初始化");
         }
     }
 }

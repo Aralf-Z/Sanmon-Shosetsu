@@ -16,7 +16,7 @@ namespace Sanmon.Core
         
         public IReadOnlyCollection<NoteBase> Notes => _notes.Values;
         
-        internal bool IsInited { get; private set; }
+        internal bool IsInit { get; private set; }
         
         internal void Init()
         {
@@ -37,12 +37,12 @@ namespace Sanmon.Core
             
             Logger.LogInfo($"notes loaded '{count}'.", "note");
             
-            IsInited = true;
+            IsInit = true;
         }
 
         internal void Destroy()
         {
-            IsInited = false;
+            IsInit = false;
         }
 
         public T Get<T>() where T : NoteBase => _notes[typeof(T)] as T;

@@ -9,7 +9,7 @@ namespace Sanmon.Core
     {
         public static GameEntity Entity(this IGetEntity getEntity)
         {
-            return GameApplication.Instance.gameEntity;
+            return GameApplication.instance.gameEntity;
         }
     }
 }

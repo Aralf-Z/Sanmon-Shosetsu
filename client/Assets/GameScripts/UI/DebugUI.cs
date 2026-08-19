@@ -33,7 +33,7 @@ namespace GameScripts
             
         }
 
-        public override EmUIOrder Order => EmUIOrder.Tip;
+        public override UIOrder Order => UIOrder.Tip;
     }
  
 }

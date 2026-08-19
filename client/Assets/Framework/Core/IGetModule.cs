@@ -12,7 +12,7 @@ namespace Sanmon.Core
     {
         public static GameModule Module(this IGetModule getModule)
         {
-            return GameApplication.Instance.gameModule;
+            return GameApplication.instance.gameModule;
         }
     }
 }
