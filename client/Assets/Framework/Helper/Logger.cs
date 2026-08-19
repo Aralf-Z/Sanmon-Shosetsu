@@ -8,6 +8,7 @@ namespace Sanmon.Helper
     /// </summary>
     public static class Logger
     {
+        //todo Warning和Error不走Log
         private static LoggerConfig Config => LoggerConfig.Ins;
         
         private static void Log(string message, string title = null, Color color = default)

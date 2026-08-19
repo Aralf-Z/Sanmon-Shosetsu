@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Sanmon.Entities;
+using Sanmon.GameEntity;
 using Sanmon.Utility.Value;
 using UnityEngine;
 

@@ -19,7 +19,6 @@ namespace Sanmon.Core
         internal void Init()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            var count = 0;
 
             foreach (var assembly in assemblies)
             {
@@ -28,12 +27,12 @@ namespace Sanmon.Core
                     var system = (SystemBase)Activator.CreateInstance(type);
                     system.Init();
                     _systems.Add(type, system);
-                    count++;
+                    
                     Logger.LogInfo($"create system '{type.FullName}'", "system");
                 }
             }
             
-            Logger.LogInfo($"systems loaded '{count}'.", "system");
+            Logger.LogInfo($"systems loaded, total: '{_systems.Count}'.", "system");
             
             IsInit = true;
         }

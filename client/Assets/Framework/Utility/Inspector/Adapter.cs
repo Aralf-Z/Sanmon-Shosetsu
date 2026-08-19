@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using Sanmon.Entities;
+using Sanmon.GameEntity;
 
 namespace Sanmon.Utility.Inspector
 {
@@ -206,7 +206,7 @@ namespace Sanmon.Utility.Inspector
     {
         public override bool CanHandle(Type type)
         {
-            return typeof(Entities.Entity).IsAssignableFrom(type);
+            return typeof(Entity).IsAssignableFrom(type);
         }
 
         public override string Content(NodeBase node)
@@ -216,7 +216,7 @@ namespace Sanmon.Utility.Inspector
 
         public override void Search(NodeBase node, int childDepth)
         {
-            var entity = (Entities.Entity)node.GetValue();
+            var entity = (Entity)node.GetValue();
 
             if(entity == null) return;
 

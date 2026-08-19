@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Sanmon.Entities;
+using Sanmon.GameEntity;
 using UnityEngine;
 
 namespace Sanmon.Core

@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Core
@@ -19,7 +20,7 @@ namespace Sanmon.Core
             _timer = DateTime.Now;
             
             Logger.LogInfo("初始化游戏", "初始化");
-            
+            Logger.LogInfo($"unity version: {Application.unityVersion}", "初始化");
             App.gameModule.Init();
         }
 

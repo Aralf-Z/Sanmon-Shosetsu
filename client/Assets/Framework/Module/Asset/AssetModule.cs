@@ -21,6 +21,10 @@ namespace Sanmon.Module
             
             YooAssets.Initialize(_logger);
             
+            if (!YooAssets.TryGetPackage(DEFAULT_PACKAGE, out var package))
+                package = YooAssets.CreatePackage(DEFAULT_PACKAGE);
+            _package = package;
+            
             StartCoroutine(InitPackage());
         }
 
@@ -55,44 +59,72 @@ namespace Sanmon.Module
         
         private IEnumerator InitPackage()
         {  
-            if (!YooAssets.TryGetPackage(DEFAULT_PACKAGE, out var package))
-                package = YooAssets.CreatePackage(DEFAULT_PACKAGE);
-            _package = package;
             InitializePackageOperation initializationOperation = null;
+            LoadPackageManifestOperation loadPackageManifestOperation = null;
             
-            var buildResult = EditorSimulateBuildInvoker.Build(DEFAULT_PACKAGE, (int)EBundleType.VirtualAssetBundle);
-            var packageRoot = buildResult.PackageRootDirectory;
-            var createParameters = new EditorSimulateModeOptions();
-            createParameters.EditorFileSystemParameters = FileSystemParameters.CreateDefaultEditorFileSystemParameters(packageRoot);
-            initializationOperation = package.InitializePackageAsync(createParameters);
-            
-            yield return initializationOperation;
+            var mode = playMode;//todo 编辑器
 
-            var options = new LoadPackageManifestOptions("Simulate", 60);
-            var operation = package.LoadPackageManifestAsync(options);
-            yield return operation;
+            _logger.Log($"资源加载模式：{mode}");
             
-            if(operation.Status is EOperationStatus.Succeeded)
-                _logger.Log("LoadPackageManifestAsync Done");
-            else
-                _logger.LogError($"LoadPackageManifestAsync Error: {operation.Error}");
-            
-            if (initializationOperation.Status == EOperationStatus.Succeeded)
+            if (mode is EPlayMode.EditorSimulateMode)
             {
-                _logger.Log("资源包初始化成功！");
-                var gop1 = LoadSync<GameObject>("Assets/GameAsset/prefab/Capsule.prefab");
-                var gop2 = LoadSync<GameObject>("Assets/GameAsset/prefab/Capsule");
-                
-                var go1 = Instantiate(gop1);
-                go1.transform.localPosition = new Vector3(0, 0, 0);
+                var buildResult = EditorSimulateBuildInvoker.Build(DEFAULT_PACKAGE, (int)EBundleType.VirtualAssetBundle);
+                var packageRoot = buildResult.PackageRootDirectory;
+                var createParameters = new EditorSimulateModeOptions
+                {
+                    EditorFileSystemParameters = FileSystemParameters.CreateDefaultEditorFileSystemParameters(packageRoot)
+                };
+                initializationOperation = _package.InitializePackageAsync(createParameters);
             
-                var go2 = Instantiate(gop2);
-                go2.transform.localPosition = new Vector3(3, 3, 3);
-            }
-            else 
-                _logger.LogError($"资源包初始化失败：{initializationOperation.Error}");
+                yield return initializationOperation;
 
-            _isInit = true;
+                var options = new LoadPackageManifestOptions("Simulate", 60);
+                loadPackageManifestOperation = _package.LoadPackageManifestAsync(options);
+                
+                yield return loadPackageManifestOperation;
+            }
+            else if(mode is EPlayMode.OfflinePlayMode)
+            {
+                var fileSystemParams = FileSystemParameters.CreateDefaultBuiltinFileSystemParameters();
+                var createParameters = new OfflinePlayModeOptions
+                {
+                    BuiltinFileSystemParameters = fileSystemParams
+                };
+                initializationOperation = _package.InitializePackageAsync(createParameters);
+                
+                yield return initializationOperation;
+                
+                var options = new LoadPackageManifestOptions("Simulate", 60);
+                loadPackageManifestOperation = _package.LoadPackageManifestAsync(options);
+                
+                yield return loadPackageManifestOperation;
+            }
+            else
+            {
+                throw new SystemException($"错误加载模式：'{mode}'尚未支持.");
+            }
+            
+            if (initializationOperation?.Status == EOperationStatus.Succeeded)
+                _logger.Log("资源包初始化成功！");
+            else 
+                _logger.LogError($"资源包初始化失败：{initializationOperation?.Error}");
+
+            if(loadPackageManifestOperation?.Status is EOperationStatus.Succeeded)
+                _logger.Log($"Manifest  加载成功");
+            else
+                _logger.LogError($"Manifest 加载失败： {loadPackageManifestOperation?.Error}");
+            
+            _isInit = loadPackageManifestOperation?.Status is EOperationStatus.Succeeded && initializationOperation?.Status == EOperationStatus.Succeeded;
+
+            if (_isInit)
+            {
+                _logger.Log($"Package Version: {_package.GetPackageVersion()}");
+                _logger.Log($"Package Note: {_package.GetPackageNote()}");
+            }
+            else
+            {
+                _logger.LogError("资源模块加载失败");
+            }
         }
         
         //todo 图集等

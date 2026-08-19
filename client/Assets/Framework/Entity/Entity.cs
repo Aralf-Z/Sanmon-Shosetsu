@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Sanmon.Utility.Set;
 
-namespace Sanmon.Entities
+namespace Sanmon.GameEntity
 {
     public class Entity
     {

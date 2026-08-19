@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
 
-namespace Sanmon.Utility.UnityExtension.Editor
+namespace Sanmon.Editor
 {
     [CustomEditor(typeof(AnimationTabber))]
     public class AnimationTabberEditor : UnityEditor.Editor

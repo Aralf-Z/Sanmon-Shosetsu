@@ -1,5 +1,4 @@
-using Sanmon.Entities;
-using UnityEditor;
+using Sanmon.GameEntity;
 using UnityEngine;
 
 
@@ -31,21 +30,6 @@ namespace GameScripts
             {
                 self.AddEffect(new EfInputMove());
             }
-        }
-    }
-
-    [CustomEditor(typeof(CharRegister))]
-    public class CharRegisterEditor : Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            base.OnInspectorGUI();
-            var charRegister = (CharRegister)target;
-            
-            if(!EditorApplication.isPlaying) return;
-            
-            GUILayout.Label($"hp: {charRegister.attri["hp"].Value}/{charRegister.res["hp"]}");
-            GUILayout.Label($"atk: {charRegister.attri["atk"].Value}");
         }
     }
 }

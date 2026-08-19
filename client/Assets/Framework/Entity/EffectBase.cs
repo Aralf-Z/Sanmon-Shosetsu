@@ -2,7 +2,7 @@ using Game.Config.Logic;
 using Sanmon.Core;
 using Sanmon.Utility.Set;
 
-namespace Sanmon.Entities
+namespace Sanmon.GameEntity
 {
     /// <summary>
     /// 这是实体运行时的逻辑类，可以做到逻辑的拆除和添加，Ef前缀

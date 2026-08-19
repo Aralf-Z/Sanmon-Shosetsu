@@ -1,4 +1,4 @@
-namespace Sanmon.Entities
+namespace Sanmon.GameEntity
 {
     /// <summary>
     /// 这是实体运行时的数据类，Cm前缀

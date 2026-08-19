@@ -21,7 +21,6 @@ namespace Sanmon.Core
         internal void Init()
         {
             var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            var count = 0;
 
             foreach (var assembly in assemblies)
             {
@@ -30,12 +29,12 @@ namespace Sanmon.Core
                     var note = (NoteBase)Activator.CreateInstance(type);
                     note.Init();
                     _notes.Add(type, note);
-                    count++;
+                    
                     Logger.LogInfo($"create note '{type.FullName}'", "note");
                 }
             }
             
-            Logger.LogInfo($"notes loaded '{count}'.", "note");
+            Logger.LogInfo($"notes loaded, total: {_notes.Count}.", "note");
             
             IsInit = true;
         }

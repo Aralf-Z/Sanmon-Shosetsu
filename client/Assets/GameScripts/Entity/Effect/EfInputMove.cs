@@ -1,5 +1,5 @@
 using Sanmon.Core;
-using Sanmon.Entities;
+using Sanmon.GameEntity;
 using UnityEngine;
 
 namespace GameScripts

@@ -3,7 +3,7 @@ using Sanmon.Core;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Sanmon.Entities
+namespace Sanmon.GameEntity
 {
     public class CmWorldModel: ComponentBase
         , IGetModule
