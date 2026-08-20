@@ -26,6 +26,7 @@ namespace Sanmon.Core
 
         protected internal override void Check(float dt)
         {
+            //todo 有问题
             if(!App.gameModule.IsInit) return;
             
             Logger.LogInfo("'Module'初始化完成", "初始化");

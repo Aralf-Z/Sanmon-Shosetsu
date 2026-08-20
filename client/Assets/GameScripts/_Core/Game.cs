@@ -14,7 +14,6 @@ namespace GameScripts
             , IGetEntity
             , IGetSystem
             , IGetNote { }
-        
         private static readonly MyGame game = new MyGame();
 
         public static AssetModule Asset => game.Module().Asset;

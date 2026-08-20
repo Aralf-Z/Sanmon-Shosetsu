@@ -17,7 +17,7 @@ namespace Sanmon.Module
         void IModule.Init()
         {
             _logger = new AssetLogger();
-            _logger.Log("YooAsset Version: 3.0.5");
+            _logger.Log("YooAsset version: 3.0.5");
             
             YooAssets.Initialize(_logger);
             
@@ -59,6 +59,10 @@ namespace Sanmon.Module
         
         private IEnumerator InitPackage()
         {  
+            //先创建包
+            //再加载version
+            //最后加载manifest
+            
             InitializePackageOperation initializationOperation = null;
             LoadPackageManifestOperation loadPackageManifestOperation = null;
             
@@ -94,7 +98,7 @@ namespace Sanmon.Module
                 
                 yield return initializationOperation;
                 
-                var options = new LoadPackageManifestOptions("Simulate", 60);
+                var options = new LoadPackageManifestOptions("2026-08-20-696", 60);
                 loadPackageManifestOperation = _package.LoadPackageManifestAsync(options);
                 
                 yield return loadPackageManifestOperation;

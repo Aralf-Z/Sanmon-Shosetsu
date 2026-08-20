@@ -11,15 +11,23 @@ namespace Sanmon.Helper
         //todo Warning和Error不走Log
         private static LoggerConfig Config => LoggerConfig.Ins;
         
-        private static void Log(string message, string title = null, Color color = default)
+        private static void Log(string message, LoggerConfig.Level level, string title = null, Color color = default)
         {
-            Log(message, title, color == default ? "#FFFFFF" : color.ColorToHex());
+            Log(message, level, title, color == default ? "#FFFFFF" : color.ColorToHex());
         }
 
-        private static void Log(string message, string title = null, string color = "#FFFFFF")
+        private static void Log(string message, LoggerConfig.Level level, string title = null, string color = "#FFFFFF")
         {
             var timeStamp = Config.logTimeStamp ? $"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}:{DateTime.Now.Millisecond:000}] " : "";
-            Debug.Log($"{timeStamp}<color={color}>{(title == null ? "" : $"<{title}>  ")}{message}</color>");
+            var pre = level switch
+            {
+                LoggerConfig.Level.Info => $"<color={Config.colors[(int)LoggerConfig.Level.Info]}>[INFO]</color>",
+                LoggerConfig.Level.Warning => $"<color={Config.colors[(int)LoggerConfig.Level.Warning]}>[WARN]</color>",
+                LoggerConfig.Level.Error => $"<color={Config.colors[(int)LoggerConfig.Level.Error]}>[ERROR]</color>",
+                LoggerConfig.Level.Debug => $"<color={Config.colors[(int)LoggerConfig.Level.Debug]}>[DEBUG]</color>",
+                _ =>  $"<color={Config.colors[(int)LoggerConfig.Level.Info]}>[LOG]</color>",
+            };
+            Debug.Log($"{timeStamp}{pre}<color={color}>{(title == null ? "" : $"<{title}>  ")}{message}</color>");
         }
         
         /// <summary>
@@ -34,11 +42,11 @@ namespace Sanmon.Helper
             {
                 if (color == default)
                 {
-                    Log(message, title, Config.colors[(int)LoggerConfig.Level.Info]);
+                    Log(message, LoggerConfig.Level.Info, title, Config.colors[(int)LoggerConfig.Level.Info]);
                 }
                 else
                 {
-                    Log(message, title, color);
+                    Log(message, LoggerConfig.Level.Info, title, color);
                 }
             };
         }
@@ -55,11 +63,11 @@ namespace Sanmon.Helper
             {
                 if (color == default)
                 {
-                    Log(message, title, Config.colors[(int)LoggerConfig.Level.Warning]);
+                    Log(message, LoggerConfig.Level.Warning, title, Config.colors[(int)LoggerConfig.Level.Warning]);
                 }
                 else
                 {
-                    Log(message, title, color);
+                    Log(message, LoggerConfig.Level.Warning, title, color);
                 }
             };
         }
@@ -76,11 +84,11 @@ namespace Sanmon.Helper
             {
                 if (color == default)
                 {
-                    Log(message, title, Config.colors[(int)LoggerConfig.Level.Error]);
+                    Log(message, LoggerConfig.Level.Error, title, Config.colors[(int)LoggerConfig.Level.Error]);
                 }
                 else
                 {
-                    Log(message, title, color);
+                    Log(message, LoggerConfig.Level.Error, title, color);
                 }
             };
         }
@@ -97,11 +105,11 @@ namespace Sanmon.Helper
             {
                 if (color == default)
                 {
-                    Log(message, title, Config.colors[(int)LoggerConfig.Level.Debug]);
+                    Log(message, LoggerConfig.Level.Debug, title, Config.colors[(int)LoggerConfig.Level.Debug]);
                 }
                 else
                 {
-                    Log(message, title, color);
+                    Log(message, LoggerConfig.Level.Debug, title, color);
                 }
             };
         }
