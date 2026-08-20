@@ -57,78 +57,90 @@ namespace Sanmon.Module
             return _package.LoadAssetAsync<T>(location);
         }
         
+        //初始化包
         private IEnumerator InitPackage()
         {  
-            //先创建包
-            //再加载version
-            //最后加载manifest
-            
-            InitializePackageOperation initializationOperation = null;
-            LoadPackageManifestOperation loadPackageManifestOperation = null;
+            InitializePackageOperation initOperation = null;
             
             var mode = playMode;//todo 编辑器
 
             _logger.Log($"资源加载模式：{mode}");
             
-            if (mode is EPlayMode.EditorSimulateMode)
+            if (mode is EPlayMode.EditorSimulateMode)//模拟编辑器模式
             {
                 var buildResult = EditorSimulateBuildInvoker.Build(DEFAULT_PACKAGE, (int)EBundleType.VirtualAssetBundle);
                 var packageRoot = buildResult.PackageRootDirectory;
-                var createParameters = new EditorSimulateModeOptions
-                {
-                    EditorFileSystemParameters = FileSystemParameters.CreateDefaultEditorFileSystemParameters(packageRoot)
-                };
-                initializationOperation = _package.InitializePackageAsync(createParameters);
-            
-                yield return initializationOperation;
+                var fileSystemParams = FileSystemParameters.CreateDefaultEditorFileSystemParameters(packageRoot);
 
-                var options = new LoadPackageManifestOptions("Simulate", 60);
-                loadPackageManifestOperation = _package.LoadPackageManifestAsync(options);
+                var createParameters = new EditorSimulateModeOptions();
+                createParameters.EditorFileSystemParameters = fileSystemParams;
                 
-                yield return loadPackageManifestOperation;
+                initOperation = _package.InitializePackageAsync(createParameters);
+            
+                yield return initOperation;
             }
-            else if(mode is EPlayMode.OfflinePlayMode)
+            else if(mode is EPlayMode.OfflinePlayMode)//单机模式
             {
                 var fileSystemParams = FileSystemParameters.CreateDefaultBuiltinFileSystemParameters();
                 var createParameters = new OfflinePlayModeOptions
                 {
                     BuiltinFileSystemParameters = fileSystemParams
                 };
-                initializationOperation = _package.InitializePackageAsync(createParameters);
+                initOperation = _package.InitializePackageAsync(createParameters);
                 
-                yield return initializationOperation;
-                
-                var options = new LoadPackageManifestOptions("2026-08-20-696", 60);
-                loadPackageManifestOperation = _package.LoadPackageManifestAsync(options);
-                
-                yield return loadPackageManifestOperation;
+                yield return initOperation;
             }
             else
             {
-                throw new SystemException($"错误加载模式：'{mode}'尚未支持.");
+                var msg = $"错误加载模式：'{mode}'尚未支持.";
+                _logger.LogError(msg);
+                throw new SystemException(msg);
             }
-            
-            if (initializationOperation?.Status == EOperationStatus.Succeeded)
+
+            if (initOperation.Status == EOperationStatus.Succeeded)
+            {
                 _logger.Log("资源包初始化成功！");
+                yield return LoadPackageVersion();
+            }
             else 
-                _logger.LogError($"资源包初始化失败：{initializationOperation?.Error}");
+                _logger.LogError($"资源包初始化失败：'{initOperation.Error}'");
+        }
 
-            if(loadPackageManifestOperation?.Status is EOperationStatus.Succeeded)
-                _logger.Log($"Manifest  加载成功");
+        //加载version
+        private IEnumerator LoadPackageVersion()
+        {
+            var loadVersionOperation = _package.RequestPackageVersionAsync();
+            yield return loadVersionOperation;
+
+            if (loadVersionOperation.Status == EOperationStatus.Succeeded)
+            {
+                var packageVersion = loadVersionOperation.PackageVersion;
+                _logger.Log($"资源包版本获取成功: '{packageVersion}'!");
+                yield return LoadPackageManifest(packageVersion);
+            }
             else
-                _logger.LogError($"Manifest 加载失败： {loadPackageManifestOperation?.Error}");
+            {
+                _logger.LogError($"资源包版本获取失败：'{loadVersionOperation.Error}'");
+            }
+        }
+
+        //加载manifest
+        private IEnumerator LoadPackageManifest(string packageVersion)
+        {
+            LoadPackageManifestOperation loadManifestOperation = null;
             
-            _isInit = loadPackageManifestOperation?.Status is EOperationStatus.Succeeded && initializationOperation?.Status == EOperationStatus.Succeeded;
+            var options = new LoadPackageManifestOptions(packageVersion, 60);
+            loadManifestOperation = _package.LoadPackageManifestAsync(options);
+                
+            yield return loadManifestOperation;
 
-            if (_isInit)
+            if (loadManifestOperation.Status is EOperationStatus.Succeeded)
             {
-                _logger.Log($"Package Version: {_package.GetPackageVersion()}");
-                _logger.Log($"Package Note: {_package.GetPackageNote()}");
+                _isInit = true;
+                _logger.Log($"资源包清单加载成功！");
             }
             else
-            {
-                _logger.LogError("资源模块加载失败");
-            }
+                _logger.LogError($"资源包清单加载失败：'{loadManifestOperation.Error}'");
         }
         
         //todo 图集等

@@ -14,17 +14,17 @@ namespace Sanmon.Module
 
         public void LogWarning(string message)
         {
-            Logger.LogWarning(message, "Asset", Color.green);
+            Logger.LogWarning(message, "Asset");
         }
 
         public void LogError(string message)
         {
-            Logger.LogError(message, "Asset", Color.green);
+            Logger.LogError(message, "Asset");
         }
 
         public void LogException(Exception exception)
         {
-            Logger.LogError(exception.Message, "Asset", Color.green);
+            Logger.LogError(exception.Message, "Asset");
         }
     }
 }

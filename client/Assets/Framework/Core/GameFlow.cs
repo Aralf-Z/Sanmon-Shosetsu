@@ -29,7 +29,7 @@ namespace Sanmon.Core
         
         internal void OnLogicUpdate(float dt)
         {
-            curFlow.Check(dt);
+            curFlow.LogicUpdate(dt);
         }
     }
 }

@@ -111,7 +111,8 @@ InitTestScene*.unity*
 
 /[Bb]undles/
 
-/[Aa]ssets/Plugins/NuGet*
-/[Aa]ssets/Temp/*
-/[Aa]ssets/Test/*
-/[Aa]ssets/Samples/*
+/[Aa]ssets/[Pp]lugins/[Nn]uGet*
+/[Aa]ssets/[Tt]emp/*
+/[Aa]ssets/[Tt]est/*
+/[Aa]ssets/[Ss]amples/*
+/[Aa]ssets/[Ss]treamingAssets/[Yy]oo/*

@@ -7,6 +7,7 @@ using Luban;
 using Luban.SimpleJSON;
 using UnityEngine;
 using UnityEngine.Networking;
+using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Module
 {
@@ -71,6 +72,8 @@ namespace Sanmon.Module
                     : new Func<string, JSONNode>(LoadJson);
             
                 Tables = (Tables)tablesCtor.Invoke(new object[] {loader});
+                
+                Logger.LogInfo("表配置加载成功！", "config");
                 _isInit = true;
             }
             catch (Exception e)

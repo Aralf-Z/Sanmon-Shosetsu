@@ -20,22 +20,6 @@ namespace Sanmon.Core
         
         internal void Init()
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-            foreach (var assembly in assemblies)
-            {
-                foreach (var type in assembly.GetTypes().Where(t => !t.IsAbstract && typeof(NoteBase).IsAssignableFrom(t)))
-                {
-                    var note = (NoteBase)Activator.CreateInstance(type);
-                    note.Init();
-                    _notes.Add(type, note);
-                    
-                    Logger.LogInfo($"create note '{type.FullName}'", "note");
-                }
-            }
-            
-            Logger.LogInfo($"notes loaded, total: {_notes.Count}.", "note");
-            
             IsInit = true;
         }
 
@@ -44,6 +28,17 @@ namespace Sanmon.Core
             IsInit = false;
         }
 
-        public T Get<T>() where T : NoteBase => _notes[typeof(T)] as T;
+        public T Get<T>() where T : NoteBase
+        {
+            var type = typeof(T);
+            if (_notes.TryGetValue(type, out var note)) return (T)note;
+            
+            var @new = (T)Activator.CreateInstance(type);
+            _notes.Add(type, @new);
+            
+            Logger.LogInfo($"create note '{type.FullName}'", "note");
+            
+            return @new;
+        }
     }
 }

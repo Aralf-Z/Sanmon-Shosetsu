@@ -18,22 +18,6 @@ namespace Sanmon.Core
         
         internal void Init()
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-
-            foreach (var assembly in assemblies)
-            {
-                foreach (var type in assembly.GetTypes().Where(t => !t.IsAbstract && typeof(SystemBase).IsAssignableFrom(t)))
-                {
-                    var system = (SystemBase)Activator.CreateInstance(type);
-                    system.Init();
-                    _systems.Add(type, system);
-                    
-                    Logger.LogInfo($"create system '{type.FullName}'", "system");
-                }
-            }
-            
-            Logger.LogInfo($"systems loaded, total: '{_systems.Count}'.", "system");
-            
             IsInit = true;
         }
 
@@ -42,6 +26,17 @@ namespace Sanmon.Core
             IsInit = false;
         }
 
-        public T Get<T>() where T : SystemBase => _systems[typeof(T)] as T;
+        public T Get<T>() where T : SystemBase
+        {
+            var type = typeof(T);
+            if (_systems.TryGetValue(type, out var sys)) return (T)sys;
+            
+            var @new = (T)Activator.CreateInstance(type);
+            _systems.Add(type, @new);
+            
+            Logger.LogInfo($"create system '{type.FullName}'", "system");
+            
+            return @new;
+        }
     }
 }

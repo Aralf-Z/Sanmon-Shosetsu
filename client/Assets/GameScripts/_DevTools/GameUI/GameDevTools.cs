@@ -25,6 +25,7 @@ namespace GameConsole.GameUI
         
         private void Awake()
         {
+            DontDestroyOnLoad(gameObject);
             gameObject.SetActive(true);
             root.gameObject.SetActive(false);
             mConsole = new ConsoleController<LogType>(

@@ -22,7 +22,7 @@ namespace Sanmon.Core
             App.ShutDown();
         }
 
-        protected internal override void Check(float dt) { }
+        protected internal override void LogicUpdate(float dt) { }
 
         protected override void Exit()
         {

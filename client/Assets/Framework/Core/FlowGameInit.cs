@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using Logger = Sanmon.Helper.Logger;
 
@@ -13,6 +14,8 @@ namespace Sanmon.Core
 
         private DateTime _timer;
         
+        private bool _done = false;
+        
         protected internal override void Init() { }
 
         protected internal override void Enter()
@@ -21,30 +24,13 @@ namespace Sanmon.Core
             
             Logger.LogInfo("初始化游戏", "初始化");
             Logger.LogInfo($"unity version: {Application.unityVersion}", "初始化");
-            App.gameModule.Init();
+            
+            StartCoroutine(InitGame());
         }
 
-        protected internal override void Check(float dt)
+        protected internal override void LogicUpdate(float dt)
         {
-            //todo 有问题
-            if(!App.gameModule.IsInit) return;
-            
-            Logger.LogInfo("'Module'初始化完成", "初始化");
-            App.gameEntity.Init();
-            
-            if(!App.gameEntity.IsInit) return;
-            
-            Logger.LogInfo("'Entity'初始化完成", "初始化");
-            App.gameNote.Init();
-            
-            if(!App.gameNote.IsInit) return;
-            
-            Logger.LogInfo("'Note'初始化完成", "初始化");
-            App.gameSystem.Init();
-            
-            if(!App.gameSystem.IsInit) return;
-            
-            Logger.LogInfo("'System'初始化完成", "初始化");
+            if(!_done) return;
             
             NextFlow();
         }
@@ -52,6 +38,32 @@ namespace Sanmon.Core
         protected override void Exit()
         {
             Logger.LogInfo($"初始化游戏模块结束, 耗时 [{(DateTime.Now - _timer).TotalMilliseconds / 1000:F5}s]", "初始化");
+        }
+
+        private IEnumerator InitGame()
+        {
+            App.gameModule.Init();
+            
+            yield return new WaitUntil(() => App.gameModule.IsInit);
+            
+            Logger.LogInfo("'Module'初始化完成", "初始化");
+            App.gameEntity.Init();
+            
+            yield return new WaitUntil(() => App.gameEntity.IsInit);
+            
+            Logger.LogInfo("'Entity'初始化完成", "初始化");
+            App.gameNote.Init();
+            
+            yield return new WaitUntil(() => App.gameNote.IsInit);
+            
+            Logger.LogInfo("'Note'初始化完成", "初始化");
+            App.gameSystem.Init();
+            
+            yield return new WaitUntil(() => App.gameSystem.IsInit);
+            
+            Logger.LogInfo("'System'初始化完成", "初始化");
+            
+            _done = true;
         }
     }
 }

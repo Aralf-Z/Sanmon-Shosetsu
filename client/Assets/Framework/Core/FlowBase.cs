@@ -13,7 +13,7 @@ namespace Sanmon.Core
 
         protected internal abstract void Init();
         protected internal abstract void Enter();
-        protected internal abstract void Check(float dt);
+        protected internal abstract void LogicUpdate(float dt);
         protected abstract void Exit();
 
         protected void NextFlow()

@@ -19,7 +19,7 @@ namespace GameScripts
             SceneManager.LoadScene("GameRuntime");
         }
 
-        protected override void Check(float dt)
+        protected override void LogicUpdate(float dt)
         {
             
         }
