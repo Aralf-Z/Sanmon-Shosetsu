@@ -1,6 +1,6 @@
 namespace Sanmon.Module
 {
-    internal class InitOrderDefine
+    internal static class InitOrderDefine
     {
         public const int ASSET = 10;
         public const int INPUT = 15;

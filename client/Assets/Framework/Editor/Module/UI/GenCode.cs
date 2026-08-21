@@ -44,7 +44,7 @@ namespace Sanmon.Editor
 
         private static List<UIElementContent> CollectBind(GameObject go)
         {
-            var uiElements = go.GetComponentsInChildren<UIElement>(true);
+            var uiElements = go.GetComponentsInChildren<UIPart>(true);
             
             if (uiElements.Length == 0)
             {
@@ -77,14 +77,14 @@ namespace Sanmon.Editor
             {
                 typeName = x.root.GetType().FullName,
                 className = x.root.GetType().Name,
-                fieldName = x.root.genElementName,
+                fieldName = x.root.genPartName,
             });
             var rootContent = contents.FirstOrDefault(x => x.root.gameObject == root);
             var rootInfo = new ElementInfo()
             {
                 typeName = rootContent!.root.GetType().FullName,
                 className = rootContent.root.GetType().Name,
-                fieldName = rootContent.root.genElementName,
+                fieldName = rootContent.root.genPartName,
                 elements = CollectElementsInfo(contents, elementInfos),
                 fields = CollectFieldInfo(rootContent.fieldBinds),
             };
@@ -119,7 +119,7 @@ namespace Sanmon.Editor
                 return infos;
             }
             
-            List<ElementInfo> CollectElementsInfo(List<UIElementContent> elements, Dictionary<UIElement, ElementInfo> map) 
+            List<ElementInfo> CollectElementsInfo(List<UIElementContent> elements, Dictionary<UIPart, ElementInfo> map) 
                 => elements.Select(e => map[e.root]).ToList();
         }
 
@@ -162,7 +162,7 @@ namespace Sanmon.Editor
 
                 foreach (var e in ctx.elements)
                 {
-                    var field = so.FindProperty(e.genElementName);
+                    var field = so.FindProperty(e.genPartName);
                     field.objectReferenceValue = e.gameObject;
                 }
 

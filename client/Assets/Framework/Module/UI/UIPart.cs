@@ -2,22 +2,23 @@ using UnityEngine;
 
 namespace Sanmon.Module
 {
-    public abstract partial class UIElement: MonoBehaviour
-        , IUIElement
+    /// <summary>
+    /// ui视窗子元素
+    /// </summary>
+    public abstract partial class UIPart: MonoBehaviour
+        , IUIView
     {
-        public bool IsOpening { get; private set; }
-        
+        public UIHandle Handle { get; }
+
         public void Open()
         {
             gameObject.SetActive(true);
-            IsOpening = true;
             OnOpen();
         }
 
         public void Hide()
         {
             gameObject.SetActive(false);
-            IsOpening = false;
             OnHide();
         }
 

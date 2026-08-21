@@ -5,11 +5,11 @@ namespace Sanmon.Editor
 {
     internal class UIElementContent
     {
-        public readonly UIElement root;
-        public readonly List<UIElement> elements = new ();
+        public readonly UIPart root;
+        public readonly List<UIPart> elements = new ();
         public readonly List<FieldBind> fieldBinds = new ();
         
-        public UIElementContent(UIElement root)
+        public UIElementContent(UIPart root)
         {
             this.root = root;
         }

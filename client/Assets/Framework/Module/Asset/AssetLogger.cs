@@ -9,22 +9,22 @@ namespace Sanmon.Module
     {
         public void Log(string message)
         {
-            Logger.LogInfo(message, "Asset", Color.green);
+            Logger.LogInfo(message, "ASSET", Color.green);
         }
 
         public void LogWarning(string message)
         {
-            Logger.LogWarning(message, "Asset");
+            Logger.LogWarning(message, "ASSET");
         }
 
         public void LogError(string message)
         {
-            Logger.LogError(message, "Asset");
+            Logger.LogError(message, "ASSET");
         }
 
         public void LogException(Exception exception)
         {
-            Logger.LogError(exception.Message, "Asset");
+            Logger.LogError(exception.Message, "ASSET");
         }
     }
 }

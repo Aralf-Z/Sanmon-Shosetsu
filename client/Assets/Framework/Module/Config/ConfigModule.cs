@@ -73,7 +73,7 @@ namespace Sanmon.Module
             
                 Tables = (Tables)tablesCtor.Invoke(new object[] {loader});
                 
-                Logger.LogInfo("表配置加载成功！", "config");
+                Logger.LogInfo("表配置加载成功！", "CONFIG");
                 _isInit = true;
             }
             catch (Exception e)

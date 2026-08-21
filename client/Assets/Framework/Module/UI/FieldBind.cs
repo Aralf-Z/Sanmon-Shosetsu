@@ -18,7 +18,7 @@ namespace Sanmon.Module
 
         public void FindParent()
         {
-            var bindGroup = transform.GetComponentInParent<UIElement>();
+            var bindGroup = transform.GetComponentInParent<UIPart>();
             if (bindGroup == null)
             {
                 throw new NullReferenceException($"can not find parent for field '{name}'.");
@@ -29,7 +29,7 @@ namespace Sanmon.Module
 
         [SerializeField] public string genComponentType;
         [SerializeField] public string genName;
-        [SerializeField] public UIElement genParent;
+        [SerializeField] public UIPart genParent;
 #endif
     }
 }

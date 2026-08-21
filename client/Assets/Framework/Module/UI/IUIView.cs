@@ -2,9 +2,10 @@ using UnityEngine;
 
 namespace Sanmon.Module
 {
-    public interface IUIElement
+    public interface IUIView
     {
-        bool IsOpening { get; }
+        UIHandle Handle { get; }
+        
         void Open();
         void Hide();
         void Close();

@@ -17,7 +17,7 @@ namespace Sanmon.Module
         void IModule.Init()
         {
             _logger = new AssetLogger();
-            _logger.Log("YooAsset version: 3.0.5");
+            _logger.Log($"YooAsset version: {YOO_ASSET_VERSION}");
             
             YooAssets.Initialize(_logger);
             
@@ -39,6 +39,7 @@ namespace Sanmon.Module
             
         }
 
+        public const string YOO_ASSET_VERSION = "3.0.5";
         public const string DEFAULT_PACKAGE = "DefaultPackage";
 
         public EPlayMode playMode = EPlayMode.EditorSimulateMode;

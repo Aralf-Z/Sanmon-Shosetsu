@@ -3,7 +3,7 @@ using Sanmon.Core;
 
 namespace Sanmon.Helper
 {
-    public class LoggerConfig: AppConfig<LoggerConfig>
+    internal class LoggerConfig: AppConfig<LoggerConfig>
     {
         public enum Level
         {

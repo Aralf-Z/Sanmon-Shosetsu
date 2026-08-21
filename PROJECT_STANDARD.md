@@ -99,7 +99,7 @@ namespace GameScript.ModuleName.SubModule
 
 | 组件类型 | 前缀 | 示例 |
 |---------|------|------|
-| UIView | `view` | `viewHeader` |
+| UIPart | `part` | `partHeader` |
 | Image/RawImage | `img` | `imgIcon` |
 | Text/TextMeshPro | `txt` | `txtTitle` |
 | Button | `btn` | `btnConfirm` |
@@ -121,7 +121,7 @@ namespace GameScript.ModuleName.SubModule
 
 
 > **注6** 所有前缀均为**小写**, 与后续单词构成驼峰命名（如 `btnConfirm`）.  
-> **注7** `UIView` 统一使用 `view` 前缀, 便于识别为局部视图模块.
+> **注7** `UIPart` 统一使用 `part` 前缀, 便于识别为局部视图模块.
 
 # 文件路径
 
