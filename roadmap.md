@@ -3,17 +3,22 @@
 ## 🧩 核心模块(Module)
 
 ### 资源管理 (Asset)
-- [x] 加载移出 Resource 加载，脱离运行包
-- [x] 评估：采用 YooAsset
+- [ ] YooAsset停止游戏时"Async operation 'DownloadSchedulerOperation' has been aborted."警告
+- [ ] Asset支持Unitask异步加载
+- [ ] 一个子功能，Gameobject的内部池化
+- [ ] 精灵图、图集加载 -> ui
 
 ### 配置系统 (Config)
 - [ ] Table Luban 的可视化工具（Unity 参考：[LubanYoki](https://github.com/HinataYoki/LubanKit)；跨平台：Avalonia）
-- [ ] 非表格配置（如游戏设置）
+- [ ] 非表格配置（如游戏设置 -> 走Application.persistentDataPath）
 
 ### 存档系统 (Save)
 - [ ] 确定方案：自研还是使用开源库？
 - [ ] 开发期间JSON，运行时压缩为二进制？尽量不加密（精力花销）
 - [ ] 实现快速加载与异步存档
+
+### UI系统 (ui)
+- [ ] UIHandle的实现
 
 ### 网络 (Net)
 - [ ] 基于 fantasy 的局域网实现
@@ -34,11 +39,23 @@
 
 ## ✨ 实体与逻辑 (Entity)
 
+### 管线系统 (pipline)
+- 所有的严格逻辑均走pipline
+- pipline处理管线会处理Entity的回调，回调用Effect写
+
 ### 效果系统 (Effect)
-- 逻辑处理单元，每秒固定刷新
-- 实体内部逻辑避免链式调用
-- 支持时序执行
-- 每个 Effect 记录施加者与携带者，方便 Debug
+- 存在默认Effect，用来处理，比如生命值低于0时，默认死亡，有些会重生
+- 可以理解成特殊处理，开发初期就很少，到后面就会根据需求逐渐替换为Effect
+- 目前使用lua来配置
+
+### 组件系统 (Component)
+- Entity的纯数据，只解决数据的存储方式，有就代表有对应的功能
+- 受到Function的修改
+- 组件存在异步初始化的情况，功能如何想办法访问到安全的数据呢？
+
+### 功能系统 (Function)
+- 处理Entity Component的独立模块，也会调用Effect，也是处理特殊节点才用
+- 比如动画功能，物理功能等等
 
 ---
 

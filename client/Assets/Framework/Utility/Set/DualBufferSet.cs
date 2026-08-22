@@ -31,7 +31,7 @@ namespace Sanmon.Utility.Set
             item.OnAdd();
         }
         
-        public void Remove(T item)
+        private void Remove(T item)
         {
             item.SetStatus(BufferStatus.PendingRemove);
             _removeCache.Add(item);
@@ -40,6 +40,15 @@ namespace Sanmon.Utility.Set
 
         public void Clear()
         {
+            foreach (var items in _mainSet.Values)
+            {
+                foreach (var item in items)
+                {
+                    item.OnRemove();
+                    item.SetStatus(BufferStatus.None);
+                }
+            }
+            
             _mainSet.Clear();
             _order.Clear();
             _addCache.Clear();
@@ -50,6 +59,7 @@ namespace Sanmon.Utility.Set
         {
             var needOrder = false;
             
+            //更新
             foreach (var order in _order)
             {
                 var items = _mainSet[order];
@@ -64,24 +74,32 @@ namespace Sanmon.Utility.Set
                 }
             }
 
+            //添加
             foreach (var item in _addCache)
             {
+                item.SetStatus(BufferStatus.Running);
+                item.OnAdd();
                 if (_mainSet.TryGetValue(item.Order, out var set))
+                {
                     set.Add(item);
+                }
                 else
                 {
-                    item.SetStatus(BufferStatus.Running);
                     _mainSet.Add(item.Order, new HashSet<T> { item });
                     _order.Add(item.Order);
                     needOrder =  true;
                 }
             }
 
+            //移出
             foreach (var item in _removeCache)
             {
+                item.OnRemove();
+                item.SetStatus(BufferStatus.None);
                 _mainSet[item.Order].Remove(item);
             }
             
+            //排序
             if(needOrder) _order.Sort();
             
             _addCache.Clear();

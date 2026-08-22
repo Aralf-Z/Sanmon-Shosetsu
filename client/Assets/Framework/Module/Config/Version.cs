@@ -13,6 +13,6 @@ namespace Sanmon.Module
 
         public string UnityVersion => Application.unityVersion;
         
-        public string yooAssetVersion => Application.version;
+        public string yooAssetVersion => AssetModule.YOO_ASSET_VERSION;
     }
 }

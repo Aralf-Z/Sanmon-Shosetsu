@@ -7,9 +7,9 @@ namespace Sanmon.GameEntity
     public class ModelBind: MonoBehaviour
         , IGetEntity
     {
-        public CmWorldModel ModelCmp { get; private set; }
+        public CmModel ModelCmp { get; private set; }
         
-        internal void Bind(CmWorldModel modelCmp)
+        internal void Bind(CmModel modelCmp)
         {
             ModelCmp = modelCmp;
         }

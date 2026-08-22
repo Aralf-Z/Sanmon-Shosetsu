@@ -13,18 +13,18 @@ using Luban.SimpleJSON;
 
 namespace Game.Config.Logic
 {
-public sealed partial class Effect : Luban.BeanBase
+public sealed partial class EffectParam : Luban.BeanBase
 {
-    public Effect(JSONNode _buf) 
+    public EffectParam(JSONNode _buf) 
     {
         { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
         { if(!_buf["order"].IsNumber) { throw new SerializationException(); }  Order = _buf["order"]; }
         { if(!_buf["parameters"].IsObject) { throw new SerializationException(); }  Parameters = global::Game.Config.Logic.EffectParamBase.DeserializeEffectParamBase(_buf["parameters"]);  }
     }
 
-    public static Effect DeserializeEffect(JSONNode _buf)
+    public static EffectParam DeserializeEffectParam(JSONNode _buf)
     {
-        return new Logic.Effect(_buf);
+        return new Logic.EffectParam(_buf);
     }
 
     /// <summary>
@@ -37,7 +37,7 @@ public sealed partial class Effect : Luban.BeanBase
     public readonly int Order;
     public readonly Logic.EffectParamBase Parameters;
    
-    public const int __ID__ = 444811873;
+    public const int __ID__ = -266980692;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)

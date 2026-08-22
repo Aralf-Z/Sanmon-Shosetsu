@@ -12,12 +12,5 @@
     "parameters": {
       "$type": "EffectHurt"
     }
-  },
-  {
-    "id": 100000003,
-    "order": 2,
-    "parameters": {
-      "$type": "EffectInputMove"
-    }
   }
 ]

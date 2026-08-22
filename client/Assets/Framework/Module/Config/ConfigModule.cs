@@ -21,49 +21,52 @@ namespace Sanmon.Module
         bool IModule.IsInit => _isInit;
 
         public Tables Tables { get; private set; }
+        public Version Version { get; private set; }
         
         void IModule.Init()
         {
+            Version = new Version();
+            Logger.LogInfo("版本信息加载成功！",  "CONFIG");
+            
             var tablesCtor = typeof(Tables).GetConstructors()[0];
             var loaderReturnType = tablesCtor.GetParameters()[0].ParameterType.GetGenericArguments()[1];
             
 #if (UNITY_WEBGL || UNITY_ANDROID) && !UNITY_EDITOR
-            //只有这里采取异步的方式，因为UniTask不能使用.GetAwaiter().GetResult();故懒加载是不支持web和安卓的
-            try
-            {
-                using var request = UnityWebRequest.Get(fileListPath);
-                await request.SendWebRequest();
-
-                if (request.result == UnityWebRequest.Result.Success)
-                {
-                    var fileContent = request.downloadHandler.text;
-                    var fileList = JsonConvert.DeserializeObject<List<string>>(fileContent);
-                    var byteMaps = new Dictionary<string, ByteBuf>();
-                    var jsonMaps = new Dictionary<string, JSONNode>();
-
-
-                    if (loaderReturnType == typeof(ByteBuf))
-                    {
-                        byteMaps = await LoadByteBuf_Web(fileList);
-                    }
-                    else
-                    {
-                        jsonMaps = await LoadJson_Web(fileList);
-                    }
-
-                    var loader = loaderReturnType == typeof(ByteBuf)
-                        ? new Func<string, ByteBuf>(file => byteMaps[file])
-                        : (Delegate) new Func<string, JSONNode>(file => jsonMaps[file]);
-
-                    sTables = (Tables) tablesCtor.Invoke(new object[] {loader});
-                }
-            }
-            catch (Exception e)
-            {
-                LogDebug.LogError(e);
-                throw;
-            }
-            
+            Logger.LogWarning("Web和安卓模式尚未支持表格加载！", "CONFIG");
+            // try
+            // {
+            //     using var request = UnityWebRequest.Get(fileListPath);
+            //     await request.SendWebRequest();
+            //
+            //     if (request.result == UnityWebRequest.Result.Success)
+            //     {
+            //         var fileContent = request.downloadHandler.text;
+            //         var fileList = JsonConvert.DeserializeObject<List<string>>(fileContent);
+            //         var byteMaps = new Dictionary<string, ByteBuf>();
+            //         var jsonMaps = new Dictionary<string, JSONNode>();
+            //
+            //
+            //         if (loaderReturnType == typeof(ByteBuf))
+            //         {
+            //             byteMaps = await LoadByteBuf_Web(fileList);
+            //         }
+            //         else
+            //         {
+            //             jsonMaps = await LoadJson_Web(fileList);
+            //         }
+            //
+            //         var loader = loaderReturnType == typeof(ByteBuf)
+            //             ? new Func<string, ByteBuf>(file => byteMaps[file])
+            //             : (Delegate) new Func<string, JSONNode>(file => jsonMaps[file]);
+            //
+            //         Tables = (Tables) tablesCtor.Invoke(new object[] {loader});
+            //     }
+            // }
+            // catch (Exception e)
+            // {
+            //     LogDebug.LogError(e);
+            //     throw;
+            // }
 #else
             try
             { 
@@ -74,6 +77,9 @@ namespace Sanmon.Module
                 Tables = (Tables)tablesCtor.Invoke(new object[] {loader});
                 
                 Logger.LogInfo("表配置加载成功！", "CONFIG");
+
+                
+                
                 _isInit = true;
             }
             catch (Exception e)
@@ -83,7 +89,7 @@ namespace Sanmon.Module
             }
 #endif
         }
-
+        
         void IModule. Deinit()
         {
             

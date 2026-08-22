@@ -18,19 +18,19 @@ public partial class Tables
     /// <summary>
     /// 实体效果-100
     /// </summary>
-    public Logic.TbEffect TbEffect {get; }
+    public Logic.TbEffectParam TbEffectParam {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
         GameGlobal = new GameGlobal(loader("gameglobal"));
-        TbEffect = new Logic.TbEffect(loader("logic_tbeffect"));
+        TbEffectParam = new Logic.TbEffectParam(loader("logic_tbeffectparam"));
         ResolveRef();
     }
     
     private void ResolveRef()
     {
         GameGlobal.ResolveRef(this);
-        TbEffect.ResolveRef(this);
+        TbEffectParam.ResolveRef(this);
     }
 }
 

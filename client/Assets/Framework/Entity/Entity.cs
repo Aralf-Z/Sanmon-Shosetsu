@@ -7,13 +7,17 @@ namespace Sanmon.GameEntity
     public class Entity
     {
         internal readonly Dictionary<Type, ComponentBase> mComponents = new();
-        internal readonly DualBufferSet<EffectBase> mEffects = new();
+        internal readonly Dictionary<Type, FunctionBase> mFunctions = new();
         
         public IReadOnlyCollection<ComponentBase> Components => mComponents.Values;
+        public IReadOnlyCollection<FunctionBase> Functions => mFunctions.Values;
         
         protected internal void LogicUpdate(float dt)
         {
-            mEffects.Update(dt);
+            foreach (var (_, func) in mFunctions)
+            {
+                func.OnLogicUpdate(dt);
+            }
         }
         
         /// <summary>
@@ -44,7 +48,7 @@ namespace Sanmon.GameEntity
         /// <returns></returns>
         public T GetComponent<T>() where T : ComponentBase
         {
-            return (T)mComponents.GetValueOrDefault(typeof(T));
+            return mComponents.GetValueOrDefault(typeof(T)) as T;
         }
 
         /// <summary>
@@ -69,9 +73,11 @@ namespace Sanmon.GameEntity
         public void RemoveComponent<T>() where T : ComponentBase
         {
             var key = typeof(T);
-            var component = mComponents[key];
-            mComponents.Remove(key);
-            component.OnRemoved();
+
+            if (!mComponents.Remove(key, out var component))
+            {
+                component.OnRemoved();
+            }
         }
 
         /// <summary>
@@ -85,32 +91,67 @@ namespace Sanmon.GameEntity
         }
 
         /// <summary>
-        /// 添加效果
+        /// 添加功能
         /// </summary>
-        /// <param name="effect"></param>
-        public void AddEffect(EffectBase effect)
+        public T AddFunction<T>() where T : FunctionBase, new()
         {
-            effect.Host = this;
-            mEffects.Add(effect);
+            var key = typeof(T);
+
+            if (mFunctions.TryGetValue(key, out var add))
+            {
+                return (T)add;
+            }
+            
+            var func = new T { Host = this };
+            mFunctions.Add(typeof(T), func);
+            func.OnAdded();
+            return func;
         }
 
         /// <summary>
-        /// 移出效果
+        /// 移出功能
         /// </summary>
-        /// <param name="effect"></param>
-        public void RemoveEffect(EffectBase effect)
+        public T GetFunction<T>() where T : FunctionBase
         {
-            mEffects.Remove(effect);
+            return mFunctions.GetValueOrDefault(typeof(T)) as T;
+        }
+
+        /// <summary>
+        /// 获取功能，如果获取不到则添加一个功能
+        /// </summary>
+        public T GetOrAddFunction<T>() where T : FunctionBase, new()
+        {
+            if (mFunctions.TryGetValue(typeof(T), out var func))
+            {
+                return (T)func;
+            }
+
+            return AddFunction<T>();
+        }
+
+        /// <summary>
+        /// 移出功能
+        /// </summary>
+        public void RemoveFunction<T>() where T : FunctionBase
+        {
+            var key = typeof(T);
+
+            if (mFunctions.Remove(key, out var func))
+            {
+                func.OnRemoved();
+            }
         }
         
         public void Clear()
         {
             foreach (var component in mComponents.Values)
-            {
-                component.OnRemoved();
-            }
+            { component.OnRemoved(); }
+            
+            foreach (var func in mFunctions.Values)
+            { func.OnRemoved(); }
+            
             mComponents.Clear();
-            mEffects.Clear();
+            mFunctions.Clear();
         }
     }
 }

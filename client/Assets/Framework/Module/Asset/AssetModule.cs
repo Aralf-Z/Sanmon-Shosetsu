@@ -39,7 +39,7 @@ namespace Sanmon.Module
             
         }
 
-        public const string YOO_ASSET_VERSION = "3.0.5";
+        internal const string YOO_ASSET_VERSION = "3.0.5";
         public const string DEFAULT_PACKAGE = "DefaultPackage";
 
         public EPlayMode playMode = EPlayMode.EditorSimulateMode;

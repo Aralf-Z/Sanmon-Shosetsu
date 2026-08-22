@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace Sanmon.GameEntity
 {
-    public class CmWorldModel: ComponentBase
+    public class CmModel: ComponentBase
         , IGetModule
         , IGetEntity
     {
@@ -27,17 +27,33 @@ namespace Sanmon.GameEntity
             set => Go.transform.localScale = value;
         }
 
-        public Quaternion Rotation
+        public Quaternion Quaternion
         {
             get => Go.transform.rotation;
             set => Go.transform.rotation = value;
         }
+
+        public float RotationX
+        {
+            get => Go.transform.rotation.eulerAngles.x;
+            set => Go.transform.rotation = Quaternion.Euler(value, 0, 0);
+        }
         
-        public string name = string.Empty;
-
-        public event Action e_onLoaded;
-
-        public void TryLoad()
+        public float RotationY
+        {
+            get => Go.transform.rotation.eulerAngles.y;
+            set => Go.transform.rotation = Quaternion.Euler(0, value, 0);
+        }
+        
+        public float RotationZ
+        {
+            get => Go.transform.rotation.eulerAngles.z;
+            set => Go.transform.rotation = Quaternion.Euler(0, 0, value);
+        }
+        
+        public string Name { get; private set; }
+        
+        public void TryLoad(string name)
         {
             var template = this.Module().Asset.LoadSync<GameObject>(name);
             var parent = this.Entity().transform;
@@ -55,19 +71,14 @@ namespace Sanmon.GameEntity
             Go.name = name;
             Bind = Go.AddComponent<ModelBind>();
             Bind.Bind(this);
-            e_onLoaded?.Invoke();
         }
         
-        public void SetModel(GameObject go, string newName = null)
+        public void SetModel(GameObject go, string newName)
         {
             Go = go;
-            if (!string.IsNullOrEmpty(newName))
-            {
-                Go.name = name =  newName;
-            }
+            Go.name = Name = newName;
             Bind = Go.AddComponent<ModelBind>();
             Bind.Bind(this);
-            e_onLoaded?.Invoke();
         }
     }
 }
