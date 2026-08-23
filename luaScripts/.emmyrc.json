@@ -1,0 +1,19 @@
+{
+  "$schema": "./.vscode/.emmylua-schema.json",
+  "completion": {
+    "autoRequire": true,
+    "callSnippet": false,
+    "postfix": "@"
+  },
+  "diagnostics": {
+    "globals": [],
+    "disable": ["undefined-global"]
+  },
+  "doc": {
+    "syntax": "md"
+  },
+  "runtime": {
+    "version": "Lua5.5",
+    "requirePattern": ["?.lua", "?/init.lua"]
+  }
+}

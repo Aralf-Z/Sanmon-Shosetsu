@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1001000001,
+    "luaScript": "",
+    "parameters": {
+      "$type": "EffectAttack"
+    }
+  },
+  {
+    "id": 1001000002,
+    "luaScript": "",
+    "parameters": {
+      "$type": "EffectHurt"
+    }
+  }
+]

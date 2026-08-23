@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<module name="">
+  <constalias name="攻击" value="1001000001" />
+  <constalias name="受伤" value="1001000002" />
+  <constalias name="冻伤" value="1002000001" />
+  <constalias name="流血" value="1002000002" />
+</module>

@@ -16,21 +16,27 @@ public partial class Tables
 {
     public GameGlobal GameGlobal {get; }
     /// <summary>
-    /// 实体效果-100
+    /// 增减益Buff-02
     /// </summary>
-    public Logic.TbEffectParam TbEffectParam {get; }
+    public Battle.TbBuffData TbBuffData {get; }
+    /// <summary>
+    /// 效果-01
+    /// </summary>
+    public Battle.TbEffectData TbEffectData {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
         GameGlobal = new GameGlobal(loader("gameglobal"));
-        TbEffectParam = new Logic.TbEffectParam(loader("logic_tbeffectparam"));
+        TbBuffData = new Battle.TbBuffData(loader("battle_tbbuffdata"));
+        TbEffectData = new Battle.TbEffectData(loader("battle_tbeffectdata"));
         ResolveRef();
     }
     
     private void ResolveRef()
     {
         GameGlobal.ResolveRef(this);
-        TbEffectParam.ResolveRef(this);
+        TbBuffData.ResolveRef(this);
+        TbEffectData.ResolveRef(this);
     }
 }
 

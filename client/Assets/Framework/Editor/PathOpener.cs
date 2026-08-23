@@ -14,16 +14,16 @@ namespace Sanmon.Editor
             Application.OpenURL("file://" + PROJECT_PATH);
         }
         
-        [MenuItem("Path/表格配置")]
+        [MenuItem("Path/表格工作区")]
         public static void OpenTableConfigPath()
         {
-            Application.OpenURL("file://" + Path.Combine(PROJECT_PATH, "config"));
+            Application.OpenURL("file://" + Path.Combine(PROJECT_PATH, "table_config"));
         }
         
         [MenuItem("Path/表格")]
         public static void OpenTablePath()
         {
-            Application.OpenURL("file://" + Path.Combine(PROJECT_PATH, "config/_tables"));
+            Application.OpenURL("file://" + Path.Combine(PROJECT_PATH, "table_config/_tables"));
         }
         
         [MenuItem("Path/存档")]

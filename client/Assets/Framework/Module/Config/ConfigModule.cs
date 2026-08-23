@@ -27,6 +27,8 @@ namespace Sanmon.Module
         {
             Version = new Version();
             Logger.LogInfo("版本信息加载成功！",  "CONFIG");
+            Logger.LogInfo($"游戏版本：{Version.GameVersion}",  "CONFIG");
+            Logger.LogInfo($"游戏内部版本：{Version.GameVersionInteral}",  "CONFIG");
             
             var tablesCtor = typeof(Tables).GetConstructors()[0];
             var loaderReturnType = tablesCtor.GetParameters()[0].ParameterType.GetGenericArguments()[1];
