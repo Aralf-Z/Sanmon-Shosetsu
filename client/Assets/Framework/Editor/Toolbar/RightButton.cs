@@ -9,6 +9,7 @@ namespace Sanmon.Editor
         static RightButton()
         {
             ToolbarExtender.RightToolbarGUI.Add(RightButtonSceneQuickSwitch.OnToolbarGUI);
+            ToolbarExtender.RightToolbarGUI.Add(RightButtonAssetMode.OnToolbarGUI);
         }
     }
 }

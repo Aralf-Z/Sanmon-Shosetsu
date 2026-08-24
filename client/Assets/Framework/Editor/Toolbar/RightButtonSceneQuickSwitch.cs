@@ -23,7 +23,7 @@ namespace Sanmon.Editor
         public static void OnToolbarGUI()
         {
             var rect = EditorGUILayout.GetControlRect();
-            rect.width = 100;
+            rect.width = 180;
 
             if (EditorGUI.DropdownButton(rect, new GUIContent(SceneManager.GetActiveScene().name, "场景切换"), FocusType.Keyboard, EditorStyles.popup))
             {

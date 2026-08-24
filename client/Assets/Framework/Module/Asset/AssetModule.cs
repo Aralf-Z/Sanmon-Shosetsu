@@ -65,7 +65,16 @@ namespace Sanmon.Module
             
             var mode = playMode;//todo 编辑器
 
-            _logger.Log($"资源加载模式：{mode}");
+#if UNITY_EDITOR
+            mode = (EPlayMode)UnityEditor.EditorPrefs.GetInt("EditorAssetMode", (int)EPlayMode.EditorSimulateMode);
+#else
+            if(mode is EPlayMode.EditorSimulateMode) 
+            {
+                _logger.LogError($"资源加载模式'{mode}'在非unity编辑器环境下不支持.");
+                yield break;
+            }
+#endif
+            _logger.Log($"资源加载模式：{mode}.");
             
             if (mode is EPlayMode.EditorSimulateMode)//模拟编辑器模式
             {

@@ -15,8 +15,8 @@ namespace Sanmon.Module
             var v3 = v2 == 0 ? _gameVersion.versionCode / 1000 : _gameVersion.versionCode % v2 / 1000;
             var v4 = v3 == 0 ? _gameVersion.versionCode : _gameVersion.versionCode % v3;
 
-            GameVersion = $"ver {v1:00}.{v2:00}.{v3:000}";
-            GameVersionInteral = $"ver {v1:00}.{v2:00}.{v3:000}.{v4:000}";
+            GameVersion = $"version {v1:00}.{v2:00}.{v3:000}";
+            GameVersionInteral = $"version {v1:00}.{v2:00}.{v3:000}.{v4:000}";
         }
 
         public string UnityVersion => Application.unityVersion;
