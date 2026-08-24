@@ -71,16 +71,18 @@ namespace YooAsset
             {
                 // 注意: 下载调度中心在最后一步创建，防止初始化失败后残留任务。
                 // 注意: 下载调度中心作为独立任务运行！
-                if (_fileSystem.DownloadScheduler == null)
-                {
-                    var schedulerConfig = new DownloadSchedulerOperation.Configuration(
-                        schedulerName: _fileSystem.GetType().Name,
-                        downloadBackend: _fileSystem.DownloadBackend,
-                        maxConcurrency: _fileSystem.DownloadMaxConcurrency,
-                        maxRequestsPerFrame: _fileSystem.DownloadMaxRequestsPerFrame);
-                    _fileSystem.DownloadScheduler = new DownloadSchedulerOperation(schedulerConfig);
-                    AsyncOperationSystem.StartOperation(_fileSystem.PackageName, _fileSystem.DownloadScheduler);
-                }
+                
+                // Editor file system 不做download scheduler operation 没意义
+                // if (_fileSystem.DownloadScheduler == null)
+                // {
+                //     var schedulerConfig = new DownloadSchedulerOperation.Configuration(
+                //         schedulerName: _fileSystem.GetType().Name,
+                //         downloadBackend: _fileSystem.DownloadBackend,
+                //         maxConcurrency: _fileSystem.DownloadMaxConcurrency,
+                //         maxRequestsPerFrame: _fileSystem.DownloadMaxRequestsPerFrame);
+                //     _fileSystem.DownloadScheduler = new DownloadSchedulerOperation(schedulerConfig);
+                //     AsyncOperationSystem.StartOperation(_fileSystem.PackageName, _fileSystem.DownloadScheduler);
+                // }
 
                 _steps = ESteps.Done;
                 SetResult();
