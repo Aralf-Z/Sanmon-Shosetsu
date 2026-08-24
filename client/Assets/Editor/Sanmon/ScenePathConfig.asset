@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5816577c9ca54d84b89da806c0140789, type: 3}
   m_Name: ScenePathConfig
   m_EditorClassIdentifier: 
-  paths: []
+  paths:
+  - path: {fileID: 102900000, guid: 7fd2cd76dcab62a4d9e384de6d382892, type: 3}

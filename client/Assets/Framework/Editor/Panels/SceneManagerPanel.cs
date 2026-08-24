@@ -39,8 +39,11 @@ namespace Sanmon.Editor
                     {
                         paths[i].path = (DefaultAsset)EditorGUILayout.ObjectField(paths[i].path, typeof(DefaultAsset), false);
 
-                        if (GUILayout.Button("X", GUILayout.Width(25))) 
+                        if (GUILayout.Button("X", GUILayout.Width(25)))
+                        {
                             paths.RemoveAt(i--);
+                            RightButtonSceneQuickSwitch.UpdateScenes();
+                        }
                     }
                 }
             }
@@ -50,6 +53,7 @@ namespace Sanmon.Editor
             if (GUILayout.Button("+新路径", GUILayout.Width(80)))
             {
                 paths.Add(new ScenePath());
+                RightButtonSceneQuickSwitch.UpdateScenes();
             }
             
             GUILayout.Space(5);

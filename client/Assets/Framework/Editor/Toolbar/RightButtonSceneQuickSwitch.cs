@@ -53,7 +53,13 @@ namespace Sanmon.Editor
                 EditorSceneManager.OpenScene(path);
             }
         }
-        
+
+        [InitializeOnLoadMethod]
+        public static void UpdateScenes()
+        {
+            UpdateScenes(null,null,null,null);
+        }
+       
         private static void UpdateScenes(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
             var folders = ScenePathConfig.Ins.paths
