@@ -178,9 +178,12 @@ namespace Sanmon.Utility.UnityExtension
             {
                 for (var i = 0; i <= CurIndex; i++)
                 {
-                    next = i;
-                    find = true;
-                    break;
+                    if (mFocusItems[i].Interactable)
+                    {
+                        next = i;
+                        find = true;
+                        break;
+                    }
                 }
             }
 
