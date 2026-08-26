@@ -7,7 +7,6 @@
     "com.marijnzwemmer.unity-toolbar-extender": "https://github.com/marijnz/unity-toolbar-extender.git",
     "com.redbluegames.mulligan": "https://github.com/redbluegames/unity-mulligan-renamer.git?path=/Assets/RedBlueGames/MulliganRenamer",
     "com.tuyoogame.yooasset": "file:../CustomPackages/YooAsset",
-    "com.unity.collab-proxy": "2.12.4",
     "com.unity.feature.development": "1.0.1",
     "com.unity.ide.rider": "3.0.40",
     "com.unity.textmeshpro": "3.0.9",
