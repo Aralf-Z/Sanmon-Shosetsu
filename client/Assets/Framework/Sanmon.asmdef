@@ -1,11 +1,13 @@
 {
-    "name": "Sanmon",
+    "name": "Game.Framework",
     "rootNamespace": "",
     "references": [
         "GUID:f51ebe6a0ceec4240a699833d6309b23",
         "GUID:eda24d0aab54f5b438658d4dd8c9b96a",
         "GUID:06ccb4eebd339014ea75ec12fece493c",
-        "GUID:65a06491bb38a5f40834ea78391b6bad"
+        "GUID:65a06491bb38a5f40834ea78391b6bad",
+        "GUID:2c8a9df12a2f4ef47b715e3b8e5d9f23",
+        "GUID:3167dc7e1d2ee214bb989969ab9b286c"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

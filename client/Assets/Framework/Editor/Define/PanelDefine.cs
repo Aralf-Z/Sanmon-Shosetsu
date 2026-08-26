@@ -5,5 +5,6 @@ namespace Sanmon.Editor
         public const int DOC = 5;
         public const int PLAY_MODE = 10;
         public const int SCENE_MANAGER = 15;
+        public const int ZLua = 20;
     }
 }

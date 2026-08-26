@@ -2,7 +2,7 @@ using System;
 
 namespace Sanmon.Utility.Value
 {
-    public struct SourceValue
+    public struct SourceValue : IEquatable<SourceValue>
     {
         public string Name { get; private set; }
         public float Value { get; private set; }
@@ -39,14 +39,22 @@ namespace Sanmon.Utility.Value
         {
             if (obj is SourceValue other)
             {
-                return Name == other.Name && Value.Equals(other.Value);
+                var delta = Value - other.Value;
+                return Name == other.Name && delta is < .00001f and > -.00001f;
             }
             return false;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Name, Value);
+            var value = MathF.Round(Value, 5);
+            return HashCode.Combine(Name, value);
+        }
+
+        public bool Equals(SourceValue other)
+        {
+            var delta = Value - other.Value;
+            return Name == other.Name && delta is < .00001f and > -.00001f;
         }
     }
 }

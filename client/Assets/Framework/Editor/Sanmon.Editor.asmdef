@@ -1,5 +1,5 @@
 {
-    "name": "Sanmon.Editor",
+    "name": "Game.Framework.Editor",
     "rootNamespace": "",
     "references": [
         "GUID:9b8bbe395183ae145ac2c52074562df4",
