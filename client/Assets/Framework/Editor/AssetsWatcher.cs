@@ -7,7 +7,7 @@ namespace Sanmon.Editor
 {
     public class AssetsWatcher : AssetPostprocessor
     {
-        private static Dictionary<string, Action<string[], string[], string[], string[]>> _extensionCallbacks = new ();
+        private static readonly Dictionary<string, Action<string[], string[], string[], string[]>> _extensionCallbacks = new ();
         
         private static void OnPostprocessAllAssets(string[] importedAssets, string[] deletedAssets, string[] movedAssets, string[] movedFromAssetPaths)
         {
