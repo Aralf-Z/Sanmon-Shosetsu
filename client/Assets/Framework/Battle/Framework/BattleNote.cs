@@ -11,5 +11,6 @@ namespace Sanmon.Battle
         }
         
         public readonly Queue<DamageInfo> damageInfos = new Queue<DamageInfo>();
+        public readonly Queue<HealInfo> healInfos = new Queue<HealInfo>();
     }
 }

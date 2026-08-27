@@ -4,6 +4,7 @@ using Game.Config.Battle;
 
 namespace Sanmon.Battle
 {
+    //todo 池化？
     public class DamageInfo
     {
         public IDamageMaker maker;
