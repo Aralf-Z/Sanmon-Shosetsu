@@ -21,7 +21,7 @@ namespace Framework.Pipeline
             _next?.Do(request);
         }
 
-        protected abstract bool CanHandle(TContext request);
+        protected virtual bool CanHandle(TContext request) => true;
 
         protected abstract void Process(TContext request);
     }

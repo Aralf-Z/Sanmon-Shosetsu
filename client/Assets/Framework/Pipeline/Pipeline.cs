@@ -6,7 +6,7 @@ namespace Framework.Pipeline
     {
         private Handler<TContext> _header;
 
-        public Handler<TContext> SetHeader(Handler<TContext> handler)
+        protected Handler<TContext> SetHeader(Handler<TContext> handler)
         {
             _header = handler;
             return _header;

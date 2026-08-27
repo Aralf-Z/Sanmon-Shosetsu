@@ -1,8 +1,7 @@
-using System;
+using Game.Config.Battle;
 using System.Collections.Generic;
 using Sanmon.GameEntity;
 using Sanmon.Utility.Value;
-using UnityEngine;
 
 namespace Sanmon.Battle
 {
@@ -13,11 +12,11 @@ namespace Sanmon.Battle
     {
         private class ResourceInfo
         {
-            public readonly string key;
+            public readonly Attribute key;
             public readonly SumValue maxValue;
             public float value;
 
-            public ResourceInfo(string key, SumValue maxValue, float value)
+            public ResourceInfo(Attribute key, SumValue maxValue, float value)
             {
                 this.key = key;
                 this.maxValue = maxValue;
@@ -25,27 +24,21 @@ namespace Sanmon.Battle
             }
         }
 
-        public IReadOnlyCollection<string> Name => mRes.Keys;
+        public IReadOnlyCollection<Attribute> Name => mRes.Keys;
         
-        private readonly Dictionary<string, ResourceInfo> mRes = new ();
+        private readonly Dictionary<Attribute, ResourceInfo> mRes = new ();
 
-        public float this[string name] => mRes.GetValueOrDefault(name)?.value ?? 0f;
+        public float this[Attribute name] => mRes.GetValueOrDefault(name)?.value ?? 0f;
         
-        public void Add(string key, SumValue maxValue, float value)
+        public void Add(Attribute key, SumValue maxValue, float value)
         {
             mRes.Add(key, new ResourceInfo(key, maxValue, value));
         }
 
-        public void Remove(string key)
+        public void Remove(Attribute key)
         {
-            var info = mRes[key];
+            //var info = mRes[key];
             mRes.Remove(key);
-        }
-
-        public void Change(string key, float value)
-        {
-            var info = mRes[key];
-            info.value = Mathf.Clamp(value, 0, info.maxValue.Value);
         }
     }
 }
