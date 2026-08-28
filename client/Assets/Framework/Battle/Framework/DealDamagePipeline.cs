@@ -10,17 +10,28 @@ namespace Sanmon.Battle
     {
         public DealDamagePipeline()
         {
-            SetHeader(new HandleCheckTag())
+            SetHeader(new HandleCheckDamageNullified())
                 .SetNext(new HandleCheckIsHit())
                 .SetNext(new HandleCheckIsCrit())
                 .SetNext(new HandleResult());
         }
 
-        private class HandleCheckTag : Handler<DamageInfo>
+        private class HandleCheckDamageNullified : Handler<DamageInfo>
         {
             protected override bool CanHandle(DamageInfo request)
             {
-                return !request.defender.tag.Contains(Tag.nondamageable);
+                var isDamageNullified = request.defender.tag.Contains(Tag.nondamageable);
+                
+                if (isDamageNullified)
+                {
+                    for (var i = 0; i < request.damage.Count; i++)
+                    {
+                        var type = request.damage[i].type;
+                        request.damage[i] = new DamagePair{type = type, value = 0};
+                    }
+                }
+                
+                return !isDamageNullified;
             }
 
             protected override void Process(DamageInfo request)

@@ -18,6 +18,7 @@ public sealed partial class EffectData : Luban.BeanBase
     public EffectData(JSONNode _buf) 
     {
         { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
+        { if(!_buf["order"].IsNumber) { throw new SerializationException(); }  Order = _buf["order"]; }
         { if(!_buf["luaScript"].IsString) { throw new SerializationException(); }  LuaScript = _buf["luaScript"]; }
         { if(!_buf["parameters"].IsObject) { throw new SerializationException(); }  Parameters = global::Game.Config.Battle.EffectParamBase.DeserializeEffectParamBase(_buf["parameters"]);  }
     }
@@ -31,6 +32,10 @@ public sealed partial class EffectData : Luban.BeanBase
     /// 唯一id
     /// </summary>
     public readonly int Id;
+    /// <summary>
+    /// 执行优先级
+    /// </summary>
+    public readonly int Order;
     /// <summary>
     /// lua脚本
     /// </summary>
@@ -49,6 +54,7 @@ public sealed partial class EffectData : Luban.BeanBase
     {
         return "{ "
         + "id:" + Id + ","
+        + "order:" + Order + ","
         + "luaScript:" + LuaScript + ","
         + "parameters:" + Parameters + ","
         + "}";

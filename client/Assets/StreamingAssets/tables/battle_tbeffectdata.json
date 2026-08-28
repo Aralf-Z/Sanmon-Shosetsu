@@ -1,6 +1,7 @@
 [
   {
     "id": 1001000001,
+    "order": 1,
     "luaScript": "",
     "parameters": {
       "$type": "EffectAttack"
@@ -8,6 +9,7 @@
   },
   {
     "id": 1001000002,
+    "order": 2,
     "luaScript": "",
     "parameters": {
       "$type": "EffectHurt"

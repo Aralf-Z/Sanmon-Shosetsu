@@ -6,15 +6,16 @@ namespace Sanmon.GameEntity
 {
     public class Entity
     {
-        internal readonly Dictionary<Type, ComponentBase> mComponents = new();
-        internal readonly Dictionary<Type, FunctionBase> mFunctions = new();
+        internal readonly Dictionary<Type, ComponentBase> _components = new();
+        internal readonly Dictionary<Type, FunctionBase> _functions = new();
+        internal readonly Dictionary<int, List<Effect>> _effects = new();
         
-        public IReadOnlyCollection<ComponentBase> Components => mComponents.Values;
-        public IReadOnlyCollection<FunctionBase> Functions => mFunctions.Values;
+        public IReadOnlyCollection<ComponentBase> Components => _components.Values;
+        public IReadOnlyCollection<FunctionBase> Functions => _functions.Values;
         
         protected internal void LogicUpdate(float dt)
         {
-            foreach (var (_, func) in mFunctions)
+            foreach (var (_, func) in _functions)
             {
                 func.OnLogicUpdate(dt);
             }
@@ -29,13 +30,13 @@ namespace Sanmon.GameEntity
         {
             var key = typeof(T);
             
-            if (mComponents.TryGetValue(key, out var add))
+            if (_components.TryGetValue(key, out var add))
             {
                 return (T)add;
             }
             
             var component = new T { Host = this };
-            mComponents.Add(key, component);
+            _components.Add(key, component);
             component.OnAdded();
             
             return component;
@@ -48,7 +49,7 @@ namespace Sanmon.GameEntity
         /// <returns></returns>
         public T GetComponent<T>() where T : ComponentBase
         {
-            return mComponents.GetValueOrDefault(typeof(T)) as T;
+            return _components.GetValueOrDefault(typeof(T)) as T;
         }
 
         /// <summary>
@@ -58,7 +59,7 @@ namespace Sanmon.GameEntity
         /// <returns></returns>
         public T GetOrAddComponent<T>() where T : ComponentBase, new()
         {
-            if (mComponents.TryGetValue(typeof(T), out var tar))
+            if (_components.TryGetValue(typeof(T), out var tar))
             {
                 return (T)tar;
             }
@@ -74,7 +75,7 @@ namespace Sanmon.GameEntity
         {
             var key = typeof(T);
 
-            if (!mComponents.Remove(key, out var component))
+            if (!_components.Remove(key, out var component))
             {
                 component.OnRemoved();
             }
@@ -87,7 +88,7 @@ namespace Sanmon.GameEntity
         /// <returns></returns>
         public bool HasComponent<T>()
         {
-            return mComponents.ContainsKey(typeof(T));
+            return _components.ContainsKey(typeof(T));
         }
 
         /// <summary>
@@ -97,13 +98,13 @@ namespace Sanmon.GameEntity
         {
             var key = typeof(T);
 
-            if (mFunctions.TryGetValue(key, out var add))
+            if (_functions.TryGetValue(key, out var add))
             {
                 return (T)add;
             }
             
             var func = new T { Host = this };
-            mFunctions.Add(typeof(T), func);
+            _functions.Add(typeof(T), func);
             func.OnAdded();
             return func;
         }
@@ -113,7 +114,7 @@ namespace Sanmon.GameEntity
         /// </summary>
         public T GetFunction<T>() where T : FunctionBase
         {
-            return mFunctions.GetValueOrDefault(typeof(T)) as T;
+            return _functions.GetValueOrDefault(typeof(T)) as T;
         }
 
         /// <summary>
@@ -121,7 +122,7 @@ namespace Sanmon.GameEntity
         /// </summary>
         public T GetOrAddFunction<T>() where T : FunctionBase, new()
         {
-            if (mFunctions.TryGetValue(typeof(T), out var func))
+            if (_functions.TryGetValue(typeof(T), out var func))
             {
                 return (T)func;
             }
@@ -136,22 +137,42 @@ namespace Sanmon.GameEntity
         {
             var key = typeof(T);
 
-            if (mFunctions.Remove(key, out var func))
+            if (_functions.Remove(key, out var func))
             {
                 func.OnRemoved();
             }
         }
+
+        public void AddEffect(int id)
+        {
+            if (_effects.Count > 0)
+            {
+                for (var i = _effects.Count - 1; i > 0; i--)
+                {
+                    
+                }
+            }
+            else
+            {
+                _effects.Add(EffectManager.Ins.Require(id));
+            }
+        }
+
+        private void RemoveEffect(int id)
+        {
+            
+        }
         
         public void Clear()
         {
-            foreach (var component in mComponents.Values)
+            foreach (var component in _components.Values)
             { component.OnRemoved(); }
             
-            foreach (var func in mFunctions.Values)
+            foreach (var func in _functions.Values)
             { func.OnRemoved(); }
             
-            mComponents.Clear();
-            mFunctions.Clear();
+            _components.Clear();
+            _functions.Clear();
         }
     }
 }

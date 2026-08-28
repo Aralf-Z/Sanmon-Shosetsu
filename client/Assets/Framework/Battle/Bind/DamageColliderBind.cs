@@ -4,17 +4,19 @@ using UnityEngine;
 
 namespace Sanmon.Battle
 {
+    /// <summary>
+    /// 伤害碰撞绑定
+    /// </summary>
     [RequireComponent(typeof(Collider))]
-    public class ColliderBind : MonoBehaviour
+    public class DamageColliderBind: MonoBehaviour
     {
         [SerializeField]private Collider Collider;
         
-        public Entity host;
         public ColliderType type { get; private set; }
         public BoxCollider Box { get; private set; }
         public SphereCollider Sphere { get; private set; }
         public CapsuleCollider Capsule { get; private set; }
-
+        
         private void Awake()
         {
             switch (Collider)
@@ -33,6 +35,29 @@ namespace Sanmon.Battle
                     break;
                 default:
                     throw new Exception("不支持的碰撞体类型");
+            }
+        }
+
+        public Action<Entity> onEntityEnter;
+        public Action<Entity> onEntityStay;
+        
+        private void OnTriggerEnter(Collider other)
+        {
+            if(onEntityEnter == null) return;
+            
+            if (other.TryGetComponent<ColliderBind>(out var bind))
+            {
+                onEntityEnter.Invoke(bind.host);
+            }
+        }
+
+        private void OnTriggerStay(Collider other)
+        {
+            if(onEntityStay == null) return;
+            
+            if (other.TryGetComponent<ColliderBind>(out var bind))
+            {
+                onEntityStay.Invoke(bind.host);
             }
         }
     }

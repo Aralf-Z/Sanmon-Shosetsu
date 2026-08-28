@@ -222,15 +222,15 @@ namespace Sanmon.Utility.Inspector
 
             var i = 0;
             
-            foreach (var (cmpType, _) in entity.mComponents)
+            foreach (var (cmpType, _) in entity._components)
             {
                 node.children.Add(new DictionaryElementLeaf()
                 {
                     parent = node,
-                    owner = entity.mComponents,
+                    owner = entity._components,
                     type = cmpType,
                     key = cmpType,
-                    collection = entity.mComponents,
+                    collection = entity._components,
                     name = $"[{cmpType.Name}]",
                     depth = childDepth,
                     index = i++,

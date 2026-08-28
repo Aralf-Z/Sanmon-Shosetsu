@@ -13,7 +13,7 @@ namespace Sanmon.Battle
         public ColliderBox box;
         public DamageSource source;
         public List<DamagePair> damage;
-
+        
         public bool isCrit;
         public bool isHit;
         
