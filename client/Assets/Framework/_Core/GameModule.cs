@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Framework.Module;
 using Sanmon.Module;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace Sanmon.Core
         public AssetModule Asset { get; private set; }
         public UIModule UI { get; private set; }
         public ConfigModule Config { get; private set; }
+        public LuaModule Lua { get; private set; }
         
         private List<IModule> _modules = new();
         private int _initIndex = 0;
@@ -28,6 +30,8 @@ namespace Sanmon.Core
             _modules.Add(UI);
             Config = GetComponentInChildren<ConfigModule>();
             _modules.Add(Config);
+            Lua = GetComponentInChildren<LuaModule>();
+            _modules.Add(Lua);
 
             _modules = _modules.OrderBy(m => m.InitOrder).ToList();
             

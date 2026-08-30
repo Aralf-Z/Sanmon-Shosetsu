@@ -10,7 +10,7 @@ namespace Sanmon.Battle
     [RequireComponent(typeof(Collider))]
     public class DamageColliderBind: MonoBehaviour
     {
-        [SerializeField]private Collider Collider;
+        [SerializeField] private Collider Collider;
         
         public ColliderType type { get; private set; }
         public BoxCollider Box { get; private set; }
@@ -45,7 +45,7 @@ namespace Sanmon.Battle
         {
             if(onEntityEnter == null) return;
             
-            if (other.TryGetComponent<ColliderBind>(out var bind))
+            if (other.TryGetComponent<UnitColliderBind>(out var bind))
             {
                 onEntityEnter.Invoke(bind.host);
             }
@@ -55,7 +55,7 @@ namespace Sanmon.Battle
         {
             if(onEntityStay == null) return;
             
-            if (other.TryGetComponent<ColliderBind>(out var bind))
+            if (other.TryGetComponent<UnitColliderBind>(out var bind))
             {
                 onEntityStay.Invoke(bind.host);
             }

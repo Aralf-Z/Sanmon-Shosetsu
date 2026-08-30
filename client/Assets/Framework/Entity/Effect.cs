@@ -10,9 +10,9 @@ namespace Sanmon.GameEntity
         
         public EffectData Config { get; }
         
-        internal Effect(int configId)
+        internal Effect()
         {
-            Config = this.Module().Config.Tables.TbEffectData[configId];
+            
         }
     }
 }

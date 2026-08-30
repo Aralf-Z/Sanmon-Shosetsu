@@ -1,3 +1,5 @@
+using System;
+
 namespace Sanmon.Utility.Singleton
 {
     /// <summary>
@@ -8,6 +10,5 @@ namespace Sanmon.Utility.Singleton
     {
         private static T _instance;
         public static T Ins => _instance ??= new T();
-        protected Singleton() { }
     }
 }

@@ -14,7 +14,10 @@ namespace Sanmon.Editor
 
         public override void DrawPanel(Rect windowRect)
         {
-            
+            if (GUILayout.Button("同步脚本到StreamingAssets", GUILayout.Width(200)))
+            {
+                SyncLuaScriptsToStreamingAssets.SyncLuaScripts();
+            }
         }
     }
 }

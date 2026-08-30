@@ -9,10 +9,10 @@ namespace Sanmon.Editor
     {
         public static void OnToolbarGUI()
         {
+            if(!PlayModeConfig.Ins.enable) return;
+            if (EditorApplication.isCompiling || EditorApplication.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode) return;
+            
             GUILayout.FlexibleSpace();
-
-            if(!PlayModeConfig.Ins.enable)
-                return;
             
             foreach (var pms in PlayModeConfig.Ins.scenes)
             {

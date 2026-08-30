@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Sanmon.Editor
 {
-    internal class PathOpener
+    internal static class PathHelper
     {
-        private static readonly string PROJECT_PATH = Directory.GetParent(Directory.GetParent(Application.dataPath)!.FullName)!.FullName;
+        public static readonly string PROJECT_PATH = Directory.GetParent(Directory.GetParent(Application.dataPath)!.FullName)!.FullName;
         
         [MenuItem("Path/项目根目录")]
         public static void OpenProjectPath()

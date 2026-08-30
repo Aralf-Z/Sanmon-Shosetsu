@@ -4,7 +4,7 @@ namespace Sanmon.Battle
 {
     public class CmCollider: ComponentBase
     {
-        public ColliderBind Bind
+        public UnitColliderBind Bind
         {
             get => _bind;
             set
@@ -14,6 +14,6 @@ namespace Sanmon.Battle
             }
         }
 
-        private ColliderBind _bind;
+        private UnitColliderBind _bind;
     }
 }

@@ -8,7 +8,7 @@ namespace Sanmon.Battle
     /// 单位的受击碰撞盒绑定
     /// </summary>
     [RequireComponent(typeof(Collider))]
-    public class ColliderBind : MonoBehaviour
+    public class UnitColliderBind : MonoBehaviour
     {
         [SerializeField]private Collider Collider;
         

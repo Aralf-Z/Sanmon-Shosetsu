@@ -154,7 +154,7 @@ namespace Sanmon.GameEntity
             }
             else
             {
-                _effects.Add(EffectManager.Ins.Require(id));
+                //_effects.Add(BattleEffect.Ins.Require(id));
             }
         }
 

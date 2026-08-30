@@ -1,0 +1,9 @@
+{
+    "files.exclude": {
+        "**/.emmyrc.json": true,
+    },
+
+    "search.exclude": {
+        "**/.emmyrc.json": true,
+    }
+}
