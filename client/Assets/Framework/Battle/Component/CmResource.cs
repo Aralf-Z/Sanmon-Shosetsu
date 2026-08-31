@@ -16,29 +16,29 @@ namespace Sanmon.Battle
             public readonly SumValue maxValue;
             public float value;
 
-            public ResourceInfo(Attribute key, SumValue maxValue, float value)
+            public ResourceInfo(Attribute key, SumValue maxValue)
             {
                 this.key = key;
                 this.maxValue = maxValue;
-                this.value = value;
+                this.value = maxValue.Value;
             }
         }
 
-        public IReadOnlyCollection<Attribute> Name => mRes.Keys;
+        public IReadOnlyCollection<Attribute> Name => _res.Keys;
         
-        private readonly Dictionary<Attribute, ResourceInfo> mRes = new ();
+        private readonly Dictionary<Attribute, ResourceInfo> _res = new ();
 
-        public float this[Attribute name] => mRes.GetValueOrDefault(name)?.value ?? 0f;
+        public float this[Attribute name] => _res.GetValueOrDefault(name)?.value ?? 0f;
         
-        public void Add(Attribute key, SumValue maxValue, float value)
+        public void Add(Attribute key, SumValue maxValue)
         {
-            mRes.Add(key, new ResourceInfo(key, maxValue, value));
+            _res.Add(key, new ResourceInfo(key, maxValue));
         }
 
         public void Remove(Attribute key)
         {
-            //var info = mRes[key];
-            mRes.Remove(key);
+            //var info = _res[key];
+            _res.Remove(key);
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Sanmon.Editor
 
         public static void OnToolbarGUI()
         {
-            if (EditorApplication.isCompiling || EditorApplication.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode) return;
+            GUI.enabled = !(EditorApplication.isCompiling || EditorApplication.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode);
             
             var rect = EditorGUILayout.GetControlRect();
             rect.width = 200;
@@ -64,6 +64,8 @@ namespace Sanmon.Editor
                         EditorPrefs.SetInt(KEY, (int)EPlayMode.WebPlayMode); break;
                 }
             }
+
+            GUI.enabled = true;
         }
     }
 }

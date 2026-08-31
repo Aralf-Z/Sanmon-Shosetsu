@@ -441,6 +441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0531ddaa25034d52b9da603fdc969f00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colliderBind: {fileID: 586124737}
 --- !u!114 &586124737
 MonoBehaviour:
   m_ObjectHideFlags: 0

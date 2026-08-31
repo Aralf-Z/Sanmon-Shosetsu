@@ -35,8 +35,7 @@ namespace GameScripts.Temp_Battle
 
         private void OnHit(Entity target)
         {
-            // Debug.Log($"{caster.GetComponent<CmModel>().Go.name} Hit On {target.GetComponent<CmModel>().Go.name}");
-            Debug.Log($"OnHit");
+            Debug.Log($"{caster.GetComponent<CmModel>().Go.name} Hit On {target.GetComponent<CmModel>().Go.name}");
             Destroy(gameObject);
         }
     }

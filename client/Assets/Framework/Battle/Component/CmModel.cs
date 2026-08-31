@@ -74,10 +74,11 @@ namespace Sanmon.Battle
             Bind.Bind(this);
         }
         
-        public void SetModel(GameObject go, string newName)
+        public void SetModel(GameObject go, string newName = null)
         {
             Go = go;
-            Go.name = Name = newName;
+            Name = newName ?? Go.name;
+            Go.name = Name;
             Bind = Go.AddComponent<ModelBind>();
             Bind.Bind(this);
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Sanmon.GameEntity;
 using UnityEngine;
@@ -13,8 +14,8 @@ namespace Sanmon.Core
         internal bool IsInit { get; private set; }
         
         private readonly HashSet<Entity> _entities = new HashSet<Entity>();
-        private readonly List<Entity> _pendingAdd = new List<Entity>();
-        private readonly List<Entity> _pendingRemove = new List<Entity>();
+        private readonly HashSet<Entity> _pendingAdd = new HashSet<Entity>();
+        private readonly HashSet<Entity> _pendingRemove = new HashSet<Entity>();
         
         internal void Init()
         {
@@ -49,14 +50,14 @@ namespace Sanmon.Core
 
         internal void OnLogicUpdate(float dt)
         {
+            foreach (var e in _entities)
+                e.LogicUpdate(dt);
+            
             foreach (var e in _pendingAdd)
                 _entities.Add(e);
             
             foreach (var e in _pendingRemove)
                 _entities.Remove(e);
-            
-            foreach (var e in _entities)
-                e.LogicUpdate(dt);
             
             _pendingAdd.Clear();
             _pendingRemove.Clear();

@@ -10,7 +10,8 @@ namespace Sanmon.Editor
         public static void OnToolbarGUI()
         {
             if(!PlayModeConfig.Ins.enable) return;
-            if (EditorApplication.isCompiling || EditorApplication.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode) return;
+            
+            GUI.enabled = !(EditorApplication.isCompiling || EditorApplication.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode);
             
             GUILayout.FlexibleSpace();
             
@@ -21,6 +22,8 @@ namespace Sanmon.Editor
                 if(GUILayout.Button(content, ToolbarStyles.TAB_BUTTON))
                     SceneHelper.StartScene(pms.scene);
             }
+            
+            GUI.enabled = true;
         }
     }
 

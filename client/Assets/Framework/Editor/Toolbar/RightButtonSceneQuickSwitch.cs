@@ -22,6 +22,8 @@ namespace Sanmon.Editor
         
         public static void OnToolbarGUI()
         {
+            GUI.enabled = !(EditorApplication.isCompiling || EditorApplication.isPlaying || EditorApplication.isPlayingOrWillChangePlaymode);
+            
             var rect = EditorGUILayout.GetControlRect();
             rect.width = 180;
 
@@ -36,6 +38,8 @@ namespace Sanmon.Editor
 
                 menu.DropDown(rect);
             }
+            
+            GUI.enabled = true;
         }
 
         private static void SwitchScene(string path)

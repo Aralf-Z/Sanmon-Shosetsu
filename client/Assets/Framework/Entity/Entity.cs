@@ -12,7 +12,11 @@ namespace Sanmon.GameEntity
         
         public IReadOnlyCollection<ComponentBase> Components => _components.Values;
         public IReadOnlyCollection<FunctionBase> Functions => _functions.Values;
-        
+
+        internal Entity()
+        {
+        }
+
         protected internal void LogicUpdate(float dt)
         {
             foreach (var (_, func) in _functions)
