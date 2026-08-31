@@ -13,8 +13,8 @@ namespace Sanmon.Core
         internal bool IsInit { get; private set; }
         
         private readonly HashSet<Entity> _entities = new HashSet<Entity>();
-        private readonly List<Entity> _removeCache = new List<Entity>();
-        private readonly List<Entity> _addCache = new List<Entity>();
+        private readonly List<Entity> _pendingAdd = new List<Entity>();
+        private readonly List<Entity> _pendingRemove = new List<Entity>();
         
         internal void Init()
         {
@@ -29,42 +29,37 @@ namespace Sanmon.Core
         public Entity Require()
         {
             var en = new Entity();
-            Register(en);
+            _pendingAdd.Add(en);
             return en;
-        }
-
-        public void Register(Entity entity)
-        {
-            _addCache.Add(entity);
         }
         
         public void Recycle(Entity entity)
         {
             entity.Clear();
-            _removeCache.Add(entity);
+            _pendingRemove.Add(entity);
         }
         
         public void Recycle(IEnumerable<Entity> entity)
         {
             foreach (var e in entity)
             {
-                _removeCache.Add(e);
+                _pendingRemove.Add(e);
             }
         }
 
         internal void OnLogicUpdate(float dt)
         {
+            foreach (var e in _pendingAdd)
+                _entities.Add(e);
+            
+            foreach (var e in _pendingRemove)
+                _entities.Remove(e);
+            
             foreach (var e in _entities)
                 e.LogicUpdate(dt);
             
-            foreach (var e in _addCache)
-                _entities.Add(e);
-            
-            foreach (var e in _removeCache)
-                _entities.Remove(e);
-            
-            _addCache.Clear();
-            _removeCache.Clear();
+            _pendingAdd.Clear();
+            _pendingRemove.Clear();
         }
     }
 }

@@ -21,20 +21,20 @@ namespace Sanmon.Utility.Set
     {
         private readonly Dictionary<int, HashSet<T>> _mainSet = new ();
         private readonly List<int> _order = new ();
-        private readonly List<T> _addCache = new ();
-        private readonly List<T> _removeCache = new ();
+        private readonly List<T> _pendingAdd = new ();
+        private readonly List<T> _pendingRemove = new ();
         
         public void Add(T item)
         {
             item.SetStatus(BufferStatus.PendingAdd);
-            _addCache.Add(item);
+            _pendingAdd.Add(item);
             item.OnAdd();
         }
         
         private void Remove(T item)
         {
             item.SetStatus(BufferStatus.PendingRemove);
-            _removeCache.Add(item);
+            _pendingRemove.Add(item);
             item.OnRemove();
         }
 
@@ -51,8 +51,8 @@ namespace Sanmon.Utility.Set
             
             _mainSet.Clear();
             _order.Clear();
-            _addCache.Clear();
-            _removeCache.Clear();
+            _pendingAdd.Clear();
+            _pendingRemove.Clear();
         }
         
         public void Update(float dt)
@@ -75,7 +75,7 @@ namespace Sanmon.Utility.Set
             }
 
             //添加
-            foreach (var item in _addCache)
+            foreach (var item in _pendingAdd)
             {
                 item.SetStatus(BufferStatus.Running);
                 item.OnAdd();
@@ -92,7 +92,7 @@ namespace Sanmon.Utility.Set
             }
 
             //移出
-            foreach (var item in _removeCache)
+            foreach (var item in _pendingRemove)
             {
                 item.OnRemove();
                 item.SetStatus(BufferStatus.None);
@@ -102,8 +102,8 @@ namespace Sanmon.Utility.Set
             //排序
             if(needOrder) _order.Sort();
             
-            _addCache.Clear();
-            _removeCache.Clear();
+            _pendingAdd.Clear();
+            _pendingRemove.Clear();
         }
     }
 }

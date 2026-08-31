@@ -173,6 +173,7 @@ namespace Sanmon.GameEntity
             
             _components.Clear();
             _functions.Clear();
+            _effects.Clear();
         }
     }
 }
