@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.annulusgames.alchemy": "https://github.com/annulusgames/Alchemy.git?path=/Alchemy/Assets/Alchemy",
     "com.code-philosophy.luban": "file:../CustomPackages/LubanRuntime",
     "com.code-philosophy.zlua": "https://github.com/focus-creative-games/zlua.git",
     "com.cysharp.unitask": "https://github.com/Cysharp/UniTask.git?path=src/UniTask/Assets/Plugins/UniTask",

@@ -151,10 +151,7 @@ namespace Sanmon.GameEntity
         {
             if (_effects.Count > 0)
             {
-                for (var i = _effects.Count - 1; i > 0; i--)
-                {
-                    
-                }
+                
             }
             else
             {

@@ -16,11 +16,11 @@ namespace Game.Config.Battle
         /// <summary>
         /// 生命
         /// </summary>
-        health = 1,
+        Health = 1,
         /// <summary>
         /// 攻击
         /// </summary>
-        attack = 2,
+        Attack = 2,
     }
 
 } 

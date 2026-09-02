@@ -18,9 +18,8 @@ public sealed partial class EffectData : Luban.BeanBase
     public EffectData(JSONNode _buf) 
     {
         { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-        { if(!_buf["order"].IsNumber) { throw new SerializationException(); }  Order = _buf["order"]; }
+        { if(!_buf["tag"].IsString) { throw new SerializationException(); }  Tag = _buf["tag"]; }
         { if(!_buf["luaScript"].IsString) { throw new SerializationException(); }  LuaScript = _buf["luaScript"]; }
-        { if(!_buf["parameters"].IsObject) { throw new SerializationException(); }  Parameters = global::Game.Config.Battle.EffectParamBase.DeserializeEffectParamBase(_buf["parameters"]);  }
     }
 
     public static EffectData DeserializeEffectData(JSONNode _buf)
@@ -32,31 +31,25 @@ public sealed partial class EffectData : Luban.BeanBase
     /// 唯一id
     /// </summary>
     public readonly int Id;
-    /// <summary>
-    /// 执行优先级
-    /// </summary>
-    public readonly int Order;
+    public readonly string Tag;
     /// <summary>
     /// lua脚本
     /// </summary>
     public readonly string LuaScript;
-    public readonly Battle.EffectParamBase Parameters;
    
     public const int __ID__ = -1702841391;
     public override int GetTypeId() => __ID__;
 
     public  void ResolveRef(Tables tables)
     {
-        Parameters?.ResolveRef(tables);
     }
 
     public override string ToString()
     {
         return "{ "
         + "id:" + Id + ","
-        + "order:" + Order + ","
+        + "tag:" + Tag + ","
         + "luaScript:" + LuaScript + ","
-        + "parameters:" + Parameters + ","
         + "}";
     }
 }

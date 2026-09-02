@@ -2,7 +2,7 @@ using Game.Config.Battle;
 
 namespace Sanmon.Battle
 {
-    public struct DamagePair
+    public class DamagePair
     {
         public DamageType type;
         public int value;

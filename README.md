@@ -31,6 +31,7 @@ Special thanks to:
 - [UniTask](https://github.com/Cysharp/UniTask)
 - [MulliganRenamer](https://github.com/redbluegames/unity-mulligan-renamer.git?path=/Assets/RedBlueGames/MulliganRenamer)
 - [unity-toolbar-extender](https://github.com/marijnz/unity-toolbar-extender)
+- [Alchemy](https://github.com/annulusgames/Alchemy)
 - [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity.git?path=/src/NuGetForUnity)
   - [zlinq](https://github.com/Cysharp/ZLinq)
   - [Newtonsoft](https://www.newtonsoft.com/json)

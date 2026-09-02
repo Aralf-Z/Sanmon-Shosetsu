@@ -30,13 +30,13 @@ namespace Sanmon.Battle
                     var methodInstance = LuaAppDomain.GetFunction<Action<DamageInfo>>(effect, method);
                     if (methodInstance != null)
                     {
-                        var newEffect = new BattleEffect
-                        {
-                            order = LuaAppDomain.GetFunction<Func<int>>(effect, "order")?.Invoke() ?? 0,
-                            methodName = method,
-                            method = methodInstance
-                        };
-                        effects.Add(effect, newEffect);
+                        // var newEffect = new BattleEffect
+                        // {
+                        //     order = LuaAppDomain.GetFunction<Func<int>>(effect, "order")?.Invoke() ?? 0,
+                        //     methodName = method,
+                        //     method = methodInstance
+                        // };
+                        // effects.Add(effect, newEffect);
                     }
                 }
             }

@@ -11,9 +11,9 @@
 local enums =
 {
     ---@class Battle.Attribute
-     ---@field public health integer @生命
-     ---@field public attack integer @攻击
-    ['Battle.Attribute'] = {   health=1,  attack=2,  };
+     ---@field public Health integer @生命
+     ---@field public Attack integer @攻击
+    ['Battle.Attribute'] = {   Health=1,  Attack=2,  };
     ---@class Battle.Blackboard
      ---@field public poisonBase integer @基础毒伤害
     ['Battle.Blackboard'] = {   poisonBase=1,  };
@@ -27,8 +27,8 @@ local enums =
      ---@field public Magical integer @魔法伤害
     ['Battle.DamageType'] = {   Physical=1,  Magical=2,  };
     ---@class Battle.Tag
-     ---@field public nondamageable integer @免疫伤害
-    ['Battle.Tag'] = {   nondamageable=1,  };
+     ---@field public ImmuneAllDamage integer @免疫所有伤害
+    ['Battle.Tag'] = {   ImmuneAllDamage=1,  };
 }
 
 local beans = {}

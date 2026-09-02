@@ -10,5 +10,7 @@ namespace Sanmon.Battle
         public string methodName;
 
         public Action<DamageInfo> method;
+
+        internal BattleEffect(int id) : base(id) { }
     }
 }

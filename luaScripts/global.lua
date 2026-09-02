@@ -1,5 +1,4 @@
-local configModule = CSharp['Game.Framework'].LuaUtils.config;
-
+local luban = require ("schema")
 
 local function _new_list(type)
     local list_type = zlua.make_generic_type(
@@ -18,7 +17,7 @@ end
 return{
     ac = CSharp['Assembly-CSharp'],
     framework = CSharp['Game.Framework'],
-    table = configModule.Tables,
+    enum = luban.enums,
     new_list = _new_list,
     new_dict = _new_dict,
 }

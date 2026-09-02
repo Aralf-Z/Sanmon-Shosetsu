@@ -24,10 +24,10 @@ namespace GameScripts.Temp_Battle
             
             self = new Unit(en);
             
-            var health = self.attri.AddValue(Attribute.health, 100f);
-            self.attri.AddValue(Attribute.attack, 10f);
+            var health = self.attri.AddValue(Attribute.Health, 100f);
+            self.attri.AddValue(Attribute.Attack, 10f);
             
-            self.resource.Add(Attribute.health, health);
+            self.resource.Add(Attribute.Health, health);
 
             var model = en.AddComponent<CmModel>();
             model.SetModel(gameObject);

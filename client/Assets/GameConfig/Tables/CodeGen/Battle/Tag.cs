@@ -14,9 +14,9 @@ namespace Game.Config.Battle
     public enum Tag
     {
         /// <summary>
-        /// 免疫伤害
+        /// 免疫所有伤害
         /// </summary>
-        nondamageable = 1,
+        ImmuneAllDamage = 1,
     }
 
 } 

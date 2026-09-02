@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.annulusgames.alchemy": {
+      "version": "https://github.com/annulusgames/Alchemy.git?path=/Alchemy/Assets/Alchemy",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "0fd900299de83d09d795ca81e804fae328bd0229"
+    },
     "com.code-philosophy.luban": {
       "version": "file:../CustomPackages/LubanRuntime",
       "depth": 0,
