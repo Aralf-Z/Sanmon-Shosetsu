@@ -12,13 +12,13 @@ namespace Sanmon.Battle
     {
         private class ResourceInfo
         {
-            public readonly Attribute key;
+            public readonly Attribute attribute;
             public readonly SumValue maxValue;
             public float value;
 
-            public ResourceInfo(Attribute key, SumValue maxValue)
+            public ResourceInfo(Attribute attribute, SumValue maxValue)
             {
-                this.key = key;
+                this.attribute = attribute;
                 this.maxValue = maxValue;
                 this.value = maxValue.Value;
             }
@@ -28,17 +28,18 @@ namespace Sanmon.Battle
         
         private readonly Dictionary<Attribute, ResourceInfo> _res = new ();
 
-        public float this[Attribute name] => _res.GetValueOrDefault(name)?.value ?? 0f;
+        public float this[Attribute attribute] => _res.GetValueOrDefault(attribute)?.value ?? 0f;
+        public float this[int attribute] => this[(Attribute)attribute];
         
-        public void Add(Attribute key, SumValue maxValue)
+        public void Add(Attribute attribute, SumValue maxValue)
         {
-            _res.Add(key, new ResourceInfo(key, maxValue));
+            _res.Add(attribute, new ResourceInfo(attribute, maxValue));
         }
 
-        public void Remove(Attribute key)
+        public void Remove(Attribute attribute)
         {
-            //var info = _res[key];
-            _res.Remove(key);
+            //var info = _res[attribute];
+            _res.Remove(attribute);
         }
     }
 }

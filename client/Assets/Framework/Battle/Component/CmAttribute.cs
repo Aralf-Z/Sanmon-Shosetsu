@@ -14,18 +14,19 @@ namespace Sanmon.Battle
         
         private readonly Dictionary<Attribute, SumValue> mAttri = new ();
         
-        public SumValue this[Attribute name] => mAttri.GetValueOrDefault(name, SumValue.DEFAULT);
+        public SumValue this[Attribute attribute] => mAttri.GetValueOrDefault(attribute, SumValue.DEFAULT);
+        public SumValue this[int attribute] => this[(Attribute)attribute];
 
-        public SumValue AddValue(Attribute name, float value)
+        public SumValue AddValue(Attribute attribute, float value)
         {
             var sum = new SumValue(value);
-            mAttri.Add(name, sum);
+            mAttri.Add(attribute, sum);
             return sum;
         }
         
-        public void RemoveValue(Attribute name)
+        public void RemoveValue(Attribute attribute)
         {
-            mAttri.Remove(name);
+            mAttri.Remove(attribute);
         }
     }
 }

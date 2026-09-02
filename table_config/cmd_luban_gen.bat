@@ -1,8 +1,10 @@
+REM https://www.datable.cn/docs/reference/cli
+
 set CLIENT=../client/Assets
 
 dotnet ./Luban/Luban.dll ^
     -v ^
-    -t all ^
+    -t client ^
     -c cs-simple-json^
     -d json ^
     --conf ./luban.conf ^

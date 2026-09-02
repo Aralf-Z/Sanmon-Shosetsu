@@ -16,6 +16,11 @@ namespace Sanmon.Battle
             _blackboard[blackboard] = defaultValue;
             return defaultValue;
         }
+        
+        public float GetOrDefault(int blackboard, float defaultValue = 0)
+        {
+            return GetOrDefault((Blackboard)blackboard, defaultValue);
+        }
 
         public float AddValue(Blackboard blackboard, float value)
         {
