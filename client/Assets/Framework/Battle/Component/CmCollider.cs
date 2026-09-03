@@ -4,16 +4,12 @@ namespace Sanmon.Battle
 {
     public class CmCollider: ComponentBase
     {
-        public UnitColliderBind Bind
+        public BindUnitCollider Bind
         {
             get => _bind;
-            set
-            {
-                _bind = value;
-                _bind.host = Host;
-            }
+            set => _bind = value;
         }
 
-        private UnitColliderBind _bind;
+        private BindUnitCollider _bind;
     }
 }

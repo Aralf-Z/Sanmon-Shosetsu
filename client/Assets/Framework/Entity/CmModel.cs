@@ -4,7 +4,7 @@ using Sanmon.GameEntity;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Sanmon.Battle
+namespace Sanmon.GameEntity
 {
     public class CmModel: ComponentBase
         , IGetModule

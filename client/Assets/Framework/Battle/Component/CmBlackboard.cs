@@ -6,9 +6,9 @@ namespace Sanmon.Battle
 {
     public class CmBlackboard: ComponentBase
     {
-        private readonly Dictionary<Blackboard, float> _blackboard = new Dictionary<Blackboard, float>();
+        private readonly Dictionary<int, float> _blackboard = new ();
         
-        public float GetOrDefault(Blackboard blackboard, float defaultValue = 0)
+        public float GetOrDefault(int blackboard, float defaultValue = 0)
         {
             if(_blackboard.TryGetValue(blackboard, out var value))
                 return value;
@@ -17,12 +17,12 @@ namespace Sanmon.Battle
             return defaultValue;
         }
         
-        public float GetOrDefault(int blackboard, float defaultValue = 0)
+        public float GetOrDefault(Blackboard blackboard, float defaultValue = 0)
         {
-            return GetOrDefault((Blackboard)blackboard, defaultValue);
+            return GetOrDefault((int)blackboard, defaultValue);
         }
 
-        public float AddValue(Blackboard blackboard, float value)
+        public float AddValue(int blackboard, float value)
         {
             if (_blackboard.TryGetValue(blackboard, out var current))
             {
@@ -33,6 +33,11 @@ namespace Sanmon.Battle
 
             _blackboard[blackboard] = value;
             return value;
+        }
+        
+        public float AddValue(Blackboard blackboard, float value)
+        {
+            return AddValue((int)blackboard, value);
         }
     }
 }

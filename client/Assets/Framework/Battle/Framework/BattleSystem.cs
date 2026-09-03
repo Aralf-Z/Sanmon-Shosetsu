@@ -1,3 +1,4 @@
+using System;
 using Sanmon.Core;
 using Sanmon.Helper;
 using Sanmon.Syztem;
@@ -13,6 +14,9 @@ namespace Sanmon.Battle
         private DealHealPipeline _dealHealPipeline;
         
         private bool _isDealing = false;
+        
+        private event Action<DamageInfo> e_onUnitDealDamage;
+        private event Action<HealInfo> e_onUnitHeal;
         
         protected internal override void Init()
         {
@@ -48,7 +52,8 @@ namespace Sanmon.Battle
                 {
                     var info = _note.damageInfos.Dequeue();
                     _dealDamagePipeline.Do(info);
-                
+                    e_onUnitDealDamage?.Invoke(info);
+                    
                     count++;
                     if (count > PIPELINE_DO_LIMIT)
                     {
@@ -66,7 +71,7 @@ namespace Sanmon.Battle
                 {
                     var info = _note.healInfos.Dequeue();
                     _dealHealPipeline.Do(info);
-                
+                    e_onUnitHeal?.Invoke(info);
                     count++;
                     if (count > PIPELINE_DO_LIMIT)
                     {

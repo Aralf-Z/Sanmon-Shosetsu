@@ -8,11 +8,12 @@ namespace Sanmon.GameEntity
     {
         internal readonly Dictionary<Type, ComponentBase> _components = new();
         internal readonly Dictionary<Type, FunctionBase> _functions = new();
-        internal readonly Dictionary<int, List<Effect>> _effects = new();
         
         public IReadOnlyCollection<ComponentBase> Components => _components.Values;
         public IReadOnlyCollection<FunctionBase> Functions => _functions.Values;
 
+        public CmInfo Info { get; internal set; }        
+        
         internal Entity()
         {
         }
@@ -146,23 +147,6 @@ namespace Sanmon.GameEntity
                 func.OnRemoved();
             }
         }
-
-        public void AddEffect(int id)
-        {
-            if (_effects.Count > 0)
-            {
-                
-            }
-            else
-            {
-                //_effects.Add(BattleEffect.Ins.Require(id));
-            }
-        }
-
-        private void RemoveEffect(int id)
-        {
-            
-        }
         
         public void Clear()
         {
@@ -174,7 +158,6 @@ namespace Sanmon.GameEntity
             
             _components.Clear();
             _functions.Clear();
-            _effects.Clear();
         }
     }
 }

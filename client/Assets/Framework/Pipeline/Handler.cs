@@ -9,20 +9,16 @@ namespace Framework.Pipeline
             _next = next;
             return next;
         }
-
-        public void Do(TContext request)
+        public void Do(TContext context)
         {
-            if (CanHandle(request))
-            {
-                Process(request);
-                return;
-            }
-
-            _next?.Do(request);
+            if (CanHandle(context) && Process(context))
+                _next?.Do(context);
         }
 
-        protected virtual bool CanHandle(TContext request) => true;
-
-        protected abstract void Process(TContext request);
+        /// <returns> 处理条件检测，默认true </returns>
+        protected virtual bool CanHandle(TContext context) => true;
+        
+        /// <returns> 是否进入下一个Handler </returns>
+        protected abstract bool Process(TContext context);
     }
 }

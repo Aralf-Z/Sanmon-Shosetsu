@@ -1,6 +1,7 @@
 using Game.Config.Battle;
 using Sanmon.Battle;
 using Sanmon.Core;
+using Sanmon.GameEntity;
 using UnityEngine;
 
 namespace GameScripts.Temp_Battle
@@ -10,17 +11,18 @@ namespace GameScripts.Temp_Battle
     {
         public Unit self;
 
-        [SerializeField] private UnitColliderBind colliderBind;
+        [SerializeField] private BindUnitCollider collider;
         
         private void Awake()
         {
-            var en = this.Entity().Require();
+            var en = this.Entity().Require("enemy");
 
             en.AddComponent<CmAttribute>();
             en.AddComponent<CmResource>();
             en.AddComponent<CmBlackboard>();
             en.AddComponent<CmTag>();
             en.AddComponent<CmGroup>();
+            en.AddComponent<CmEffect>();
             
             self = new Unit(en);
             
@@ -30,9 +32,11 @@ namespace GameScripts.Temp_Battle
             self.resource.Add(Attribute.Health, health);
 
             var model = en.AddComponent<CmModel>();
+            var trans =  en.AddComponent<CmTransform>();
             model.SetModel(gameObject);
+            trans.SetTransform(gameObject.AddComponent<BindTransform>());
             
-            colliderBind.host = en;
+            collider.unit = self;
         }
     }
 }

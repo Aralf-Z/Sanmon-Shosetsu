@@ -2,6 +2,6 @@ namespace Sanmon.Battle
 {
     public interface IDamageMaker
     {
-        string Name{get; set;}
+        string Name { get; }
     }
 }

@@ -13,6 +13,8 @@ namespace Sanmon.Battle
         public CmBlackboard blackboard;
         public CmTag tag;
         public CmGroup group;
+        public CmEffect effect;
+        public CmTransform transform;
 
         public Unit(Entity unit)
         {
@@ -22,6 +24,8 @@ namespace Sanmon.Battle
             blackboard = unit.GetComponent<CmBlackboard>();
             tag = unit.GetComponent<CmTag>();
             group = unit.GetComponent<CmGroup>();
+            effect = unit.GetComponent<CmEffect>();
+            transform = unit.GetComponent<CmTransform>();
         }
     }
 }

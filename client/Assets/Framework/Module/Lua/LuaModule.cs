@@ -64,7 +64,7 @@ namespace Framework.Module
             if (Directory.Exists(path))
             {
                 foreach (var file in Directory.GetFiles(path, "*.lua", SearchOption.AllDirectories))
-                    yield return Path.GetFileName(file);
+                    yield return Path.GetFileNameWithoutExtension(file);
             }
             else
             {

@@ -1,6 +1,7 @@
 using Game.Config.Battle;
 using Sanmon.Battle;
 using Sanmon.Core;
+using Sanmon.GameEntity;
 using Sanmon.Helper;
 using UnityEngine;
 
@@ -17,13 +18,14 @@ namespace GameScripts.Temp_Battle
 
         private void Awake()
         {
-            var en = this.Entity().Require();
+            var en = this.Entity().Require("player");
 
             en.AddComponent<CmAttribute>();
             en.AddComponent<CmResource>();
             en.AddComponent<CmBlackboard>();
             en.AddComponent<CmTag>();
             en.AddComponent<CmGroup>();
+            en.AddComponent<CmEffect>();
             
             self = new Unit(en);
             
@@ -33,9 +35,9 @@ namespace GameScripts.Temp_Battle
             self.resource.Add(Attribute.Health, health);
             
             var model = en.AddComponent<CmModel>();
+            var trans =  en.AddComponent<CmTransform>();
             model.SetModel(gameObject);
-
-            
+            trans.SetTransform(gameObject.AddComponent<BindTransform>());
         }
 
         private void Update()
@@ -48,7 +50,7 @@ namespace GameScripts.Temp_Battle
             {
                 var instance = Instantiate(bullet.gameObject).GetComponent<Bullet>();
                 var start = transform.position.SetY(4);
-                instance.caster = self.unit;
+                instance.caster = self;
                 instance.Cast(start, enemy.transform.position - start);
             }
         }

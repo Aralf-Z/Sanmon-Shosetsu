@@ -17,6 +17,8 @@ namespace Sanmon.Core
         private readonly HashSet<Entity> _pendingAdd = new HashSet<Entity>();
         private readonly HashSet<Entity> _pendingRemove = new HashSet<Entity>();
         
+        private int _entityInstanceId;
+        
         internal void Init()
         {
             IsInit = true;
@@ -27,9 +29,13 @@ namespace Sanmon.Core
             IsInit = false;
         }
         
-        public Entity Require()
+        public Entity Require(string entityName)
         {
             var en = new Entity();
+            var info = en.AddComponent<CmInfo>();
+            info.Name = entityName;
+            info.InstanceId = _entityInstanceId++;
+            en.Info = info;
             _pendingAdd.Add(en);
             return en;
         }
@@ -50,14 +56,14 @@ namespace Sanmon.Core
 
         internal void OnLogicUpdate(float dt)
         {
-            foreach (var e in _entities)
-                e.LogicUpdate(dt);
-            
             foreach (var e in _pendingAdd)
                 _entities.Add(e);
             
             foreach (var e in _pendingRemove)
                 _entities.Remove(e);
+            
+            foreach (var e in _entities)
+                e.LogicUpdate(dt);
             
             _pendingAdd.Clear();
             _pendingRemove.Clear();

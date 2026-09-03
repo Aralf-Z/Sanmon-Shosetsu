@@ -1,4 +1,4 @@
-local luban = require ("schema")
+local luban = require ("config/schema")
 
 local function _new_list(type)
     local list_type = zlua.make_generic_type(

@@ -5,11 +5,16 @@ namespace Sanmon.Battle
     public class DamagePair
     {
         public DamageType type;
-        public int value;
+        /// <summary> 基础数值 </summary>
+        public float value;
+        /// <summary> 加区 </summary>
+        public float addValue;
+        /// <summary> 乘区 </summary>
+        public float mulValue;
 
         public override string ToString()
         {
-            return $"[{type}: {value}]";
+            return $"[{type}={value}, 加区={addValue}, 乘区={mulValue}]";
         }
     }
 }

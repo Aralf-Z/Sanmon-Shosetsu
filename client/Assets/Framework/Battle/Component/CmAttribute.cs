@@ -10,23 +10,33 @@ namespace Sanmon.Battle
     /// </summary>
     public class CmAttribute: ComponentBase
     {
-        public IReadOnlyDictionary<Attribute, SumValue> Attri => mAttri;
+        public IReadOnlyDictionary<int, SumValue> Attri => mAttri;
         
-        private readonly Dictionary<Attribute, SumValue> mAttri = new ();
+        private readonly Dictionary<int, SumValue> mAttri = new ();
         
-        public SumValue this[Attribute attribute] => mAttri.GetValueOrDefault(attribute, SumValue.DEFAULT);
-        public SumValue this[int attribute] => this[(Attribute)attribute];
+        public SumValue this[Attribute attribute] => this[(int)attribute];
+        public SumValue this[int attribute] => mAttri.GetValueOrDefault(attribute, SumValue.DEFAULT);
 
-        public SumValue AddValue(Attribute attribute, float value)
+        public SumValue AddValue(int attribute, float value)
         {
             var sum = new SumValue(value);
             mAttri.Add(attribute, sum);
             return sum;
         }
         
-        public void RemoveValue(Attribute attribute)
+        public SumValue AddValue(Attribute attribute, float value)
+        {
+            return AddValue((int)attribute, value);
+        }
+        
+        public void RemoveValue(int attribute)
         {
             mAttri.Remove(attribute);
+        }
+        
+        public void RemoveValue(Attribute attribute)
+        {
+            mAttri.Remove((int)attribute);
         }
     }
 }
