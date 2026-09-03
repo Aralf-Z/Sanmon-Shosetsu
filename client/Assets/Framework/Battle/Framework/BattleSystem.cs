@@ -1,13 +1,13 @@
 using System;
 using Sanmon.Core;
-using Sanmon.Helper;
 using Sanmon.Syztem;
+using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Battle
 {
     public class BattleSystem: SystemBase
     {
-        private const int PIPELINE_DO_LIMIT = 50;
+        private const int PIPELINE_DO_LIMIT = 5;
         
         private BattleNote _note;
         private DealDamagePipeline _dealDamagePipeline;
@@ -21,12 +21,16 @@ namespace Sanmon.Battle
         protected internal override void Init()
         {
             _note = this.Note().Get<BattleNote>();
+            _dealDamagePipeline = new DealDamagePipeline();
+            _dealHealPipeline = new DealHealPipeline();
         }
 
         public void OnUnitDealDamage(DamageInfo damageInfo)
         {
+            var timer = UnityEngine.Time.realtimeSinceStartup;
             _note.damageInfos.Enqueue(damageInfo);
             DealOnce();
+            Logger.LogDebug($"伤害处理流程花费{UnityEngine.Time.realtimeSinceStartup - timer}", "测试");
         }
 
         public void OnUnitDealHeal(HealInfo healInfo)

@@ -19,7 +19,7 @@ namespace Sanmon.Helper
         private static void Log(string message, LoggerConfig.Level level, string title = null, string color = "#FFFFFF")
         {
             var timeStamp = Config.logTimeStamp ? $"[{DateTime.Now.Hour:00}:{DateTime.Now.Minute:00}:{DateTime.Now.Second:00}:{DateTime.Now.Millisecond:000}] " : "";
-            Debug.Log($"{timeStamp}<color={color}>{(title == null ? "" : $"<{title}>  ")}{message}</color>");
+            Debug.Log($"{timeStamp}<color={color}>{(title == null ? "" : $"<{title}>")}{message}</color>");
         }
         
         /// <summary>
@@ -111,7 +111,7 @@ namespace Sanmon.Helper
         public static void LogTime(string message, string title = null, Color color = default)
         {
             if(Config.level >=　LoggerConfig.Level.Debug) 
-                LogDebug(message,$"[t:{Time.realtimeSinceStartup:F3}] {(title == null ? "" : $"<{title}>")}", color);
+                LogDebug($"[t:{Time.realtimeSinceStartup:F5}]{message}", title, color);
         }
     }
 }

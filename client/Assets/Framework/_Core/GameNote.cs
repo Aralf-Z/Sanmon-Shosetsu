@@ -34,6 +34,7 @@ namespace Sanmon.Core
             if (_notes.TryGetValue(type, out var note)) return (T)note;
             
             var @new = (T)Activator.CreateInstance(type);
+            @new.Init();
             _notes.Add(type, @new);
             
             Logger.LogInfo($"create note '{type.FullName}'", "note");

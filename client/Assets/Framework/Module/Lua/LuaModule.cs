@@ -32,7 +32,7 @@ namespace Framework.Module
         
         private bool _isInit = false;
 
-        private static string RootPath 
+        public static string RootPath 
         {
             get
             {

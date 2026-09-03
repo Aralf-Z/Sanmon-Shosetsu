@@ -11,15 +11,23 @@ namespace Sanmon.Battle
         public DealDamagePipeline()
         {
             SetHeader(new HandleCheckHit())
-                .SetNext(new HandleOnHitBuff())
+                //.SetNext(new HandleOnHitBuff())
                 .SetNext(new HandleCalculateValue())
                 .SetNext(new HandleResult());
         }
 
         private static void DoEvent(Unit unit, string eventName, DamageInfo damageInfo)
         {
-            foreach (var effectEvent in unit.effect.FindEvent(eventName))
-                effectEvent.action?.Invoke(damageInfo);
+            Logger.LogTime($"Do Event at {eventName}");
+            var efs = unit.effect.FindEvent(eventName);
+            if(efs == null) return;
+            foreach (var effectEvent in efs)
+            {
+                Logger.LogTime($"Invoke Event at {eventName}");
+                effectEvent.action?.Invoke(1);
+                Logger.LogTime($"End Invoke Event at {eventName}");
+            }
+            Logger.LogTime($"End Event at {eventName}");
         }
 
         private class HandleCheckHit : Handler<DamageInfo>
@@ -35,7 +43,7 @@ namespace Sanmon.Battle
                 DoEvent(context.attacker, DealDamageEvent.HIT_ATTACKER_AFTER_HIT, context);
                 DoEvent(context.defender, DealDamageEvent.HIT_DEFENDER_AFTER_HIT, context);
 
-                return context.isHit;
+                return true;//context.isHit;
             }
         }
 

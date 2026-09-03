@@ -32,6 +32,7 @@ namespace Sanmon.Core
             if (_systems.TryGetValue(type, out var sys)) return (T)sys;
             
             var @new = (T)Activator.CreateInstance(type);
+            @new.Init();
             _systems.Add(type, @new);
             
             Logger.LogInfo($"create system '{type.FullName}'", "system");

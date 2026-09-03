@@ -41,8 +41,6 @@ namespace GameScripts.Temp_Battle
 
         private void OnHit(Unit target)
         {
-            Debug.Log($"{caster.unit.Info.Name} Hit On {target.unit.Info.Name}");
-
             var damageInfo = new DamageInfo()
             {
                 maker = this,
@@ -65,8 +63,11 @@ namespace GameScripts.Temp_Battle
                         value = Random.Range(20,26),
                     },
                 },
+                buffsOnHitForAttacker = new List<Buff>(),
+                buffsOnHitForDefender = new List<Buff>()
             };
             
+            Debug.Log($"{caster.unit.Info.Name} Hit On {target.unit.Info.Name}\n {damageInfo}");
             this.System().Get<BattleSystem>().OnUnitDealDamage(damageInfo);
             
             Destroy(gameObject);

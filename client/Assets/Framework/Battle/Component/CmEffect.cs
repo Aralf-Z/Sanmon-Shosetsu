@@ -20,7 +20,10 @@ namespace Sanmon.Battle
 
         internal IReadOnlyList<EffectEvent> FindEvent(string eventName)
         {
-            return _events.GetValueOrDefault(eventName, DEFAULT_EVENTS);
+            Logger.LogTime($"FindEvent {eventName}");
+            var r = _events.GetValueOrDefault(eventName, null);
+            Logger.LogTime($"End FindEvent {eventName}");
+            return r;
         }
         
         public void Add(string effect)

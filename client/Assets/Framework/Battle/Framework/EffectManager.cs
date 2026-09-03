@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using Framework.Module;
 using Sanmon.Core;
 using Sanmon.Helper;
 using Sanmon.Utility.Singleton;
@@ -52,38 +54,10 @@ namespace Sanmon.Battle
 #if UNITY_EDITOR
             var time = UnityEngine.Time.realtimeSinceStartup;
 #endif
-            var events = new List<EffectEvent>();
-            
-            //todo zlua找不到function会报错
             foreach (var luaModule in this.Module().Lua.GetLuaFileName(EFFECT_PATH))
             {
-                var effect = new Effect
-                {
-                    name = luaModule
-                };
-                
-                var lua = Path.Combine(EFFECT_PATH, luaModule);
-                
-                foreach (var method in LUA_EVENT_NAME)
-                {
-                    var @event = LuaAppDomain.GetFunction<Action<DamageInfo>>(lua, method);
-                    if (@event != null)
-                    {
-                        events.Add(new EffectEvent()
-                        {
-                            order = LuaAppDomain.GetFunction<Func<int>>(lua, $"{method}_order")?.Invoke() 
-                                    ?? (luaModule.StartsWith("default") ? 0 : 1),
-                            name = method,
-                            effect = effect,
-                            action = @event
-                        });
-                    }
-                }
-                
-                effect.events = events.ToArray();
+                var effect = NewEffect(luaModule);
                 effects.Add(luaModule, effect);
-                
-                events.Clear();
             }
 #if UNITY_EDITOR
             Logger.LogInfo($"EffectManager 初始化花销 '{UnityEngine.Time.realtimeSinceStartup - time}s'", "战斗");
@@ -96,6 +70,78 @@ namespace Sanmon.Battle
                 return  effectInstance;
             
             throw new EffectException($"申请错误的Effect名: {effect}");
+        }
+
+        
+        private Effect NewEffect(string effectName)
+        {
+            var effect = new Effect
+            {
+                name = effectName
+            };
+                
+            var luaFullPath = Path.Combine(LuaModule.RootPath, EFFECT_PATH, effectName + ".lua");
+            var luaText = File.ReadAllText(luaFullPath, Encoding.UTF8);
+            var returnText = ExtractLastBracedContent(luaText);
+            var luaModule = Path.Combine(EFFECT_PATH, effectName);
+            var events =  new List<EffectEvent>();
+            
+            foreach (var method in LUA_EVENT_NAME)
+            {
+                if (returnText.Contains(method))
+                {
+                    var orderFunc = $"{method}_order";
+                    var @event = LuaAppDomain.GetFunction<Action<int>>(luaModule, method);
+                    
+                    if (@event != null)
+                    {
+                        events.Add(new EffectEvent()
+                        {
+                            order = returnText.Contains(orderFunc) 
+                                ? LuaAppDomain.GetFunction<Func<int>>(luaModule, orderFunc).Invoke()
+                                : effectName.StartsWith("default") ? 0 : 1,
+                            name = method,
+                            effect = effect,
+                            action = @event
+                        });
+                    }
+                }
+            }
+                
+            effect.events = events.ToArray();
+            
+            return effect;
+        }
+        
+        private static string ExtractLastBracedContent(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return null;
+            var end = text.LastIndexOf('}');
+            if (end == -1) return null;
+            
+            var braceCount = 0;
+            var start = -1;
+            for (var i = end; i >= 0; i--)
+            {
+                var c = text[i];
+                if (c == '}') braceCount++;
+                else if (c == '{')
+                {
+                    braceCount--;
+                    if (braceCount == 0)
+                    {
+                        start = i;
+                        break;
+                    }
+                }
+            }
+
+            if (start == -1) return null;
+            
+            var inner = text.Substring(start + 1, end - start - 1).Trim();
+            if (string.IsNullOrEmpty(inner)) return null;
+            
+            return inner;
         }
     }
 }

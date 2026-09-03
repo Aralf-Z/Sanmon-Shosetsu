@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Sanmon.Helper;
 
 namespace Framework.Pipeline
 {
@@ -14,7 +15,9 @@ namespace Framework.Pipeline
         
         public virtual void Do(TContext context)
         {
+            Logger.LogTime("Do");
             _header.Do(context);
+            Logger.LogTime("DoEnd");
         }
     }
 }

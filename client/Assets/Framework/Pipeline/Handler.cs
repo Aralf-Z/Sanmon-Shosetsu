@@ -1,3 +1,5 @@
+using Sanmon.Helper;
+
 namespace Framework.Pipeline
 {
     public abstract class Handler<TContext>
@@ -11,7 +13,10 @@ namespace Framework.Pipeline
         }
         public void Do(TContext context)
         {
-            if (CanHandle(context) && Process(context))
+            Logger.LogTime($"Do {GetType().Name}");
+            var go = CanHandle(context) && Process(context);
+            Logger.LogTime($"DoEnd {GetType().Name}");
+            if (go)
                 _next?.Do(context);
         }
 
