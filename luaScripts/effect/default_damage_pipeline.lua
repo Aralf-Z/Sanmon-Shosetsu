@@ -2,7 +2,7 @@ local global = require("global")
 
 -- 命中阶段
 local function _hit_attacker_before_hit(damage_info)
-    if(damage_info.defender.tag:Contains(global.enum['Battle.Tag'].Dead)) then
+    if(damage_info.defender.tag:Check(global.enum['Battle.Tag'].Dead)) then
         damage_info.isHit = false;
         --print("defender is dead, attacker cannot hit")
     end

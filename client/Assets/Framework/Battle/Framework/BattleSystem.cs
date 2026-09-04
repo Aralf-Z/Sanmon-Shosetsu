@@ -7,7 +7,7 @@ namespace Sanmon.Battle
 {
     public class BattleSystem : SystemBase
     {
-        private const int PIPELINE_DO_LIMIT = 20;
+        private const float PIPELINE_COST_TIME = 0.008f;//8ms
 
         private BattleNote _note;
         private DealDamagePipeline _dealDamagePipeline;
@@ -28,29 +28,6 @@ namespace Sanmon.Battle
         public void OnUnitDealDamage(DamageInfo damageInfo)
         {
             var timer = UnityEngine.Time.realtimeSinceStartup;
-            //---
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            //---
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            //---
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            //---
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
-            _note.damageInfos.Enqueue(damageInfo);
             _note.damageInfos.Enqueue(damageInfo);
             DealOnce();
             Logger.LogDebug($"伤害处理流程花费[{((UnityEngine.Time.realtimeSinceStartup - timer) * 1000).ToString("F5")}ms]", "测试");
@@ -67,8 +44,7 @@ namespace Sanmon.Battle
             if (_isDealing) return; //避免递归
 
             _isDealing = true;
-
-            var count = 0;
+            
             DamageInfo firstDamageInfo = null;
 
             if (_note.damageInfos.Count > 0)
@@ -79,14 +55,16 @@ namespace Sanmon.Battle
                 {
                     var info = _note.damageInfos.Dequeue();
                     _dealDamagePipeline.Do(info);
-                    e_onUnitDealDamage?.Invoke(info);
+                    
+                    if(!info.isAbort)
+                        e_onUnitDealDamage?.Invoke(info);
 
-                    count++;
-                    if (count > PIPELINE_DO_LIMIT)
-                    {
-                        Logger.LogWarning($"战斗处理超标, 大于{PIPELINE_DO_LIMIT} -> \n{firstDamageInfo}", "战斗");
-                        _note.damageInfos.Clear();
-                    }
+                    // count++;
+                    // if (count > PIPELINE_DO_LIMIT)
+                    // {
+                    //     Logger.LogWarning($"战斗处理超标, 大于{PIPELINE_DO_LIMIT} -> \n{firstDamageInfo}", "战斗");
+                    //     _note.damageInfos.Clear();
+                    // }
                 }
             }
 
@@ -98,13 +76,14 @@ namespace Sanmon.Battle
                 {
                     var info = _note.healInfos.Dequeue();
                     _dealHealPipeline.Do(info);
-                    e_onUnitHeal?.Invoke(info);
-                    count++;
-                    if (count > PIPELINE_DO_LIMIT)
-                    {
-                        Logger.LogWarning($"战斗处理超标, 大于{PIPELINE_DO_LIMIT} -> \n{firstDamageInfo}\n{firstHealInfo}", "战斗");
-                        _note.healInfos.Clear();
-                    }
+                    if(!info.isAbort)
+                        e_onUnitHeal?.Invoke(info);
+                    // count++;
+                    // if (count > PIPELINE_DO_LIMIT)
+                    // {
+                    //     Logger.LogWarning($"战斗处理超标, 大于{PIPELINE_DO_LIMIT} -> \n{firstDamageInfo}\n{firstHealInfo}", "战斗");
+                    //     _note.healInfos.Clear();
+                    // }
                 }
             }
 

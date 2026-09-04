@@ -8,10 +8,12 @@ namespace Sanmon.Battle
     {
         private Dictionary<int, int> _tags = new ();
 
-        public bool Contains(int tag) => TagCount(tag) > 0;
+        public bool Check(int tag) => TagCount(tag) > 0;
+        public bool Check(Tag tag) => Check((int)tag);
         
         public int TagCount(int tag) => _tags.GetValueOrDefault(tag, 0);
-
+        public int TagCount(Tag tag) => TagCount((int)tag);
+        
         public void Add(int tag)
         {
             if(!_tags.TryAdd(tag, 1))

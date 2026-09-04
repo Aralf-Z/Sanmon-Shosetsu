@@ -22,6 +22,17 @@ namespace Sanmon.Battle
             return GetOrDefault((int)blackboard, defaultValue);
         }
 
+        public float ChangeValue(int blackboard, float value)
+        {
+            var result = _blackboard[blackboard] += value;
+            return result;
+        }
+
+        public float ChangeValue(Blackboard blackboard, float value)
+        {
+            return ChangeValue((int)blackboard, value);
+        }
+        
         public float AddValue(int blackboard, float value)
         {
             if (_blackboard.TryGetValue(blackboard, out var current))

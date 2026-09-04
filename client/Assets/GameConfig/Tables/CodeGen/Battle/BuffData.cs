@@ -19,6 +19,7 @@ public sealed partial class BuffData : Luban.BeanBase
     {
         { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
         { if(!_buf["order"].IsNumber) { throw new SerializationException(); }  Order = _buf["order"]; }
+        { if(!_buf["maxStack"].IsNumber) { throw new SerializationException(); }  MaxStack = _buf["maxStack"]; }
     }
 
     public static BuffData DeserializeBuffData(JSONNode _buf)
@@ -31,6 +32,7 @@ public sealed partial class BuffData : Luban.BeanBase
     /// </summary>
     public readonly int Id;
     public readonly int Order;
+    public readonly int MaxStack;
    
     public const int __ID__ = -833855725;
     public override int GetTypeId() => __ID__;
@@ -44,6 +46,7 @@ public sealed partial class BuffData : Luban.BeanBase
         return "{ "
         + "id:" + Id + ","
         + "order:" + Order + ","
+        + "maxStack:" + MaxStack + ","
         + "}";
     }
 }

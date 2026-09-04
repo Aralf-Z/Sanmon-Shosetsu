@@ -18,6 +18,8 @@ namespace Sanmon.Battle
         
         private static void DoEvent(Unit unit, string eventName, DamageInfo damageInfo)
         {
+            if(damageInfo.isAbort) return;
+            
             foreach (var effectEvent in unit.effect.FindEvent(eventName))
             {
                 effectEvent.action?.Invoke(damageInfo);

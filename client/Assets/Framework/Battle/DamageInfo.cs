@@ -16,6 +16,7 @@ namespace Sanmon.Battle
         
         public bool isCrit;
         public bool isHit;
+        public bool isAbort;
         
         public List<Buff> buffsOnHitForDefender;
         public List<Buff> buffsOnHitForAttacker;

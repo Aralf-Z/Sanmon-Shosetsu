@@ -1,5 +1,6 @@
 using Game.Config.Battle;
 using Sanmon.Utility.Set;
+using UnityEngine;
 
 namespace Sanmon.Battle
 {
@@ -10,21 +11,15 @@ namespace Sanmon.Battle
 
         public BuffData data;
 
-        /// <summary>
-        /// 当前层数
-        /// </summary>
+        /// <summary> 添加时的时间戳 </summary>
+        public float addTimeStamp;
+        /// <summary> 当前层数 </summary>
         public int stack;
-        /// <summary>
-        /// 每层计时时间
-        /// </summary>
+        /// <summary> 每层计时时间 </summary>
         public float duration;
-        /// <summary>
-        /// 计时器
-        /// </summary>
+        /// <summary> 计时器 </summary>
         public float timer;
-        /// <summary>
-        /// 携带时间
-        /// </summary>
+        /// <summary> 携带时间 </summary>
         public float carryTime;
         
         private BufferStatus _status;
@@ -36,12 +31,13 @@ namespace Sanmon.Battle
         
         public void OnAdd()
         {
-            
+            addTimeStamp = Time.realtimeSinceStartup;
         }
 
         public void OnUpdate(float dt)
         {
-            
+            carryTime += dt;
+            timer += dt;
         }
 
         public void OnRemove()

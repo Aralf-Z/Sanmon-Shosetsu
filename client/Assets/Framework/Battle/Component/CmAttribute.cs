@@ -14,9 +14,11 @@ namespace Sanmon.Battle
         
         private readonly Dictionary<int, SumValue> mAttri = new ();
         
-        public SumValue this[Attribute attribute] => this[(int)attribute];
         public SumValue this[int attribute] => mAttri.GetValueOrDefault(attribute, SumValue.DEFAULT);
-
+        public SumValue this[Attribute attribute] => this[(int)attribute];
+        public SumValue Get(int attribute) => this[attribute];
+        public SumValue Get(Attribute attribute) => this[attribute];
+        
         public SumValue AddValue(int attribute, float value)
         {
             var sum = new SumValue(value);
