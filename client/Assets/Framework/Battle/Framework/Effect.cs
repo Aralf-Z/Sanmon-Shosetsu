@@ -24,6 +24,6 @@ namespace Sanmon.Battle
 
         public Effect effect;
 
-        public Action<int> action;
+        public Action<DamageInfo> action;
     }
 }

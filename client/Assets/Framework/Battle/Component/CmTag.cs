@@ -14,7 +14,8 @@ namespace Sanmon.Battle
 
         public void Add(int tag)
         {
-            _tags[tag]++;
+            if(!_tags.TryAdd(tag, 1))
+                _tags[tag]++;
         }
 
         public void Add(Tag tag)

@@ -30,6 +30,7 @@ namespace Sanmon.Battle
 
         public float this[int attribute] => _res.GetValueOrDefault(attribute)?.value ?? 0f;
         public float this[Attribute attribute] => this[(int)attribute];
+        public float Get(int attribute) => this[attribute];
         
         public void Add(int attribute, SumValue maxValue)
         {
@@ -50,6 +51,16 @@ namespace Sanmon.Battle
         public void Remove(Attribute attribute)
         {
             Remove((int)attribute);
+        }
+
+        public void ChangeValue(int attribute, float value)
+        {
+            _res[attribute].value += value;
+        }
+        
+        public void ChangeValue(Attribute attribute, float value)
+        {
+            ChangeValue((int)attribute, value);
         }
     }
 }

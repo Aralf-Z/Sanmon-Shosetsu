@@ -26,7 +26,7 @@ namespace GameScripts.Temp_Battle
             
             self = new Unit(en);
             
-            var health = self.attri.AddValue(Attribute.Health, 100f);
+            var health = self.attri.AddValue(Attribute.Health, 10000f);
             self.attri.AddValue(Attribute.Attack, 10f);
             
             self.resource.Add(Attribute.Health, health);

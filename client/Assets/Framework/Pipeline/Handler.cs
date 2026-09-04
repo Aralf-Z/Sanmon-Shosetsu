@@ -13,11 +13,8 @@ namespace Framework.Pipeline
         }
         public void Do(TContext context)
         {
-            Logger.LogTime($"Do {GetType().Name}");
             var go = CanHandle(context) && Process(context);
-            Logger.LogTime($"DoEnd {GetType().Name}");
-            if (go)
-                _next?.Do(context);
+            if (go) _next?.Do(context);
         }
 
         /// <returns> 处理条件检测，默认true </returns>

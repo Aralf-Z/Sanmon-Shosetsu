@@ -21,6 +21,18 @@ namespace Game.Config.Battle
         /// 攻击
         /// </summary>
         Attack = 2,
+        /// <summary>
+        /// 防御
+        /// </summary>
+        Defence = 3,
+        /// <summary>
+        /// 精准
+        /// </summary>
+        Accuracy = 4,
+        /// <summary>
+        /// 敏捷
+        /// </summary>
+        Dexterity = 5,
     }
 
 } 

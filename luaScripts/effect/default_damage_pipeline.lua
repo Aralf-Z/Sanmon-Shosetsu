@@ -2,29 +2,24 @@ local global = require("global")
 
 -- 命中阶段
 local function _hit_attacker_before_hit(damage_info)
-    --print(os.clock())
-    --print("hit_attacker_before_hit", damage_info: ToString())
+    if(damage_info.defender.tag:Contains(global.enum['Battle.Tag'].Dead)) then
+        damage_info.isHit = false;
+        --print("defender is dead, attacker cannot hit")
+    end
 end
 
 local function _hit_defender_before_hit(damage_info)
-    --print(os.clock())
-    --print("hit_defender_before_hit", damage_info: ToString())
+    
 end
 
 local function _hit_attacker_check_hit(damage_info)
-    --damage_info.isHit = true
-    --print(os.clock())
-    --print("hit_attacker_check_hit", damage_info: ToString())
+    damage_info.isHit = math.random(1, 20) ~= 1;
 end
 
 local function _hit_attacker_after_hit(damage_info)
-    --print(os.clock())
-    --print("hit_attacker_after_hit", damage_info: ToString())
 end
 
 local function _hit_defender_after_hit(damage_info)
-    --print(os.clock())
-    --print("hit_defender_after_hit", damage_info: ToString())
 end
 
 -- 计算阶段
@@ -39,23 +34,29 @@ local function _cal_defender_before_cal(damage_info)
 end
 
 local function _cal_attacker_check_crit(damage_info)
-    --print(os.clock())
-    --print("cal_attacker_check_crit", damage_info: ToString())
+    damage_info.isCrit = math.random(1, 20) == 20;
 end
 
 local function _cal_attacker_check_extra_damage(damage_info)
-    --print(os.clock())
-    --print("cal_attacker_check_extra_damage", damage_info: ToString())
-end
-
-local function _cal_attacker_check_ratio(damage_info)
-    --print(os.clock())
-    --print("cal_attacker_check_ratio", damage_info: ToString())
+    for i = 1, damage_info.damage.Count - 1 do
+        local d = damage_info.damage:get_Item(i)
+        if d.type == global.enum['Battle.DamageType'].Physical then
+            d.addValue = 5
+        elseif d.type == global.enum['Battle.DamageType'].Magical then
+            d.mulValue = 1.2
+        end
+    end
 end
 
 local function _cal_defender_check_defence(damage_info)
-    --print(os.clock())
-    --print("cal_defender_check_defence", damage_info: ToString())
+    for i = 1, damage_info.damage.Count - 1 do
+        local d = damage_info.damage:get_Item(i)
+        if d.type == global.enum['Battle.DamageType'].Physical then
+            d.deductionRatio = 0.2
+        elseif d.type == global.enum['Battle.DamageType'].Magical then
+            d.deductionValue = 5
+        end
+    end
 end
 
 local function _cal_attacker_check_derive(damage_info)
@@ -90,13 +91,18 @@ local function _final_defender_before_final(damage_info)
 end
 
 local function _final_defender_evaluation(damage_info)
-    --print(os.clock())
-    --print("final_defender_evaluation", damage_info: ToString())
+    local deResource = damage_info.defender.resource
+
+    for i = 1, damage_info.damage.Count - 1 do
+        local d = damage_info.damage:get_Item(i)
+        local v = (d.value * d.mulValue + d.addValue) * (1 - d.deductionRatio) - d.deductionValue
+        deResource: ChangeValue(global.enum['Battle.Attribute'].Health, -v)
+    end
 end
 
 local function _final_defender_check_state(damage_info)
-    --print(os.clock())
-    --print("final_defender_check_state", damage_info: ToString())
+    local dead = damage_info.defender.resource:Get(global.enum['Battle.Attribute'].Health) <= 0
+    damage_info.defender.tag: Add(global.enum['Battle.Tag'].Dead)
 end
 
 local function _final_attacker_derive(damage_info)
@@ -130,7 +136,6 @@ return {
     cal_defender_before_cal = _cal_defender_before_cal,
     cal_attacker_check_crit = _cal_attacker_check_crit,
     cal_attacker_check_extra_damage = _cal_attacker_check_extra_damage,
-    cal_attacker_check_ratio = _cal_attacker_check_ratio,
     cal_defender_check_defence = _cal_defender_check_defence,
     cal_attacker_check_derive = _cal_attacker_check_derive,
     cal_defender_check_derive = _cal_defender_check_derive,

@@ -60,14 +60,13 @@ namespace GameScripts.Temp_Battle
                     },
                     new () {
                         type = DamageType.Physical,
-                        value = Random.Range(20,26),
+                        value = Random.Range(10,15),
                     },
                 },
                 buffsOnHitForAttacker = new List<Buff>(),
                 buffsOnHitForDefender = new List<Buff>()
             };
             
-            Debug.Log($"{caster.unit.Info.Name} Hit On {target.unit.Info.Name}\n {damageInfo}");
             this.System().Get<BattleSystem>().OnUnitDealDamage(damageInfo);
             
             Destroy(gameObject);

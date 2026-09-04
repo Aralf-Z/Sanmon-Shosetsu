@@ -35,11 +35,8 @@ namespace Sanmon.Battle
         /// <summary> 计算阶段-攻击者-暴击计算 </summary>
         public const string CAL_ATTACKER_CHECK_CRIT = "cal_attacker_check_crit";
 
-        /// <summary> 计算阶段-攻击者-额外伤害 </summary>
+        /// <summary> 计算阶段-攻击者-额外伤害计算 </summary>
         public const string CAL_ATTACKER_CHECK_EXTRA_DAMAGE = "cal_attacker_check_extra_damage";
-
-        /// <summary> 计算阶段-攻击者-伤害倍率计算 </summary>
-        public const string CAL_ATTACKER_CHECK_RATIO = "cal_attacker_check_ratio";
 
         /// <summary> 计算阶段-受击者-抵消、减伤等计算 </summary>
         public const string CAL_DEFENDER_CHECK_DEFENCE = "cal_defender_check_defence";

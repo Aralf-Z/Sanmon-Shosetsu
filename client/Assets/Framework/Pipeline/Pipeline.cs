@@ -15,9 +15,7 @@ namespace Framework.Pipeline
         
         public virtual void Do(TContext context)
         {
-            Logger.LogTime("Do");
             _header.Do(context);
-            Logger.LogTime("DoEnd");
         }
     }
 }

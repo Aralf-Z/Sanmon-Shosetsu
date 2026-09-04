@@ -17,6 +17,10 @@ namespace Game.Config.Battle
         /// 免疫所有伤害
         /// </summary>
         ImmuneAllDamage = 1,
+        /// <summary>
+        /// 死亡
+        /// </summary>
+        Dead = 2,
     }
 
 } 

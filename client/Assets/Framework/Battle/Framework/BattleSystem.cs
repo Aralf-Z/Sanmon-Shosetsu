@@ -5,19 +5,19 @@ using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Battle
 {
-    public class BattleSystem: SystemBase
+    public class BattleSystem : SystemBase
     {
-        private const int PIPELINE_DO_LIMIT = 5;
-        
+        private const int PIPELINE_DO_LIMIT = 20;
+
         private BattleNote _note;
         private DealDamagePipeline _dealDamagePipeline;
         private DealHealPipeline _dealHealPipeline;
-        
+
         private bool _isDealing = false;
-        
+
         private event Action<DamageInfo> e_onUnitDealDamage;
         private event Action<HealInfo> e_onUnitHeal;
-        
+
         protected internal override void Init()
         {
             _note = this.Note().Get<BattleNote>();
@@ -28,9 +28,32 @@ namespace Sanmon.Battle
         public void OnUnitDealDamage(DamageInfo damageInfo)
         {
             var timer = UnityEngine.Time.realtimeSinceStartup;
+            //---
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            //---
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            //---
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            //---
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
+            _note.damageInfos.Enqueue(damageInfo);
             _note.damageInfos.Enqueue(damageInfo);
             DealOnce();
-            Logger.LogDebug($"伤害处理流程花费{UnityEngine.Time.realtimeSinceStartup - timer}", "测试");
+            Logger.LogDebug($"伤害处理流程花费[{((UnityEngine.Time.realtimeSinceStartup - timer) * 1000).ToString("F5")}ms]", "测试");
         }
 
         public void OnUnitDealHeal(HealInfo healInfo)
@@ -38,26 +61,26 @@ namespace Sanmon.Battle
             _note.healInfos.Enqueue(healInfo);
             DealOnce();
         }
-        
+
         private void DealOnce()
         {
-            if (_isDealing) return;//避免递归
-            
+            if (_isDealing) return; //避免递归
+
             _isDealing = true;
-            
+
             var count = 0;
             DamageInfo firstDamageInfo = null;
-            
+
             if (_note.damageInfos.Count > 0)
             {
                 firstDamageInfo = _note.damageInfos.Peek();
-            
+
                 while (_note.damageInfos.Count > 0)
                 {
                     var info = _note.damageInfos.Dequeue();
                     _dealDamagePipeline.Do(info);
                     e_onUnitDealDamage?.Invoke(info);
-                    
+
                     count++;
                     if (count > PIPELINE_DO_LIMIT)
                     {
@@ -70,7 +93,7 @@ namespace Sanmon.Battle
             if (_note.healInfos.Count > 0)
             {
                 var firstHealInfo = _note.healInfos.Peek();
-            
+
                 while (_note.healInfos.Count > 0)
                 {
                     var info = _note.healInfos.Dequeue();
@@ -84,7 +107,7 @@ namespace Sanmon.Battle
                     }
                 }
             }
-            
+
             _isDealing = false;
         }
     }

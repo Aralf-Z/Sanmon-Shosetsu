@@ -11,23 +11,17 @@ namespace Sanmon.Battle
         public DealDamagePipeline()
         {
             SetHeader(new HandleCheckHit())
-                //.SetNext(new HandleOnHitBuff())
+                .SetNext(new HandleOnHitBuff())
                 .SetNext(new HandleCalculateValue())
                 .SetNext(new HandleResult());
         }
-
+        
         private static void DoEvent(Unit unit, string eventName, DamageInfo damageInfo)
         {
-            Logger.LogTime($"Do Event at {eventName}");
-            var efs = unit.effect.FindEvent(eventName);
-            if(efs == null) return;
-            foreach (var effectEvent in efs)
+            foreach (var effectEvent in unit.effect.FindEvent(eventName))
             {
-                Logger.LogTime($"Invoke Event at {eventName}");
-                effectEvent.action?.Invoke(1);
-                Logger.LogTime($"End Invoke Event at {eventName}");
+                effectEvent.action?.Invoke(damageInfo);
             }
-            Logger.LogTime($"End Event at {eventName}");
         }
 
         private class HandleCheckHit : Handler<DamageInfo>
@@ -42,8 +36,8 @@ namespace Sanmon.Battle
                 //命中后
                 DoEvent(context.attacker, DealDamageEvent.HIT_ATTACKER_AFTER_HIT, context);
                 DoEvent(context.defender, DealDamageEvent.HIT_DEFENDER_AFTER_HIT, context);
-
-                return true;//context.isHit;
+                
+                return context.isHit;
             }
         }
 
@@ -51,7 +45,7 @@ namespace Sanmon.Battle
         {
             protected override bool Process(DamageInfo context)
             {
-                //todo
+                //todo 
                 return true;
             }
         }
@@ -66,7 +60,6 @@ namespace Sanmon.Battle
                 //攻击者数值计算
                 DoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_CHECK_CRIT, context);
                 DoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_CHECK_EXTRA_DAMAGE, context);
-                DoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_CHECK_RATIO, context);
                 //防御者数值计算
                 DoEvent(context.defender, DealDamageEvent.CAL_DEFENDER_CHECK_DEFENCE, context);
                 //衍生效果判断
@@ -75,7 +68,7 @@ namespace Sanmon.Battle
                 //计算后
                 DoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_AFTER_CAL, context);
                 DoEvent(context.defender, DealDamageEvent.CAL_DEFENDER_AFTER_CAL, context);
-
+                
                 return true;
             }
         }
@@ -96,7 +89,6 @@ namespace Sanmon.Battle
                 // 结算后
                 DoEvent(context.attacker, DealDamageEvent.FINAL_ATTACKER_AFTER_FINAL, context);
                 DoEvent(context.defender, DealDamageEvent.FINAL_DEFENDER_AFTER_FINAL, context);
-                Logger.LogInfo($"伤害结束 -> {context}", "战斗");
                 
                 return true;
             }

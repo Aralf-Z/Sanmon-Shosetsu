@@ -29,7 +29,6 @@ namespace Sanmon.Battle
             DealDamageEvent.CAL_DEFENDER_BEFORE_CAL,
             DealDamageEvent.CAL_ATTACKER_CHECK_CRIT,
             DealDamageEvent.CAL_ATTACKER_CHECK_EXTRA_DAMAGE,
-            DealDamageEvent.CAL_ATTACKER_CHECK_RATIO,
             DealDamageEvent.CAL_DEFENDER_CHECK_DEFENCE,
             DealDamageEvent.CAL_ATTACKER_CHECK_DERIVE,
             DealDamageEvent.CAL_DEFENDER_CHECK_DERIVE,
@@ -91,7 +90,7 @@ namespace Sanmon.Battle
                 if (returnText.Contains(method))
                 {
                     var orderFunc = $"{method}_order";
-                    var @event = LuaAppDomain.GetFunction<Action<int>>(luaModule, method);
+                    var @event = LuaAppDomain.GetFunction<Action<DamageInfo>>(luaModule, method);
                     
                     if (@event != null)
                     {
