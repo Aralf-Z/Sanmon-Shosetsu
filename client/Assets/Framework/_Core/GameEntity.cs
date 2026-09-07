@@ -17,6 +17,8 @@ namespace Sanmon.Core
         private readonly HashSet<Entity> _pendingAdd = new HashSet<Entity>();
         private readonly HashSet<Entity> _pendingRemove = new HashSet<Entity>();
         
+        public IReadOnlyCollection<Entity> Entities => _entities;
+        
         private int _entityInstanceId;
         
         internal void Init()

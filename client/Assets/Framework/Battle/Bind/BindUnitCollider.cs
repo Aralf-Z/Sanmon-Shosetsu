@@ -10,7 +10,7 @@ namespace Sanmon.Battle
     [RequireComponent(typeof(Collider))]
     public class BindUnitCollider : MonoBehaviour
     {
-        [SerializeField]private Collider Collider;
+        public Collider bindCollider;
         
         public Unit unit;
         public ColliderType type { get; private set; }
@@ -20,7 +20,7 @@ namespace Sanmon.Battle
 
         private void Awake()
         {
-            switch (Collider)
+            switch (bindCollider)
             {
                 case BoxCollider boxCollider:
                     Box = boxCollider;
@@ -35,7 +35,7 @@ namespace Sanmon.Battle
                     type = ColliderType.Capsule;
                     break;
                 default:
-                    throw new Exception("不支持的碰撞体类型");
+                    throw new Exception($"不支持的碰撞体类型 [{bindCollider} - {bindCollider.GetType().FullName}]");
             }
         }
     }

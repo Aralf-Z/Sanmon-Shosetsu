@@ -1,6 +1,8 @@
 using System;
 using Sanmon.Core;
+using Sanmon.GameEntity;
 using Sanmon.Syztem;
+using ZLinq;
 using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Battle
@@ -88,6 +90,17 @@ namespace Sanmon.Battle
             }
 
             _isDealing = false;
+        }
+
+        public BindUnitCollider SearchNearestUnit(Unit self, Group target)
+        {
+            return this.Entity().Entities
+                .AsValueEnumerable()
+                .Where(e => e.GetComponent<CmGroup>().group == target && self.unit != e)
+                .OrderBy(e => (e.GetComponent<CmTransform>().Position - self.transform.Position).sqrMagnitude)
+                .FirstOrDefault()
+                ?.GetComponent<CmCollider>()
+                ?.Bind;
         }
     }
 }

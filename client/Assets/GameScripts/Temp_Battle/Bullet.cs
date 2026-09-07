@@ -13,7 +13,7 @@ namespace GameScripts.Temp_Battle
         , IGetSystem
         , IDamageMaker
     {
-        public float speed = 10f;
+        public float speed = 5f;
         
         public BindDamageCollider box;
         
@@ -31,7 +31,7 @@ namespace GameScripts.Temp_Battle
             transform.position = start;
             direction = face;
             if(face != Vector3.zero)
-                transform.rotation = Quaternion.Euler(face);
+                transform.rotation = Quaternion.LookRotation(face);
         }
 
         private void Update()

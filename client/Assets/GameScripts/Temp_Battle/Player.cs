@@ -9,10 +9,10 @@ namespace GameScripts.Temp_Battle
 {
     public class Player : MonoBehaviour
     , IGetEntity
+    , IGetSystem
     {
         public float moveSpeed = 3f;
         public Bullet bullet;
-        public Enemy enemy;
 
         public Unit self;
 
@@ -26,6 +26,8 @@ namespace GameScripts.Temp_Battle
             en.AddComponent<CmTag>();
             en.AddComponent<CmGroup>();
             en.AddComponent<CmEffect>();
+            var model = en.AddComponent<CmModel>();
+            var trans =  en.AddComponent<CmTransform>();
             
             self = new Unit(en);
             
@@ -33,9 +35,8 @@ namespace GameScripts.Temp_Battle
             self.attri.AddValue(Attribute.Attack, 10f);
             
             self.resource.Add(Attribute.Health, health);
+            self.group.group = Group.Player;
             
-            var model = en.AddComponent<CmModel>();
-            var trans =  en.AddComponent<CmTransform>();
             model.SetModel(gameObject);
             trans.SetTransform(gameObject.AddComponent<BindTransform>());
         }
@@ -49,9 +50,11 @@ namespace GameScripts.Temp_Battle
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 var instance = Instantiate(bullet.gameObject).GetComponent<Bullet>();
-                var start = transform.position.SetY(4);
+                var start = transform.position.SetY(3);
+                var target = Game.Sys<BattleSystem>().SearchNearestUnit(self, Group.Enemy);
+                var dir = target ? target.transform.position - start : Vector3.forward;
                 instance.caster = self;
-                instance.Cast(start, enemy.transform.position - start);
+                instance.Cast(start, dir);
             }
         }
     }

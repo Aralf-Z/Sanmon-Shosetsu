@@ -70,7 +70,7 @@ namespace Sanmon.GameEntity
             }
             
             Go.name = name;
-            Bind = Go.AddComponent<ModelBind>();
+            Bind = Go.GetComponent<ModelBind>() ?? Go.AddComponent<ModelBind>();
             Bind.Bind(this);
         }
         
@@ -79,7 +79,7 @@ namespace Sanmon.GameEntity
             Go = go;
             Name = newName ?? Go.name;
             Go.name = Name;
-            Bind = Go.AddComponent<ModelBind>();
+            Bind = Go.GetComponent<ModelBind>() ?? Go.AddComponent<ModelBind>();
             Bind.Bind(this);
         }
     }
