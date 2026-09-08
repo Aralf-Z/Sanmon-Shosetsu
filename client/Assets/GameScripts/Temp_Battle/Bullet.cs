@@ -13,6 +13,8 @@ namespace GameScripts.Temp_Battle
         , IGetSystem
         , IDamageMaker
     {
+        public static GameObject template;
+        
         public float speed = 5f;
         
         public BindDamageCollider box;
@@ -26,12 +28,17 @@ namespace GameScripts.Temp_Battle
             box.onEntityEnter = OnHit;
         }
 
-        public void Cast(Vector3 start, Vector3 face)
+        public static void Cast(Unit caster, Vector3 start, Vector3 target)
         {
-            transform.position = start;
-            direction = face;
+            var face = target - start;
+            var instance = Game.Asset.NewGo("Assets/GameAsset/prefab/bullet").GetComponent<Bullet>();
+
+            instance.caster = caster;
+            
+            instance.transform.position = start;
+            instance.direction = face;
             if(face != Vector3.zero)
-                transform.rotation = Quaternion.LookRotation(face);
+                instance.transform.rotation = Quaternion.LookRotation(face);
         }
 
         private void Update()

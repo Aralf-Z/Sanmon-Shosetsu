@@ -24,6 +24,10 @@ namespace Sanmon.Battle
 
         public Effect effect;
 
-        public Action<DamageInfo> action;
+        public Action<DamageInfo> damageAction;
+        
+        public Action<HealInfo> healAction;
+
+        public Action<Buff> buffAction;
     }
 }

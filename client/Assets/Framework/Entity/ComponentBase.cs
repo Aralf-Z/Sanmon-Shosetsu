@@ -5,7 +5,10 @@ namespace Sanmon.GameEntity
     /// </summary>
     public abstract class ComponentBase
     {
-        public Entity Host { get; internal set; }
+        /// <summary>
+        /// 所有者
+        /// </summary>
+        public Entity Owner { get; internal set; }
         
         /// <summary>
         /// 被添加时
@@ -23,6 +26,6 @@ namespace Sanmon.GameEntity
             
         }
         
-        public T GetSibling<T>() where T : ComponentBase => Host.GetComponent<T>();
+        public T GetSibling<T>() where T : ComponentBase => Owner.GetComponent<T>();
     }
 }

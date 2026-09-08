@@ -4,6 +4,6 @@ namespace Sanmon.Battle
 {
     public class CmGroup: ComponentBase
     {
-        public Group group = Group.Neutral;
+        public Group ServeFor = Group.Neutral;
     }
 }

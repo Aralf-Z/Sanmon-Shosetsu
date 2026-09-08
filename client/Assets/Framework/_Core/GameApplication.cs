@@ -37,6 +37,7 @@ namespace Sanmon.Core
             
             var dt = Time.fixedDeltaTime;
             
+            gameSystem.OnLogicUpdate(dt);
             gameEntity.OnLogicUpdate(dt);
             gameModule.OnLogicUpdate(dt);
             gameFlow.OnLogicUpdate(dt);

@@ -7,6 +7,9 @@ namespace Sanmon.GameEntity
     /// </summary>
     public abstract class FunctionBase
     {
+        /// <summary>
+        /// 宿主
+        /// </summary>
         public Entity Host { get; internal set; }
         
         public abstract void OnAdded();

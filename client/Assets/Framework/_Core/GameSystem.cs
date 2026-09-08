@@ -13,6 +13,7 @@ namespace Sanmon.Core
     public class GameSystem: MonoBehaviour
     {
         private readonly Dictionary<Type, SystemBase> _systems = new Dictionary<Type, SystemBase>();
+        private readonly List<ISystemUpdater>  _systemUpdaters = new List<ISystemUpdater>();
         
         internal bool IsInit { get; private set; }
         
@@ -34,10 +35,22 @@ namespace Sanmon.Core
             var @new = (T)Activator.CreateInstance(type);
             @new.Init();
             _systems.Add(type, @new);
+
+            if (@new is ISystemUpdater updater)
+                _systemUpdaters.Add(updater);
             
             Logger.LogInfo($"create system '{type.FullName}'", "system");
             
             return @new;
+        }
+        
+        public void OnLogicUpdate(float dt)
+        {
+            for (var i = _systemUpdaters.Count - 1; i >= 0; i--)
+            {
+                var sys = _systemUpdaters[i];
+                sys.OnLogicUpdate(dt);
+            }
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Sanmon.Battle
             
             foreach (var effectEvent in unit.effect.FindEvent(eventName))
             {
-                effectEvent.action?.Invoke(damageInfo);
+                effectEvent.damageAction?.Invoke(damageInfo);
             }
         }
 

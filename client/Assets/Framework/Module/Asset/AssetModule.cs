@@ -47,6 +47,11 @@ namespace Sanmon.Module
         private ResourcePackage _package;
         private AssetLogger _logger;
         private bool _isInit;
+
+        public GameObject NewGo(string location)
+        {
+            return Instantiate((GameObject)LoadAsync<GameObject>(location).AssetObject);
+        }
         
         public T LoadSync<T>(string location) where T : Object
         {

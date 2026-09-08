@@ -7,7 +7,7 @@ namespace Sanmon.Battle
     /// </summary>
     public class Unit
     {
-        public Entity unit;
+        public Entity entity;
         public CmAttribute attri;
         public CmResource resource;
         public CmBlackboard blackboard;
@@ -15,17 +15,32 @@ namespace Sanmon.Battle
         public CmGroup group;
         public CmEffect effect;
         public CmTransform transform;
+        public CmCollider collider;
 
-        public Unit(Entity unit)
+        internal Unit(Entity entity)
         {
-            this.unit = unit;
-            attri = unit.GetComponent<CmAttribute>();
-            resource = unit.GetComponent<CmResource>();
-            blackboard = unit.GetComponent<CmBlackboard>();
-            tag = unit.GetComponent<CmTag>();
-            group = unit.GetComponent<CmGroup>();
-            effect = unit.GetComponent<CmEffect>();
-            transform = unit.GetComponent<CmTransform>();
+            this.entity = entity;
+            attri = entity.GetComponent<CmAttribute>();
+            resource = entity.GetComponent<CmResource>();
+            blackboard = entity.GetComponent<CmBlackboard>();
+            tag = entity.GetComponent<CmTag>();
+            group = entity.GetComponent<CmGroup>();
+            effect = entity.GetComponent<CmEffect>();
+            transform = entity.GetComponent<CmTransform>();
+            collider = entity.GetComponent<CmCollider>();
+        }
+
+        internal Unit(Entity entity, CmAttribute attri, CmResource resource, CmBlackboard blackboard, CmTag tag, CmGroup group, CmEffect effect, CmTransform transform, CmCollider collider)
+        {
+            this.entity = entity;
+            this.attri = attri;
+            this.resource = resource;
+            this.blackboard = blackboard;
+            this.tag = tag;
+            this.group = group;
+            this.effect = effect;
+            this.transform = transform;
+            this.collider = collider;
         }
     }
 }

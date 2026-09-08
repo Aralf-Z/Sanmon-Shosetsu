@@ -72,7 +72,7 @@ namespace Sanmon.Battle
             }
             else
             {
-                throw new EffectException($"entity'{Host.Info}]' 未包含effect'{effect}'");
+                throw new EffectException($"entity'{Owner.Info}]' 未包含effect'{effect}'");
             }
         }
         

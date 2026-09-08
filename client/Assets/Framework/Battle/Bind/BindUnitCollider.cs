@@ -11,32 +11,11 @@ namespace Sanmon.Battle
     public class BindUnitCollider : MonoBehaviour
     {
         public Collider bindCollider;
-        
         public Unit unit;
-        public ColliderType type { get; private set; }
-        public BoxCollider Box { get; private set; }
-        public SphereCollider Sphere { get; private set; }
-        public CapsuleCollider Capsule { get; private set; }
-
+        
         private void Awake()
         {
-            switch (bindCollider)
-            {
-                case BoxCollider boxCollider:
-                    Box = boxCollider;
-                    type = ColliderType.Box;
-                    break;
-                case SphereCollider sphereCollider:
-                    Sphere = sphereCollider;
-                    type = ColliderType.Sphere;
-                    break;
-                case CapsuleCollider capsuleCollider:
-                    Capsule = capsuleCollider;
-                    type = ColliderType.Capsule;
-                    break;
-                default:
-                    throw new Exception($"不支持的碰撞体类型 [{bindCollider} - {bindCollider.GetType().FullName}]");
-            }
+            bindCollider ??= GetComponent<Collider>();
         }
     }
 }

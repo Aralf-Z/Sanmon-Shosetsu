@@ -8,37 +8,26 @@ using UnityEngine;
 namespace GameScripts.Temp_Battle
 {
     public class Player : MonoBehaviour
-    , IGetEntity
-    , IGetSystem
     {
         public float moveSpeed = 3f;
-        public Bullet bullet;
 
         public Unit self;
 
+        public float castInterval = 0.5f;
+        private float castTimer;
+        
         private void Awake()
         {
-            var en = this.Entity().Require("player");
-
-            en.AddComponent<CmAttribute>();
-            en.AddComponent<CmResource>();
-            en.AddComponent<CmBlackboard>();
-            en.AddComponent<CmTag>();
-            en.AddComponent<CmGroup>();
-            en.AddComponent<CmEffect>();
-            var model = en.AddComponent<CmModel>();
-            var trans =  en.AddComponent<CmTransform>();
-            
-            self = new Unit(en);
+            self = Game.Sys<BattleSystem>().RegisterUnit("player", transform);
             
             var health = self.attri.AddValue(Attribute.Health, 100f);
             self.attri.AddValue(Attribute.Attack, 10f);
             
             self.resource.Add(Attribute.Health, health);
-            self.group.group = Group.Player;
-            
+            self.group.ServeFor = Group.Player;
+
+            var model = self.entity.AddComponent<CmModel>();
             model.SetModel(gameObject);
-            trans.SetTransform(gameObject.AddComponent<BindTransform>());
         }
 
         private void Update()
@@ -47,14 +36,14 @@ namespace GameScripts.Temp_Battle
             
             transform.position += direction * moveSpeed * Time.deltaTime;
 
-            if (Input.GetKeyDown(KeyCode.Space))
+            castTimer -= Time.deltaTime;
+            
+            if (Input.GetKey(KeyCode.Space) && castTimer <= 0)
             {
-                var instance = Instantiate(bullet.gameObject).GetComponent<Bullet>();
                 var start = transform.position.SetY(3);
                 var target = Game.Sys<BattleSystem>().SearchNearestUnit(self, Group.Enemy);
-                var dir = target ? target.transform.position - start : Vector3.forward;
-                instance.caster = self;
-                instance.Cast(start, dir);
+                Bullet.Cast(self, start, target.transform.Position);
+                castTimer = castInterval;
             }
         }
     }

@@ -6,7 +6,7 @@ namespace Sanmon.Battle
 {
     public class Buff: IBufferItem
     {
-        public Unit caster;
+        public BuffCaster caster;
         public Unit carrier;
 
         public BuffData data;
@@ -15,13 +15,15 @@ namespace Sanmon.Battle
         public float addTimeStamp;
         /// <summary> 当前层数 </summary>
         public int stack;
-        /// <summary> 每层计时时间 </summary>
-        public float duration;
         /// <summary> 计时器 </summary>
         public float timer;
+        /// <summary> 计时器总时长 </summary>
+        public float timerDuration;
         /// <summary> 携带时间 </summary>
         public float carryTime;
-        
+
+        #region IBufferItem
+
         private BufferStatus _status;
         
         public BufferStatus Status => _status;
@@ -29,25 +31,27 @@ namespace Sanmon.Battle
         public int Order => data.Order;
         
         
-        public void OnAdd()
+        void IBufferItem.OnAdd()
         {
             addTimeStamp = Time.realtimeSinceStartup;
         }
 
-        public void OnUpdate(float dt)
+        void IBufferItem.OnUpdate(float dt)
         {
             carryTime += dt;
             timer += dt;
         }
 
-        public void OnRemove()
+        void IBufferItem.OnRemove()
         {
             
         }
 
-        public void SetStatus(BufferStatus status)
+        void IBufferItem.SetStatus(BufferStatus status)
         {
             _status = status;
         }
+
+        #endregion
     }
 }

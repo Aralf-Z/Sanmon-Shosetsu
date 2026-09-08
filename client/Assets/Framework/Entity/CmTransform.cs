@@ -4,50 +4,50 @@ namespace Sanmon.GameEntity
 {
     public class CmTransform: ComponentBase
     {
-        private GameObject go;
+        private GameObject _go;
 
-        private BindTransform bind;
+        private BindTransform _bind;
         
         public Vector3 Position
         {
-            get => go.transform.position;
-            set => go.transform.position = value;
+            get => _go.transform.position;
+            set => _go.transform.position = value;
         }
 
         public Vector3 Scale
         {
-            get => go.transform.localScale;
-            set => go.transform.localScale = value;
+            get => _go.transform.localScale;
+            set => _go.transform.localScale = value;
         }
 
         public Quaternion Quaternion
         {
-            get => go.transform.rotation;
-            set => go.transform.rotation = value;
+            get => _go.transform.rotation;
+            set => _go.transform.rotation = value;
         }
 
         public float RotationX
         {
-            get => go.transform.rotation.eulerAngles.x;
-            set => go.transform.rotation = Quaternion.Euler(value, 0, 0);
+            get => _go.transform.rotation.eulerAngles.x;
+            set => _go.transform.rotation = Quaternion.Euler(value, 0, 0);
         }
         
         public float RotationY
         {
-            get => go.transform.rotation.eulerAngles.y;
-            set => go.transform.rotation = Quaternion.Euler(0, value, 0);
+            get => _go.transform.rotation.eulerAngles.y;
+            set => _go.transform.rotation = Quaternion.Euler(0, value, 0);
         }
         
         public float RotationZ
         {
-            get => go.transform.rotation.eulerAngles.z;
-            set => go.transform.rotation = Quaternion.Euler(0, 0, value);
+            get => _go.transform.rotation.eulerAngles.z;
+            set => _go.transform.rotation = Quaternion.Euler(0, 0, value);
         }
 
-        public void SetTransform(BindTransform bindTransform)
+        public void SetBind(Transform transform)
         {
-            bind = bindTransform;
-            go = bind.gameObject;
+            _bind = transform.GetComponent<BindTransform>() ?? transform.gameObject.AddComponent<BindTransform>();
+            _go = _bind.gameObject;
         }
     }
 }

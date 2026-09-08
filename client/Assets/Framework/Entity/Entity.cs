@@ -40,7 +40,7 @@ namespace Sanmon.GameEntity
                 return (T)add;
             }
             
-            var component = new T { Host = this };
+            var component = new T { Owner = this };
             _components.Add(key, component);
             component.OnAdded();
             

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Game.Config.Battle;
 using Sanmon.Battle;
@@ -22,28 +21,16 @@ namespace GameScripts.Temp_Battle
         
         private void Awake()
         {
-            var en = this.Entity().Require("enemy");
-
-            en.AddComponent<CmAttribute>();
-            en.AddComponent<CmResource>();
-            en.AddComponent<CmBlackboard>();
-            en.AddComponent<CmTag>();
-            en.AddComponent<CmGroup>();
-            en.AddComponent<CmEffect>();
-            var model = en.AddComponent<CmModel>();
-            var trans =  en.AddComponent<CmTransform>();
-            
-            self = new Unit(en);
+            self = Game.Sys<BattleSystem>().RegisterUnit("player", transform);
             
             var health = self.attri.AddValue(Attribute.Health, Random.Range(15, 25));
             self.attri.AddValue(Attribute.Attack, 10f);
             self.resource.Add(Attribute.Health, health);
-            self.group.group = Group.Enemy;
-            
-            model.SetModel(gameObject);
-            trans.SetTransform(gameObject.GetComponent<BindTransform>() ?? gameObject.AddComponent<BindTransform>());
-            
+            self.group.ServeFor = Group.Enemy;
             unitCollider.unit = self;
+
+            var model = self.entity.AddComponent<CmModel>();
+            model.SetModel(gameObject);
         }
 
         private void Update()
@@ -64,8 +51,8 @@ namespace GameScripts.Temp_Battle
         
         private IEnumerator TryDisappear()
         {
+            Game.Sys<BattleSystem>().UnregisterUnit(self);
             yield return new WaitForSeconds(.5f);
-            this.Entity().Recycle(self.unit);
             Destroy(gameObject);
         } 
     }

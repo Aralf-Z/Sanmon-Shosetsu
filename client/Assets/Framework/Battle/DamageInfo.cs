@@ -23,7 +23,7 @@ namespace Sanmon.Battle
 
         public override string ToString()
         {
-            return $"maker: {maker.Name} | attacker: [{attacker.unit.Info}] | [defender: {defender.unit.Info}]"
+            return $"maker: {maker.Name} | attacker: [{attacker.entity.Info}] | [defender: {defender.entity.Info}]"
                 + $"\nsource = {source} | isCrit = {isCrit} | isHit = {isHit}"
                 + $"\ndamage = {string.Join(", ", damage)}"
                 + $"\nbuffsOnHitForDefender = {string.Join("\n", buffsOnHitForDefender.Select(x => x.data))}"

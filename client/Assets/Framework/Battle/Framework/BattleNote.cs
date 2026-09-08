@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Sanmon.GameEntity;
 using Sanmon.Note;
 
 namespace Sanmon.Battle
@@ -12,5 +13,8 @@ namespace Sanmon.Battle
         
         public readonly Queue<DamageInfo> damageInfos = new Queue<DamageInfo>();
         public readonly Queue<HealInfo> healInfos = new Queue<HealInfo>();
+        
+        public readonly Dictionary<Entity, Unit> allUnits = new ();
+        public IReadOnlyCollection<Unit> AllUnits => allUnits.Values;
     }
 }

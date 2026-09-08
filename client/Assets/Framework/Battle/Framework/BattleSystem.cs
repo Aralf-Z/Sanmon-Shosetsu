@@ -2,12 +2,14 @@ using System;
 using Sanmon.Core;
 using Sanmon.GameEntity;
 using Sanmon.Syztem;
+using UnityEngine;
 using ZLinq;
 using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Battle
 {
     public class BattleSystem : SystemBase
+    , ISystemUpdater
     {
         private const float PIPELINE_COST_TIME = 0.008f;//8ms
 
@@ -27,12 +29,64 @@ namespace Sanmon.Battle
             _dealHealPipeline = new DealHealPipeline();
         }
 
+        public Unit RegisterUnit(Entity entity, Transform transform = null)
+        {
+            if(_note.allUnits.TryGetValue(entity, out var unit))
+                return unit;
+            
+            var attri = entity.GetOrAddComponent<CmAttribute>();
+            var res = entity.GetOrAddComponent<CmResource>();
+            var bb = entity.GetOrAddComponent<CmBlackboard>();
+            var tag = entity.GetOrAddComponent<CmTag>();
+            var group = entity.GetOrAddComponent<CmGroup>();
+            var eff = entity.GetOrAddComponent<CmEffect>();
+            var trans =  entity.GetOrAddComponent<CmTransform>();
+            var collider = entity.GetOrAddComponent<CmCollider>();
+            
+            if(transform)
+            {
+                trans.SetBind(transform);
+                collider.SetBind(transform);
+            }
+            
+            var newUnit = new Unit(entity, attri, res, bb, tag, group, eff, trans, collider);
+            
+            _note.allUnits.Add(entity, newUnit);
+            
+            return newUnit;
+        }
+        
+        public Unit RegisterUnit(string unitName, Transform transform)
+        {
+            var en = this.Entity().Require(unitName);
+            var attri = en.AddComponent<CmAttribute>();
+            var res = en.AddComponent<CmResource>();
+            var bb = en.AddComponent<CmBlackboard>();
+            var tag = en.AddComponent<CmTag>();
+            var group = en.AddComponent<CmGroup>();
+            var eff = en.AddComponent<CmEffect>();
+            var trans =  en.AddComponent<CmTransform>();
+            var collider = en.AddComponent<CmCollider>();
+            
+            trans.SetBind(transform);
+            
+            var newUnit = new Unit(en, attri, res, bb, tag, group, eff, trans, collider);
+            
+            _note.allUnits.Add(en, newUnit);
+            
+            return newUnit;
+        }
+        
+        public void UnregisterUnit(Unit unit, bool recycleEntity = true)
+        {
+            if (recycleEntity) this.Entity().Recycle(unit.entity);
+            _note.allUnits.Remove(unit.entity);
+        }
+        
         public void OnUnitDealDamage(DamageInfo damageInfo)
         {
-            var timer = UnityEngine.Time.realtimeSinceStartup;
             _note.damageInfos.Enqueue(damageInfo);
             DealOnce();
-            Logger.LogDebug($"伤害处理流程花费[{((UnityEngine.Time.realtimeSinceStartup - timer) * 1000).ToString("F5")}ms]", "测试");
         }
 
         public void OnUnitDealHeal(HealInfo healInfo)
@@ -44,63 +98,49 @@ namespace Sanmon.Battle
         private void DealOnce()
         {
             if (_isDealing) return; //避免递归
-
+            
+            var timer = Time.realtimeSinceStartup;
+            
             _isDealing = true;
             
-            DamageInfo firstDamageInfo = null;
-
             if (_note.damageInfos.Count > 0)
             {
-                firstDamageInfo = _note.damageInfos.Peek();
-
                 while (_note.damageInfos.Count > 0)
                 {
                     var info = _note.damageInfos.Dequeue();
                     _dealDamagePipeline.Do(info);
-                    
-                    if(!info.isAbort)
-                        e_onUnitDealDamage?.Invoke(info);
-
-                    // count++;
-                    // if (count > PIPELINE_DO_LIMIT)
-                    // {
-                    //     Logger.LogWarning($"战斗处理超标, 大于{PIPELINE_DO_LIMIT} -> \n{firstDamageInfo}", "战斗");
-                    //     _note.damageInfos.Clear();
-                    // }
+                    e_onUnitDealDamage?.Invoke(info);
                 }
             }
 
             if (_note.healInfos.Count > 0)
             {
-                var firstHealInfo = _note.healInfos.Peek();
-
                 while (_note.healInfos.Count > 0)
                 {
                     var info = _note.healInfos.Dequeue();
                     _dealHealPipeline.Do(info);
-                    if(!info.isAbort)
-                        e_onUnitHeal?.Invoke(info);
-                    // count++;
-                    // if (count > PIPELINE_DO_LIMIT)
-                    // {
-                    //     Logger.LogWarning($"战斗处理超标, 大于{PIPELINE_DO_LIMIT} -> \n{firstDamageInfo}\n{firstHealInfo}", "战斗");
-                    //     _note.healInfos.Clear();
-                    // }
+                    e_onUnitHeal?.Invoke(info);
                 }
             }
 
             _isDealing = false;
+            
+            var time = ((Time.realtimeSinceStartup - timer) * 1000).ToString("F5");
+            Logger.LogDebug($"伤害处理流程花费[{time}ms]", "测试");
         }
 
-        public BindUnitCollider SearchNearestUnit(Unit self, Group target)
+        public Unit SearchNearestUnit(Unit self, Group group)
         {
-            return this.Entity().Entities
+            return _note.AllUnits
                 .AsValueEnumerable()
-                .Where(e => e.GetComponent<CmGroup>().group == target && self.unit != e)
-                .OrderBy(e => (e.GetComponent<CmTransform>().Position - self.transform.Position).sqrMagnitude)
-                .FirstOrDefault()
-                ?.GetComponent<CmCollider>()
-                ?.Bind;
+                .Where(u => u.group.ServeFor == group && u != self)
+                .OrderBy(u => (u.transform.Position - self.transform.Position).sqrMagnitude)
+                .FirstOrDefault();
+        }
+
+        void ISystemUpdater.OnLogicUpdate(float dt)
+        {
+            
         }
     }
 }
