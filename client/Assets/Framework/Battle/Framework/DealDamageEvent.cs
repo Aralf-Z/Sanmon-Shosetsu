@@ -3,6 +3,37 @@ namespace Sanmon.Battle
     /// <summary> 伤害管线事件 </summary>
     public static class DealDamageEvent
     {
+        public static readonly string[] DEAL_DAMAGE_EVENT = new string[]
+        {
+            // 命中阶段
+            HIT_ATTACKER_BEFORE_HIT,
+            HIT_DEFENDER_BEFORE_HIT,
+            HIT_ATTACKER_CHECK_HIT,
+            HIT_ATTACKER_AFTER_HIT,
+            HIT_DEFENDER_AFTER_HIT,
+
+            // 计算阶段
+            CAL_ATTACKER_BEFORE_CAL,
+            CAL_DEFENDER_BEFORE_CAL,
+            CAL_ATTACKER_CHECK_CRIT,
+            CAL_ATTACKER_CHECK_EXTRA_DAMAGE,
+            CAL_DEFENDER_CHECK_DEFENCE,
+            CAL_ATTACKER_CHECK_DERIVE,
+            CAL_DEFENDER_CHECK_DERIVE,
+            CAL_ATTACKER_AFTER_CAL,
+            CAL_DEFENDER_AFTER_CAL,
+
+            // 结算阶段
+            FINAL_ATTACKER_BEFORE_FINAL,
+            FINAL_DEFENDER_BEFORE_FINAL,
+            FINAL_DEFENDER_EVALUATION,
+            FINAL_DEFENDER_CHECK_STATE,
+            FINAL_ATTACKER_DERIVE,
+            FINAL_DEFENDER_DERIVE,
+            FINAL_ATTACKER_AFTER_FINAL,
+            FINAL_DEFENDER_AFTER_FINAL,
+        };
+        
         // ============================================================
         // 命中阶段
         // ============================================================

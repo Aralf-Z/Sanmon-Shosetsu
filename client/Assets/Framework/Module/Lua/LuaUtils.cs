@@ -1,17 +1,14 @@
-using Sanmon.Core;
-using Sanmon.Module;
+using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace Framework.Module
 {
-    public static class LuaUtils
+    public static partial class LuaUtils
     {
-        private class Getter : IGetModule
+        public static string[] AnalyzeKey(string lua)
         {
-            
+            return LuaKeyAnalyzer.Analyze(lua);
         }
-
-        private static readonly Getter _getter = new Getter();
-        
-        public static ConfigModule config => _getter.Module().Config;
     }
 }

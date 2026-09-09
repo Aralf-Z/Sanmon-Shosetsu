@@ -16,8 +16,7 @@ namespace Sanmon.Module
 
         internal void Load(string path)
         {
-            var go = this.Module().Asset.LoadSync<GameObject>(path);
-            _go = Object.Instantiate(go);
+            _go = this.Module().Asset.LoadPrefabAndInstantiateNew(path);
             View = _go.GetComponent<IUIView>();
             IsLoaded = true;
         }

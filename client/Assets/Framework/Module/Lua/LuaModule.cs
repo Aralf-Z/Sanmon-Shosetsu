@@ -57,9 +57,9 @@ namespace Framework.Module
             return File.Exists(path) ? File.ReadAllText(path, Encoding.UTF8) : null;
         }
 
-        public IEnumerable<string> GetLuaFileName(string folder)
+        public IEnumerable<string> GetLuaModule(string workspace)
         {
-            var path = Path.Combine(RootPath, folder);
+            var path = Path.Combine(RootPath, workspace);
             
             if (Directory.Exists(path))
             {

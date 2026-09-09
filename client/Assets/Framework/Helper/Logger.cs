@@ -11,9 +11,9 @@ namespace Sanmon.Helper
         //todo Warning和Error不走Log
         private static LoggerConfig Config => LoggerConfig.Ins;
         
-        private static void Log(string message, LoggerConfig.Level level, string title = null, Color color = default)
+        private static void Log(string message, LoggerConfig.Level level, string title = null, Color? color = null)
         {
-            Log(message, level, title, color == default ? "#FFFFFF" : color.ColorToHex());
+            Log(message, level, title, color?.ColorToHex() ?? "#FFFFFF");
         }
 
         private static void Log(string message, LoggerConfig.Level level, string title = null, string color = "#FFFFFF")

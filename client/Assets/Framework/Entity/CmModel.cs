@@ -59,9 +59,9 @@ namespace Sanmon.GameEntity
             var template = this.Module().Asset.LoadSync<GameObject>(name);
             var parent = this.Entity().transform;
             
-            if (template)
+            if (template.AssetObject is GameObject go)
             {
-                Go = Object.Instantiate(template, parent);
+                Go = Object.Instantiate(go, parent);
             }
             else
             {

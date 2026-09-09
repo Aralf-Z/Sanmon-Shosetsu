@@ -81,9 +81,7 @@ namespace Sanmon.Module
 
             if (mCachedWindows.ContainsKey(type)) return;
             
-            var prefab = this.Module().Asset.LoadSync<GameObject>(windowName);
-            
-            var window = Instantiate(prefab).GetComponent<T>();
+            var window = this.Module().Asset.LoadSync<GameObject>(windowName).InstantiateSync().GetComponent<T>();
 
             if (window == null)
             {

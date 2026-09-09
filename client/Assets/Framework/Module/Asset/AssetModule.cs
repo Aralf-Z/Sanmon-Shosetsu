@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.IO;
-using Sanmon.Helper;
 using UnityEngine;
 using YooAsset;
 using Object = UnityEngine.Object;
@@ -43,19 +41,20 @@ namespace Sanmon.Module
         public const string DEFAULT_PACKAGE = "DefaultPackage";
 
         public EPlayMode playMode = EPlayMode.EditorSimulateMode;
-
+        
         private ResourcePackage _package;
         private AssetLogger _logger;
         private bool _isInit;
 
-        public GameObject NewGo(string location)
+        public GameObject LoadPrefabAndInstantiateNew(string location, InstantiateOptions? options = null)
         {
-            return Instantiate((GameObject)LoadAsync<GameObject>(location).AssetObject);
+            //todo 引用计数，计时卸载优化？
+            return LoadAsync<GameObject>(location).InstantiateSync(options ?? new InstantiateOptions(true));
         }
         
-        public T LoadSync<T>(string location) where T : Object
+        public AssetHandle LoadSync<T>(string location) where T : Object
         {
-            return _package.LoadAssetSync<T>(location).AssetObject as T;
+            return _package.LoadAssetSync<T>(location);
         }
         
         public AssetHandle LoadAsync<T>(string location) where T: Object
@@ -68,7 +67,7 @@ namespace Sanmon.Module
         {  
             InitializePackageOperation initOperation = null;
             
-            var mode = playMode;//todo 编辑器
+            var mode = playMode;
 
 #if UNITY_EDITOR
             mode = (EPlayMode)UnityEditor.EditorPrefs.GetInt("EditorAssetMode", (int)EPlayMode.EditorSimulateMode);

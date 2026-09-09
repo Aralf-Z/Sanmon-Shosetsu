@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using Game.Config.Battle;
 using Sanmon.Battle;
 using Sanmon.Core;
-using Sanmon.GameEntity;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -31,7 +29,7 @@ namespace GameScripts.Temp_Battle
         public static void Cast(Unit caster, Vector3 start, Vector3 target)
         {
             var face = target - start;
-            var instance = Game.Asset.NewGo("Assets/GameAsset/prefab/bullet").GetComponent<Bullet>();
+            var instance = Game.Asset.LoadPrefabAndInstantiateNew("Assets/GameAsset/prefab/bullet").GetComponent<Bullet>();
 
             instance.caster = caster;
             
