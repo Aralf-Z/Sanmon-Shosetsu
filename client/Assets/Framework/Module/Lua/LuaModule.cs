@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Sanmon.Helper;
 using Sanmon.Module;
 using Unity.Properties;
 using UnityEngine;
@@ -32,7 +33,7 @@ namespace Framework.Module
         
         private bool _isInit = false;
 
-        public static string RootPath 
+        private static string RootPath 
         {
             get
             {
@@ -42,7 +43,6 @@ namespace Framework.Module
                 return Path.Combine(Application.streamingAssetsPath, "LuaScripts");
 # endif    
             }
-
         }
         
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -57,18 +57,35 @@ namespace Framework.Module
             return File.Exists(path) ? File.ReadAllText(path, Encoding.UTF8) : null;
         }
 
-        public IEnumerable<string> GetLuaModule(string workspace)
+        public IEnumerable<LuaInfo> GetLuaModule(string workspace)
         {
             var path = Path.Combine(RootPath, workspace);
-            
-            if (Directory.Exists(path))
-            {
-                foreach (var file in Directory.GetFiles(path, "*.lua", SearchOption.AllDirectories))
-                    yield return Path.GetFileNameWithoutExtension(file);
-            }
-            else
-            {
+
+            if (!Directory.Exists(path))
                 throw new InvalidPathException(path);
+
+            foreach (var file in Directory.EnumerateFiles(path, "*.lua", SearchOption.AllDirectories))
+            {
+                var fullPath = file.PathFormat();
+                var relativePath = Path.GetRelativePath(path, file);
+                var moduleName = Path.Combine(workspace, Path.ChangeExtension(relativePath, null));
+                var fileName = Path.GetFileNameWithoutExtension(file);
+
+                yield return new LuaInfo(fullPath, moduleName, fileName);
+            }  
+        }
+
+        public struct LuaInfo
+        {
+            public readonly string fullPath;
+            public readonly string module;
+            public readonly string file;
+
+            public LuaInfo(string fullPath, string module, string file)
+            {
+                this.fullPath = fullPath;
+                this.module = module;
+                this.file = file;
             }
         }
     }

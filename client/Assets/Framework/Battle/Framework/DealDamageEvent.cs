@@ -1,37 +1,39 @@
+using System.Collections.Generic;
+
 namespace Sanmon.Battle
 {
     /// <summary> 伤害管线事件 </summary>
-    public static class DealDamageEvent
+    internal static class DealDamageEvent
     {
-        public static readonly string[] DEAL_DAMAGE_EVENT = new string[]
+        public static readonly Dictionary<string, EventType> DEAL_DAMAGE_EVENT = new ()
         {
             // 命中阶段
-            HIT_ATTACKER_BEFORE_HIT,
-            HIT_DEFENDER_BEFORE_HIT,
-            HIT_ATTACKER_CHECK_HIT,
-            HIT_ATTACKER_AFTER_HIT,
-            HIT_DEFENDER_AFTER_HIT,
+            [HIT_ATTACKER_BEFORE_HIT] = EventType.DamageInfo,
+            [HIT_DEFENDER_BEFORE_HIT] = EventType.DamageInfo,
+            [HIT_ATTACKER_CHECK_HIT] = EventType.DamageInfo,
+            [HIT_ATTACKER_AFTER_HIT] = EventType.DamageInfo,
+            [HIT_DEFENDER_AFTER_HIT] = EventType.DamageInfo,
 
             // 计算阶段
-            CAL_ATTACKER_BEFORE_CAL,
-            CAL_DEFENDER_BEFORE_CAL,
-            CAL_ATTACKER_CHECK_CRIT,
-            CAL_ATTACKER_CHECK_EXTRA_DAMAGE,
-            CAL_DEFENDER_CHECK_DEFENCE,
-            CAL_ATTACKER_CHECK_DERIVE,
-            CAL_DEFENDER_CHECK_DERIVE,
-            CAL_ATTACKER_AFTER_CAL,
-            CAL_DEFENDER_AFTER_CAL,
+            [CAL_ATTACKER_BEFORE_CAL] = EventType.DamageInfo,
+            [CAL_DEFENDER_BEFORE_CAL] = EventType.DamageInfo,
+            [CAL_ATTACKER_CHECK_CRIT] = EventType.DamageInfo,
+            [CAL_ATTACKER_CHECK_EXTRA_DAMAGE] = EventType.DamageInfo,
+            [CAL_DEFENDER_CHECK_DEFENCE] = EventType.DamageInfo,
+            [CAL_ATTACKER_CHECK_DERIVE] = EventType.DamageInfo,
+            [CAL_DEFENDER_CHECK_DERIVE] = EventType.DamageInfo,
+            [CAL_ATTACKER_AFTER_CAL] = EventType.DamageInfo,
+            [CAL_DEFENDER_AFTER_CAL] = EventType.DamageInfo,
 
             // 结算阶段
-            FINAL_ATTACKER_BEFORE_FINAL,
-            FINAL_DEFENDER_BEFORE_FINAL,
-            FINAL_DEFENDER_EVALUATION,
-            FINAL_DEFENDER_CHECK_STATE,
-            FINAL_ATTACKER_DERIVE,
-            FINAL_DEFENDER_DERIVE,
-            FINAL_ATTACKER_AFTER_FINAL,
-            FINAL_DEFENDER_AFTER_FINAL,
+            [FINAL_ATTACKER_BEFORE_FINAL] = EventType.DamageInfo,
+            [FINAL_DEFENDER_BEFORE_FINAL] = EventType.DamageInfo,
+            [FINAL_DEFENDER_EVALUATION] = EventType.DamageInfo,
+            [FINAL_DEFENDER_CHECK_STATE] = EventType.DamageInfo,
+            [FINAL_ATTACKER_DERIVE] = EventType.DamageInfo,
+            [FINAL_DEFENDER_DERIVE] = EventType.DamageInfo,
+            [FINAL_ATTACKER_AFTER_FINAL] = EventType.DamageInfo,
+            [FINAL_DEFENDER_AFTER_FINAL] = EventType.DamageInfo,
         };
         
         // ============================================================

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Sanmon.Battle
 {
-    internal static partial class EffectBuiltIn
+    internal static partial class EffectBuiltin
     {
         public static List<Effect> Effects = new ()
         {

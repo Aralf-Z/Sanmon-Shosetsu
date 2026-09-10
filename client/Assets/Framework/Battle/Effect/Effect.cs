@@ -27,15 +27,6 @@ namespace Sanmon.Battle
         BuffHealInfo,
     }
 
-    internal class EventPair
-    {
-        public EventType eventType;
-
-        public string name;
-
-        public int order;
-    }
-    
     internal class EffectEvent
     {
         public int order;
@@ -58,7 +49,7 @@ namespace Sanmon.Battle
         
         public void LoadLua()
         {
-            var luaModule = Path.Combine(EffectManager.EFFECT_PATH, name);
+            var luaModule = Path.Combine(EffectManager.EFFECT_PATH, effect.name);
             switch (eventType)
             {
                 case EventType.DamageInfo:

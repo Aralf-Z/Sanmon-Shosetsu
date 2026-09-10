@@ -49,7 +49,8 @@ namespace Sanmon.Module
         public GameObject LoadPrefabAndInstantiateNew(string location, InstantiateOptions? options = null)
         {
             //todo 引用计数，计时卸载优化？
-            return LoadAsync<GameObject>(location).InstantiateSync(options ?? new InstantiateOptions(true));
+            var handle = LoadSync<GameObject>(location);
+            return handle.InstantiateSync(options ?? new InstantiateOptions(true));
         }
         
         public AssetHandle LoadSync<T>(string location) where T : Object
