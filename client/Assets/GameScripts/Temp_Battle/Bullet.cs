@@ -69,8 +69,6 @@ namespace GameScripts.Temp_Battle
                         value = Random.Range(10,15),
                     },
                 },
-                buffsOnHitForAttacker = new List<Buff>(),
-                buffsOnHitForDefender = new List<Buff>()
             };
             
             this.System().Get<BattleSystem>().OnUnitDealDamage(damageInfo);

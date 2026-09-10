@@ -87,6 +87,11 @@ namespace Framework.Module
                 this.module = module;
                 this.file = file;
             }
+
+            public override string ToString()
+            {
+                return $"fullPath: {fullPath}, module: {module}, file: {file}";
+            }
         }
     }
 }

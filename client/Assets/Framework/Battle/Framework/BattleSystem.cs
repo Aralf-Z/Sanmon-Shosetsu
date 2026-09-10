@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Game.Config.Battle;
 using Sanmon.Core;
 using Sanmon.GameEntity;
 using Sanmon.Syztem;
@@ -37,6 +39,7 @@ namespace Sanmon.Battle
             var attri = entity.GetOrAddComponent<CmAttribute>();
             var res = entity.GetOrAddComponent<CmResource>();
             var bb = entity.GetOrAddComponent<CmBlackboard>();
+            var buff = entity.GetOrAddComponent<CmBuff>();
             var tag = entity.GetOrAddComponent<CmTag>();
             var group = entity.GetOrAddComponent<CmGroup>();
             var eff = entity.GetOrAddComponent<CmEffect>();
@@ -49,7 +52,7 @@ namespace Sanmon.Battle
                 collider.SetBind(transform);
             }
             
-            var newUnit = new Unit(entity, attri, res, bb, tag, group, eff, trans, collider);
+            var newUnit = new Unit(entity, attri, res, bb, buff, tag, group, eff, trans, collider);
             
             _note.allUnits.Add(entity, newUnit);
             
@@ -62,6 +65,7 @@ namespace Sanmon.Battle
             var attri = en.AddComponent<CmAttribute>();
             var res = en.AddComponent<CmResource>();
             var bb = en.AddComponent<CmBlackboard>();
+            var buff = en.AddComponent<CmBuff>();
             var tag = en.AddComponent<CmTag>();
             var group = en.AddComponent<CmGroup>();
             var eff = en.AddComponent<CmEffect>();
@@ -70,7 +74,7 @@ namespace Sanmon.Battle
             
             trans.SetBind(transform);
             
-            var newUnit = new Unit(en, attri, res, bb, tag, group, eff, trans, collider);
+            var newUnit = new Unit(en, attri, res, bb, buff, tag, group, eff, trans, collider);
             
             _note.allUnits.Add(en, newUnit);
             
@@ -95,6 +99,18 @@ namespace Sanmon.Battle
             DealOnce();
         }
 
+        public void OnUnitDealBuff(Unit caster, Unit carrier, int buffId)
+        {
+            var buff = new Buff(buffId);
+            
+            buff.caster = caster;
+            buff.carrier = carrier;
+            buff.addTimeStamp = Time.realtimeSinceStartup;
+            buff.stack = (int)buff.data.Parametric.GetValueOrDefault(BuffParam.StartStack, 0);
+            //todo effect
+            //todo event
+        }
+        
         private void DealOnce()
         {
             if (_isDealing) return; //避免递归
@@ -128,7 +144,7 @@ namespace Sanmon.Battle
             var time = ((Time.realtimeSinceStartup - timer) * 1000).ToString("F5");
             Logger.LogDebug($"伤害处理流程花费[{time}ms]", "测试");
         }
-
+        
         public Unit SearchNearestUnit(Unit self, Group group)
         {
             return _note.AllUnits

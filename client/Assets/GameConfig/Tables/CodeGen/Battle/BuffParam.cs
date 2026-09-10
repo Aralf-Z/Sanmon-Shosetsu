@@ -11,12 +11,16 @@
 
 namespace Game.Config.Battle
 { 
-    public enum Blackboard
+    public enum BuffParam
     {
         /// <summary>
-        /// 基础毒伤害
+        /// 初始层数
         /// </summary>
-        PoisonBase = 1,
+        StartStack = 1,
+        /// <summary>
+        /// 计时
+        /// </summary>
+        TimerDuration = 2,
     }
 
 } 

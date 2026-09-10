@@ -1,12 +1,20 @@
 using Game.Config.Battle;
+using Sanmon.Core;
+using Sanmon.Module;
 using Sanmon.Utility.Set;
 using UnityEngine;
 
 namespace Sanmon.Battle
 {
     public class Buff: IBufferItem
+    , IGetModule
     {
-        public BuffCaster caster;
+        internal Buff(int id)
+        {
+            data = this.Module().Config.Tables.TbBuffData[id];
+        }
+
+        public Unit caster;
         public Unit carrier;
 
         public BuffData data;
@@ -28,7 +36,7 @@ namespace Sanmon.Battle
         
         public BufferStatus Status => _status;
         
-        public int Order => data.Order;
+        public int Order => 0;
         
         
         void IBufferItem.OnAdd()

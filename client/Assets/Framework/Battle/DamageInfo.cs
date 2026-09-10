@@ -17,17 +17,12 @@ namespace Sanmon.Battle
         public bool isCrit;
         public bool isHit;
         public bool isAbort;
-        
-        public List<Buff> buffsOnHitForDefender;
-        public List<Buff> buffsOnHitForAttacker;
 
         public override string ToString()
         {
             return $"maker: {maker.Name} | attacker: [{attacker.entity.Info}] | [defender: {defender.entity.Info}]"
-                + $"\nsource = {source} | isCrit = {isCrit} | isHit = {isHit}"
-                + $"\ndamage = {string.Join(", ", damage)}"
-                + $"\nbuffsOnHitForDefender = {string.Join("\n", buffsOnHitForDefender.Select(x => x.data))}"
-                + $"\nbuffsOnHitForAttacker = {string.Join("\n", buffsOnHitForAttacker.Select(x => x.data))}";
+                   + $"\nsource = {source} | isCrit = {isCrit} | isHit = {isHit} | isAbort {isAbort}"
+                   + $"\ndamage = {string.Join(", ", damage)}";
         }
     }
 }

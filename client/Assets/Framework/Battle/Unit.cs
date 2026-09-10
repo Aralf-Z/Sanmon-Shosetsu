@@ -11,6 +11,7 @@ namespace Sanmon.Battle
         public CmAttribute attri;
         public CmResource resource;
         public CmBlackboard blackboard;
+        public CmBuff buff;
         public CmTag tag;
         public CmGroup group;
         public CmEffect effect;
@@ -23,6 +24,7 @@ namespace Sanmon.Battle
             attri = entity.GetComponent<CmAttribute>();
             resource = entity.GetComponent<CmResource>();
             blackboard = entity.GetComponent<CmBlackboard>();
+            buff = entity.GetComponent<CmBuff>();
             tag = entity.GetComponent<CmTag>();
             group = entity.GetComponent<CmGroup>();
             effect = entity.GetComponent<CmEffect>();
@@ -30,12 +32,13 @@ namespace Sanmon.Battle
             collider = entity.GetComponent<CmCollider>();
         }
 
-        internal Unit(Entity entity, CmAttribute attri, CmResource resource, CmBlackboard blackboard, CmTag tag, CmGroup group, CmEffect effect, CmTransform transform, CmCollider collider)
+        internal Unit(Entity entity, CmAttribute attri, CmResource resource, CmBlackboard blackboard, CmBuff buff, CmTag tag, CmGroup group, CmEffect effect, CmTransform transform, CmCollider collider)
         {
             this.entity = entity;
             this.attri = attri;
             this.resource = resource;
             this.blackboard = blackboard;
+            this.buff = buff;
             this.tag = tag;
             this.group = group;
             this.effect = effect;

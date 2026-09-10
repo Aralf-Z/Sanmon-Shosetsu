@@ -18,8 +18,12 @@ local enums =
      ---@field public Dexterity integer @敏捷
     ['Battle.Attribute'] = {   Health=1,  Attack=2,  Defence=3,  Accuracy=4,  Dexterity=5,  };
     ---@class Battle.Blackboard
-     ---@field public poisonBase integer @基础毒伤害
-    ['Battle.Blackboard'] = {   poisonBase=1,  };
+     ---@field public PoisonBase integer @基础毒伤害
+    ['Battle.Blackboard'] = {   PoisonBase=1,  };
+    ---@class Battle.BuffParam
+     ---@field public StartStack integer @初始层数
+     ---@field public TimerDuration integer @计时器时间
+    ['Battle.BuffParam'] = {   StartStack=1,  TimerDuration=2,  };
     ---@class Battle.DamageSource
      ---@field public Main integer @主要伤害
      ---@field public Derivation integer @派生伤害

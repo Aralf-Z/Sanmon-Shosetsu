@@ -1,5 +1,7 @@
 namespace Sanmon.Battle
 {
+    //废弃
+    
     public enum BuffCasterType
     {
         Unit = 1,

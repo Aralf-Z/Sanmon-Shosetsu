@@ -46,6 +46,11 @@ namespace Sanmon.Module
         private AssetLogger _logger;
         private bool _isInit;
 
+        /// <summary>
+        /// 同步加载预制体并且实例化
+        /// </summary>
+        /// <param name="location">加载路径</param>
+        /// <param name="options">实例化选项</param>
         public GameObject LoadPrefabAndInstantiateNew(string location, InstantiateOptions? options = null)
         {
             //todo 引用计数，计时卸载优化？
@@ -53,11 +58,19 @@ namespace Sanmon.Module
             return handle.InstantiateSync(options ?? new InstantiateOptions(true));
         }
         
+        /// <summary>
+        /// 同步加载
+        /// </summary>
+        /// <param name="location">加载路径</param>
         public AssetHandle LoadSync<T>(string location) where T : Object
         {
             return _package.LoadAssetSync<T>(location);
         }
         
+        /// <summary>
+        /// 异步加载
+        /// </summary>
+        /// <param name="location">加载路径</param>
         public AssetHandle LoadAsync<T>(string location) where T: Object
         {
             return _package.LoadAssetAsync<T>(location);

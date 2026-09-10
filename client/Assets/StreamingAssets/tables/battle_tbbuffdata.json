@@ -1,12 +1,30 @@
 [
   {
     "id": 1002000001,
-    "order": 1,
-    "maxStack": 3
+    "effects": [],
+    "parametric": [
+      [
+        1,
+        2
+      ],
+      [
+        2,
+        5
+      ]
+    ]
   },
   {
     "id": 1002000002,
-    "order": 2,
-    "maxStack": 5
+    "effects": [],
+    "parametric": [
+      [
+        1,
+        5
+      ],
+      [
+        2,
+        5
+      ]
+    ]
   }
 ]

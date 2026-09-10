@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Framework.Pipeline;
 using Sanmon.Helper;
 
@@ -11,12 +12,11 @@ namespace Sanmon.Battle
         public DealDamagePipeline()
         {
             SetHeader(new HandleCheckHit())
-                .SetNext(new HandleOnHitBuff())
                 .SetNext(new HandleCalculateValue())
                 .SetNext(new HandleResult());
         }
         
-        private static void DoEvent(Unit unit, string eventName, DamageInfo damageInfo)
+        private static void DoDamageInfoEvent(Unit unit, string eventName, DamageInfo damageInfo)
         {
             if(damageInfo.isAbort) return;
             
@@ -25,30 +25,35 @@ namespace Sanmon.Battle
                 effectEvent.damageAction?.Invoke(damageInfo);
             }
         }
+        
+        private static void DoBuffEvent(Unit unit, string eventName, DamageInfo damageInfo)
+        {
+            if(damageInfo.isAbort) return;
+            
+            foreach (var effectEvent in unit.effect.FindEvent(eventName))
+            {
+                if (unit.buff.buffOnEvent.TryGetValue(eventName, out var list))
+                {
+                    foreach (var buff in list) 
+                        effectEvent.buffDamageAction?.Invoke(buff, damageInfo);
+                }
+            }
+        }
 
         private class HandleCheckHit : Handler<DamageInfo>
         {
             protected override bool Process(DamageInfo context)
             {
                 //命中前
-                DoEvent(context.attacker, DealDamageEvent.HIT_ATTACKER_BEFORE_HIT, context);
-                DoEvent(context.defender, DealDamageEvent.HIT_DEFENDER_BEFORE_HIT, context);
+                DoDamageInfoEvent(context.attacker, DealDamageEvent.HIT_ATTACKER_BEFORE_HIT, context);
+                DoDamageInfoEvent(context.defender, DealDamageEvent.HIT_DEFENDER_BEFORE_HIT, context);
                 //命中检测
-                DoEvent(context.attacker, DealDamageEvent.HIT_ATTACKER_CHECK_HIT, context);
+                DoDamageInfoEvent(context.attacker, DealDamageEvent.HIT_ATTACKER_CHECK_HIT, context);
                 //命中后
-                DoEvent(context.attacker, DealDamageEvent.HIT_ATTACKER_AFTER_HIT, context);
-                DoEvent(context.defender, DealDamageEvent.HIT_DEFENDER_AFTER_HIT, context);
+                DoDamageInfoEvent(context.attacker, DealDamageEvent.HIT_ATTACKER_AFTER_HIT, context);
+                DoDamageInfoEvent(context.defender, DealDamageEvent.HIT_DEFENDER_AFTER_HIT, context);
                 
                 return context.isHit;
-            }
-        }
-
-        private class HandleOnHitBuff : Handler<DamageInfo>
-        {
-            protected override bool Process(DamageInfo context)
-            {
-                //todo 
-                return true;
             }
         }
 
@@ -57,19 +62,19 @@ namespace Sanmon.Battle
             protected override bool Process(DamageInfo context)
             {
                 //计算前
-                DoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_BEFORE_CAL, context);
-                DoEvent(context.defender, DealDamageEvent.CAL_DEFENDER_BEFORE_CAL, context);
+                DoDamageInfoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_BEFORE_CAL, context);
+                DoDamageInfoEvent(context.defender, DealDamageEvent.CAL_DEFENDER_BEFORE_CAL, context);
                 //攻击者数值计算
-                DoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_CHECK_CRIT, context);
-                DoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_CHECK_EXTRA_DAMAGE, context);
+                DoDamageInfoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_CHECK_CRIT, context);
+                DoDamageInfoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_CHECK_EXTRA_DAMAGE, context);
                 //防御者数值计算
-                DoEvent(context.defender, DealDamageEvent.CAL_DEFENDER_CHECK_DEFENCE, context);
+                DoDamageInfoEvent(context.defender, DealDamageEvent.CAL_DEFENDER_CHECK_DEFENCE, context);
                 //衍生效果判断
-                DoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_CHECK_DERIVE, context);
-                DoEvent(context.defender, DealDamageEvent.CAL_DEFENDER_CHECK_DERIVE, context);
+                DoDamageInfoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_CHECK_DERIVE, context);
+                DoDamageInfoEvent(context.defender, DealDamageEvent.CAL_DEFENDER_CHECK_DERIVE, context);
                 //计算后
-                DoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_AFTER_CAL, context);
-                DoEvent(context.defender, DealDamageEvent.CAL_DEFENDER_AFTER_CAL, context);
+                DoDamageInfoEvent(context.attacker, DealDamageEvent.CAL_ATTACKER_AFTER_CAL, context);
+                DoDamageInfoEvent(context.defender, DealDamageEvent.CAL_DEFENDER_AFTER_CAL, context);
                 
                 return true;
             }
@@ -80,17 +85,20 @@ namespace Sanmon.Battle
             protected override bool Process(DamageInfo context)
             {
                 // 结算前
-                DoEvent(context.attacker, DealDamageEvent.FINAL_ATTACKER_BEFORE_FINAL, context);
-                DoEvent(context.defender, DealDamageEvent.FINAL_DEFENDER_BEFORE_FINAL, context);
+                DoDamageInfoEvent(context.attacker, DealDamageEvent.FINAL_ATTACKER_BEFORE_FINAL, context);
+                DoDamageInfoEvent(context.defender, DealDamageEvent.FINAL_DEFENDER_BEFORE_FINAL, context);
                 // 受击者结算
-                DoEvent(context.defender, DealDamageEvent.FINAL_DEFENDER_EVALUATION, context);
-                DoEvent(context.defender, DealDamageEvent.FINAL_DEFENDER_CHECK_STATE, context);
+                DoDamageInfoEvent(context.defender, DealDamageEvent.FINAL_DEFENDER_EVALUATION, context);
+                DoDamageInfoEvent(context.defender, DealDamageEvent.FINAL_DEFENDER_CHECK_STATE, context);
                 // 衍生效果生效
-                DoEvent(context.attacker, DealDamageEvent.FINAL_ATTACKER_DERIVE, context);
-                DoEvent(context.defender, DealDamageEvent.FINAL_DEFENDER_DERIVE, context);
+                DoDamageInfoEvent(context.attacker, DealDamageEvent.FINAL_ATTACKER_DERIVE, context);
+                DoDamageInfoEvent(context.defender, DealDamageEvent.FINAL_DEFENDER_DERIVE, context);
                 // 结算后
-                DoEvent(context.attacker, DealDamageEvent.FINAL_ATTACKER_AFTER_FINAL, context);
-                DoEvent(context.defender, DealDamageEvent.FINAL_DEFENDER_AFTER_FINAL, context);
+                DoDamageInfoEvent(context.attacker, DealDamageEvent.FINAL_ATTACKER_AFTER_FINAL, context);
+                DoDamageInfoEvent(context.defender, DealDamageEvent.FINAL_DEFENDER_AFTER_FINAL, context);
+                //buff效果
+                DoBuffEvent(context.attacker, BuffEvent.ATTACKER_AFTER_HIT, context);
+                DoBuffEvent(context.defender, BuffEvent.DEFENDER_AFTER_HIT, context);
                 
                 return true;
             }

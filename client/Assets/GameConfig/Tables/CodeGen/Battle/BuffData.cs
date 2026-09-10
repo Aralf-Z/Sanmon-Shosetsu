@@ -18,8 +18,8 @@ public sealed partial class BuffData : Luban.BeanBase
     public BuffData(JSONNode _buf) 
     {
         { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
-        { if(!_buf["order"].IsNumber) { throw new SerializationException(); }  Order = _buf["order"]; }
-        { if(!_buf["maxStack"].IsNumber) { throw new SerializationException(); }  MaxStack = _buf["maxStack"]; }
+        { var __json0 = _buf["effects"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Effects = new string[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { string __v0;  { if(!__e0.IsString) { throw new SerializationException(); }  __v0 = __e0; }  Effects[__index0++] = __v0; }   }
+        { var __json0 = _buf["parametric"]; if(!__json0.IsArray) { throw new SerializationException(); } Parametric = new System.Collections.Generic.Dictionary<Battle.BuffParam, float>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { Battle.BuffParam _k0;  { if(!__e0[0].IsNumber) { throw new SerializationException(); }  _k0 = (Battle.BuffParam)__e0[0].AsInt; } float _v0;  { if(!__e0[1].IsNumber) { throw new SerializationException(); }  _v0 = __e0[1]; }  Parametric.Add(_k0, _v0); }   }
     }
 
     public static BuffData DeserializeBuffData(JSONNode _buf)
@@ -31,8 +31,11 @@ public sealed partial class BuffData : Luban.BeanBase
     /// 唯一id
     /// </summary>
     public readonly int Id;
-    public readonly int Order;
-    public readonly int MaxStack;
+    public readonly string[] Effects;
+    /// <summary>
+    /// Buff参数
+    /// </summary>
+    public readonly System.Collections.Generic.Dictionary<Battle.BuffParam, float> Parametric;
    
     public const int __ID__ = -833855725;
     public override int GetTypeId() => __ID__;
@@ -45,8 +48,8 @@ public sealed partial class BuffData : Luban.BeanBase
     {
         return "{ "
         + "id:" + Id + ","
-        + "order:" + Order + ","
-        + "maxStack:" + MaxStack + ","
+        + "effects:" + Luban.StringUtil.CollectionToString(Effects) + ","
+        + "parametric:" + Luban.StringUtil.CollectionToString(Parametric) + ","
         + "}";
     }
 }
