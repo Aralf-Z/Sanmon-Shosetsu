@@ -106,7 +106,6 @@ namespace Sanmon.Battle
             buff.caster = caster;
             buff.carrier = carrier;
             buff.addTimeStamp = Time.realtimeSinceStartup;
-            buff.stack = (int)buff.data.Parametric.GetValueOrDefault(BuffParam.StartStack, 0);
             //todo effect
             //todo event
         }

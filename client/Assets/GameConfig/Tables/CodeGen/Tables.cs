@@ -15,6 +15,9 @@ namespace Game.Config
 public partial class Tables
 {
     public GameGlobal GameGlobal {get; }
+    public Character.LvData LvData {get; }
+    public Character.ClassData ClassData {get; }
+    public Character.BaseEquipmentData BaseEquipmentData {get; }
     /// <summary>
     /// 增减益Buff-02
     /// </summary>
@@ -23,20 +26,32 @@ public partial class Tables
     /// 效果-01
     /// </summary>
     public Battle.TbEffectData TbEffectData {get; }
+    /// <summary>
+    /// 天赋-04
+    /// </summary>
+    public Character.TbTalentData TbTalentData {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
         GameGlobal = new GameGlobal(loader("gameglobal"));
+        LvData = new Character.LvData(loader("character_lvdata"));
+        ClassData = new Character.ClassData(loader("character_classdata"));
+        BaseEquipmentData = new Character.BaseEquipmentData(loader("character_baseequipmentdata"));
         TbBuffData = new Battle.TbBuffData(loader("battle_tbbuffdata"));
         TbEffectData = new Battle.TbEffectData(loader("battle_tbeffectdata"));
+        TbTalentData = new Character.TbTalentData(loader("character_tbtalentdata"));
         ResolveRef();
     }
     
     private void ResolveRef()
     {
         GameGlobal.ResolveRef(this);
+        LvData.ResolveRef(this);
+        ClassData.ResolveRef(this);
+        BaseEquipmentData.ResolveRef(this);
         TbBuffData.ResolveRef(this);
         TbEffectData.ResolveRef(this);
+        TbTalentData.ResolveRef(this);
     }
 }
 

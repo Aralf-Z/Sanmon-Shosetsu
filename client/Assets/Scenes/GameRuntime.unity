@@ -607,7 +607,7 @@ GameObject:
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &908465919
 Transform:
   m_ObjectHideFlags: 0
@@ -761,7 +761,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 3
-  bullet: {fileID: 0}
   castInterval: 0.5
 --- !u!1 &2007734024
 GameObject:

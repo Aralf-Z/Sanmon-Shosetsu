@@ -9,50 +9,58 @@
 
 
 
-namespace Game.Config.Battle
+namespace Game.Config.Character
 { 
-    public enum DamageType
+    public enum SubClass
     {
         /// <summary>
-        /// 钝击
+        /// 血刃掠夺者
         /// </summary>
-        Blunt = 1,
+        BloodBladeRaider = 101,
         /// <summary>
-        /// 挥砍
+        /// 铁壁卫将
         /// </summary>
-        Slash = 2,
+        IronwallGuardian = 102,
         /// <summary>
-        /// 穿刺
+        /// 裂阵勇士
         /// </summary>
-        Pierce = 3,
+        LineBreaker = 103,
         /// <summary>
-        /// 火焰
+        /// 焚界术士
         /// </summary>
-        Fire = 4,
+        WorldBurner = 201,
         /// <summary>
-        /// 冰霜
+        /// 奥术织构者
         /// </summary>
-        Frost = 5,
+        ArcaneWeaver = 202,
         /// <summary>
-        /// 毒素
+        /// 寒霜秘术师
         /// </summary>
-        Poison = 6,
+        FrostArcanist = 203,
         /// <summary>
-        /// 雷电
+        /// 圣裁者
         /// </summary>
-        Lightning = 7,
+        DivineJudge = 301,
         /// <summary>
-        /// 暗影
+        /// 守护神官
         /// </summary>
-        Shadow = 8,
+        GuardianPriest = 302,
         /// <summary>
-        /// 神圣
+        /// 净罪使徒
         /// </summary>
-        Holy = 9,
+        Purifier = 303,
         /// <summary>
-        /// 奥术
+        /// 森林之子
         /// </summary>
-        Arcane = 10,
+        ChildOfTheForest = 401,
+        /// <summary>
+        /// 暗影猎手
+        /// </summary>
+        ShadowHunter = 402,
+        /// <summary>
+        /// 双刃
+        /// </summary>
+        BladeDancer = 403,
     }
 
 } 

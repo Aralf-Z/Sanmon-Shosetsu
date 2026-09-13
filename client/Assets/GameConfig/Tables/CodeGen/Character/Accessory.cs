@@ -9,14 +9,22 @@
 
 
 
-namespace Game.Config.Battle
+namespace Game.Config.Character
 { 
-    public enum BuffParam
+    public enum Accessory
     {
         /// <summary>
-        /// 伤害
+        /// 项链
         /// </summary>
-        Damage = 0,
+        Necklace = 1,
+        /// <summary>
+        /// 手环
+        /// </summary>
+        Bracelet = 2,
+        /// <summary>
+        /// 戒指
+        /// </summary>
+        Ring = 3,
     }
 
 } 

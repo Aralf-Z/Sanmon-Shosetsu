@@ -9,14 +9,26 @@
 
 
 
-namespace Game.Config.Battle
+namespace Game.Config.Character
 { 
-    public enum BuffParam
+    public enum MainClass
     {
         /// <summary>
-        /// 伤害
+        /// 战士
         /// </summary>
-        Damage = 0,
+        Warrior = 1,
+        /// <summary>
+        /// 法师
+        /// </summary>
+        Mage = 2,
+        /// <summary>
+        /// 牧师
+        /// </summary>
+        Priest = 3,
+        /// <summary>
+        /// 猎人
+        /// </summary>
+        Hunter = 4,
     }
 
 } 

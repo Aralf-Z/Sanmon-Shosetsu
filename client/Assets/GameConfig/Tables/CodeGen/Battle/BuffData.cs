@@ -19,6 +19,9 @@ public sealed partial class BuffData : Luban.BeanBase
     {
         { if(!_buf["id"].IsNumber) { throw new SerializationException(); }  Id = _buf["id"]; }
         { var __json0 = _buf["effects"]; if(!__json0.IsArray) { throw new SerializationException(); } int _n0 = __json0.Count; Effects = new string[_n0]; int __index0=0; foreach(JSONNode __e0 in __json0.Children) { string __v0;  { if(!__e0.IsString) { throw new SerializationException(); }  __v0 = __e0; }  Effects[__index0++] = __v0; }   }
+        { if(!_buf["start_stack"].IsNumber) { throw new SerializationException(); }  StartStack = _buf["start_stack"]; }
+        { if(!_buf["max_stack"].IsNumber) { throw new SerializationException(); }  MaxStack = _buf["max_stack"]; }
+        { if(!_buf["duration"].IsNumber) { throw new SerializationException(); }  Duration = _buf["duration"]; }
         { var __json0 = _buf["parametric"]; if(!__json0.IsArray) { throw new SerializationException(); } Parametric = new System.Collections.Generic.Dictionary<Battle.BuffParam, float>(__json0.Count); foreach(JSONNode __e0 in __json0.Children) { Battle.BuffParam _k0;  { if(!__e0[0].IsNumber) { throw new SerializationException(); }  _k0 = (Battle.BuffParam)__e0[0].AsInt; } float _v0;  { if(!__e0[1].IsNumber) { throw new SerializationException(); }  _v0 = __e0[1]; }  Parametric.Add(_k0, _v0); }   }
     }
 
@@ -33,7 +36,19 @@ public sealed partial class BuffData : Luban.BeanBase
     public readonly int Id;
     public readonly string[] Effects;
     /// <summary>
-    /// Buff参数
+    /// 开始层数
+    /// </summary>
+    public readonly float StartStack;
+    /// <summary>
+    /// 最大层数
+    /// </summary>
+    public readonly float MaxStack;
+    /// <summary>
+    /// 计时器
+    /// </summary>
+    public readonly float Duration;
+    /// <summary>
+    /// Buff参数1
     /// </summary>
     public readonly System.Collections.Generic.Dictionary<Battle.BuffParam, float> Parametric;
    
@@ -49,6 +64,9 @@ public sealed partial class BuffData : Luban.BeanBase
         return "{ "
         + "id:" + Id + ","
         + "effects:" + Luban.StringUtil.CollectionToString(Effects) + ","
+        + "startStack:" + StartStack + ","
+        + "maxStack:" + MaxStack + ","
+        + "duration:" + Duration + ","
         + "parametric:" + Luban.StringUtil.CollectionToString(Parametric) + ","
         + "}";
     }

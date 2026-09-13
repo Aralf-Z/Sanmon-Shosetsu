@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Game.Config.Battle;
 using UnityEngine;
+using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Battle
 {
@@ -45,11 +46,7 @@ namespace Sanmon.Battle
                         name = DealDamageEvent.CAL_ATTACKER_CHECK_EXTRA_DAMAGE,
                         damageAction = d =>
                         {
-                            foreach (var dp in d.damage)
-                            {
-                                dp.addValue += dp.type is DamageType.Physical ? 5 : 0;
-                                dp.mulValue += dp.type is DamageType.Magical ? 1.2f : 0;
-                            }
+                            
                         }
                     }
                     ,
@@ -60,8 +57,7 @@ namespace Sanmon.Battle
                         {
                             foreach (var dp in d.damage)
                             {
-                                dp.deductionRatio += dp.type is DamageType.Physical ? .2f : 0;
-                                dp.deductionValue += dp.type is DamageType.Magical ? 5f : 0;
+                               Logger.LogDebug(dp.ToString());
                             }
                         }
                     }

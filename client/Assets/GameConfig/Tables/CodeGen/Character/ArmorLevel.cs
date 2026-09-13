@@ -9,14 +9,26 @@
 
 
 
-namespace Game.Config.Battle
+namespace Game.Config.Character
 { 
-    public enum BuffParam
+    public enum ArmorLevel
     {
         /// <summary>
-        /// 伤害
+        /// 布甲
         /// </summary>
-        Damage = 0,
+        Cloth = 1,
+        /// <summary>
+        /// 皮甲
+        /// </summary>
+        Leather = 2,
+        /// <summary>
+        /// 链甲
+        /// </summary>
+        Chain = 3,
+        /// <summary>
+        /// 板甲
+        /// </summary>
+        Plate = 4,
     }
 
 } 

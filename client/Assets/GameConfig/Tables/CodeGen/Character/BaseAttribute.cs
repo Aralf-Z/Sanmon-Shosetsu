@@ -9,50 +9,34 @@
 
 
 
-namespace Game.Config.Battle
+namespace Game.Config.Character
 { 
-    public enum DamageType
+    public enum BaseAttribute
     {
         /// <summary>
-        /// 钝击
+        /// 力量
         /// </summary>
-        Blunt = 1,
+        Strength = 1,
         /// <summary>
-        /// 挥砍
+        /// 智力
         /// </summary>
-        Slash = 2,
+        Intelligence = 2,
         /// <summary>
-        /// 穿刺
+        /// 敏捷
         /// </summary>
-        Pierce = 3,
+        Dexterity = 3,
         /// <summary>
-        /// 火焰
+        /// 体质
         /// </summary>
-        Fire = 4,
+        Constitution = 4,
         /// <summary>
-        /// 冰霜
+        /// 精神
         /// </summary>
-        Frost = 5,
+        Spirit = 5,
         /// <summary>
-        /// 毒素
+        /// 感知
         /// </summary>
-        Poison = 6,
-        /// <summary>
-        /// 雷电
-        /// </summary>
-        Lightning = 7,
-        /// <summary>
-        /// 暗影
-        /// </summary>
-        Shadow = 8,
-        /// <summary>
-        /// 神圣
-        /// </summary>
-        Holy = 9,
-        /// <summary>
-        /// 奥术
-        /// </summary>
-        Arcane = 10,
+        Wisdom = 6,
     }
 
 } 

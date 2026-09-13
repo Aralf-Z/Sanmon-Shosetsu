@@ -1,0 +1,74 @@
+[
+  {
+    "id": 101000001,
+    "lv": 1,
+    "exp": 100,
+    "talentPoint": 1
+  },
+  {
+    "id": 101000002,
+    "lv": 2,
+    "exp": 348,
+    "talentPoint": 1
+  },
+  {
+    "id": 101000003,
+    "lv": 3,
+    "exp": 722,
+    "talentPoint": 1
+  },
+  {
+    "id": 101000004,
+    "lv": 4,
+    "exp": 1213,
+    "talentPoint": 2
+  },
+  {
+    "id": 101000005,
+    "lv": 5,
+    "exp": 1812,
+    "talentPoint": 1
+  },
+  {
+    "id": 101000006,
+    "lv": 6,
+    "exp": 2516,
+    "talentPoint": 1
+  },
+  {
+    "id": 101000007,
+    "lv": 7,
+    "exp": 3320,
+    "talentPoint": 1
+  },
+  {
+    "id": 101000008,
+    "lv": 8,
+    "exp": 4222,
+    "talentPoint": 2
+  },
+  {
+    "id": 101000009,
+    "lv": 9,
+    "exp": 5220,
+    "talentPoint": 1
+  },
+  {
+    "id": 101000010,
+    "lv": 10,
+    "exp": 6310,
+    "talentPoint": 1
+  },
+  {
+    "id": 101000011,
+    "lv": 11,
+    "exp": 7490,
+    "talentPoint": 2
+  },
+  {
+    "id": 101000012,
+    "lv": 12,
+    "exp": 8760,
+    "talentPoint": 2
+  }
+]

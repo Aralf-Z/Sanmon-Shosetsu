@@ -61,11 +61,11 @@ namespace GameScripts.Temp_Battle
                 damage = new List<DamagePair>()
                 {
                     new () {
-                        type = DamageType.Magical,
+                        type = DamageType.Arcane,
                         value = Random.Range(5,10),
                     },
                     new () {
-                        type = DamageType.Physical,
+                        type = DamageType.Blunt,
                         value = Random.Range(10,15),
                     },
                 },

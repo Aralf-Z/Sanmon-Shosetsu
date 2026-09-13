@@ -1,0 +1,117 @@
+[
+  {
+    "id": 10200001,
+    "main_type": 1,
+    "type": 101,
+    "name": "血刃掠夺者",
+    "weapon_unlock": 11,
+    "talent_tree": [
+      [
+        104101011,
+        104101012,
+        104101013
+      ],
+      [
+        104101021,
+        104101022
+      ],
+      [
+        104101031,
+        104101032,
+        104101033
+      ],
+      [
+        104101041,
+        104101042
+      ]
+    ]
+  },
+  {
+    "id": 10200002,
+    "main_type": 1,
+    "type": 102,
+    "name": "铁壁卫将",
+    "weapon_unlock": 6213,
+    "talent_tree": []
+  },
+  {
+    "id": 10200003,
+    "main_type": 1,
+    "type": 103,
+    "name": "裂阵勇士",
+    "weapon_unlock": 15360,
+    "talent_tree": []
+  },
+  {
+    "id": 10200004,
+    "main_type": 2,
+    "type": 201,
+    "name": "焚界术士",
+    "weapon_unlock": 400,
+    "talent_tree": []
+  },
+  {
+    "id": 10200005,
+    "main_type": 2,
+    "type": 202,
+    "name": "奥术织构者",
+    "weapon_unlock": 400,
+    "talent_tree": []
+  },
+  {
+    "id": 10200006,
+    "main_type": 2,
+    "type": 203,
+    "name": "寒霜秘术师",
+    "weapon_unlock": 400,
+    "talent_tree": []
+  },
+  {
+    "id": 10200007,
+    "main_type": 3,
+    "type": 301,
+    "name": "圣裁者",
+    "weapon_unlock": 196,
+    "talent_tree": []
+  },
+  {
+    "id": 10200008,
+    "main_type": 3,
+    "type": 302,
+    "name": "守护神官",
+    "weapon_unlock": 1093,
+    "talent_tree": []
+  },
+  {
+    "id": 10200009,
+    "main_type": 3,
+    "type": 303,
+    "name": "净罪使徒",
+    "weapon_unlock": 197,
+    "talent_tree": []
+  },
+  {
+    "id": 10200010,
+    "main_type": 4,
+    "type": 401,
+    "name": "森林之子",
+    "weapon_unlock": 16896,
+    "talent_tree": []
+  },
+  {
+    "id": 10200011,
+    "main_type": 4,
+    "type": 402,
+    "name": "暗影猎手",
+    "weapon_unlock": 16904,
+    "talent_tree": []
+  },
+  {
+    "id": 10200012,
+    "main_type": 4,
+    "type": 403,
+    "name": "双刃",
+    "weapon_unlock": 9,
+    "talent_tree": []
+  }
+]

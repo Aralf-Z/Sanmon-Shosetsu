@@ -18,21 +18,101 @@ namespace Game.Config.Battle
         /// </summary>
         Health = 1,
         /// <summary>
+        /// 法力
+        /// </summary>
+        Mana = 2,
+        /// <summary>
         /// 攻击
         /// </summary>
-        Attack = 2,
+        Attack = 3,
+        /// <summary>
+        /// 法术强度
+        /// </summary>
+        SpellPower = 4,
         /// <summary>
         /// 防御
         /// </summary>
-        Defence = 3,
+        Defence = 5,
         /// <summary>
         /// 精准
         /// </summary>
-        Accuracy = 4,
+        Accuracy = 6,
         /// <summary>
-        /// 敏捷
+        /// 反射
         /// </summary>
-        Dexterity = 5,
+        Reflex = 7,
+        /// <summary>
+        /// 攻击速度
+        /// </summary>
+        AttackSpeed = 8,
+        /// <summary>
+        /// 施法速度
+        /// </summary>
+        SpellSpeed = 9,
+        /// <summary>
+        /// 生命回复
+        /// </summary>
+        HealthRecover = 10,
+        /// <summary>
+        /// 法力回复
+        /// </summary>
+        ManaRecover = 11,
+        /// <summary>
+        /// 钝击抗性
+        /// </summary>
+        BluntResistance = 12,
+        /// <summary>
+        /// 挥砍抗性
+        /// </summary>
+        SlashResistance = 13,
+        /// <summary>
+        /// 穿刺抗性
+        /// </summary>
+        PierceResistance = 14,
+        /// <summary>
+        /// 火焰抗性
+        /// </summary>
+        FireResistance = 15,
+        /// <summary>
+        /// 冰霜抗性
+        /// </summary>
+        FrostResistance = 16,
+        /// <summary>
+        /// 毒素抗性
+        /// </summary>
+        PoisonResistance = 17,
+        /// <summary>
+        /// 雷电抗性
+        /// </summary>
+        LightningResistance = 18,
+        /// <summary>
+        /// 暗影抗性
+        /// </summary>
+        ShadowResistance = 19,
+        /// <summary>
+        /// 神圣抗性
+        /// </summary>
+        HolyResistance = 20,
+        /// <summary>
+        /// 奥术抗性
+        /// </summary>
+        ArcaneResistance = 21,
+        /// <summary>
+        /// 治疗强化
+        /// </summary>
+        HealBonus = 22,
+        /// <summary>
+        /// 移动速度
+        /// </summary>
+        MoveSpeed = 23,
+        /// <summary>
+        /// 冷却加速
+        /// </summary>
+        ColdDownBonus = 24,
+        /// <summary>
+        /// 法力消耗减免
+        /// </summary>
+        ManaCostBonus = 25,
     }
 
 } 

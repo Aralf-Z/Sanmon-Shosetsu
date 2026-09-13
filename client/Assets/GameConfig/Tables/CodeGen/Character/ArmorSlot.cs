@@ -9,14 +9,30 @@
 
 
 
-namespace Game.Config.Battle
+namespace Game.Config.Character
 { 
-    public enum BuffParam
+    public enum ArmorSlot
     {
         /// <summary>
-        /// 伤害
+        /// 头
         /// </summary>
-        Damage = 0,
+        Head = 1,
+        /// <summary>
+        /// 身
+        /// </summary>
+        Chest = 2,
+        /// <summary>
+        /// 手
+        /// </summary>
+        Hands = 3,
+        /// <summary>
+        /// 腿
+        /// </summary>
+        Legs = 4,
+        /// <summary>
+        /// 脚
+        /// </summary>
+        Feet = 5,
     }
 
 } 

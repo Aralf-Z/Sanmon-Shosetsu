@@ -2,13 +2,12 @@
   {
     "id": 1002000001,
     "effects": [],
+    "start_stack": 1,
+    "max_stack": 5,
+    "duration": 10,
     "parametric": [
       [
-        1,
-        2
-      ],
-      [
-        2,
+        0,
         5
       ]
     ]
@@ -16,13 +15,12 @@
   {
     "id": 1002000002,
     "effects": [],
+    "start_stack": 1,
+    "max_stack": 5,
+    "duration": 2,
     "parametric": [
       [
-        1,
-        5
-      ],
-      [
-        2,
+        0,
         5
       ]
     ]

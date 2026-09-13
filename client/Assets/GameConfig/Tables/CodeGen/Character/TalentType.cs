@@ -9,14 +9,18 @@
 
 
 
-namespace Game.Config.Battle
+namespace Game.Config.Character
 { 
-    public enum BuffParam
+    public enum TalentType
     {
         /// <summary>
-        /// 伤害
+        /// 被动
         /// </summary>
-        Damage = 0,
+        Passive = 1,
+        /// <summary>
+        /// 主动
+        /// </summary>
+        Active = 2,
     }
 
 } 

@@ -12,6 +12,7 @@ namespace Sanmon.Battle
         internal Buff(int id)
         {
             data = this.Module().Config.Tables.TbBuffData[id];
+            stack = data.StartStack;
         }
 
         public Unit caster;
@@ -22,7 +23,7 @@ namespace Sanmon.Battle
         /// <summary> 添加时的时间戳 </summary>
         public float addTimeStamp;
         /// <summary> 当前层数 </summary>
-        public int stack;
+        public float stack;
         /// <summary> 计时器 </summary>
         public float timer;
         /// <summary> 计时器总时长 </summary>

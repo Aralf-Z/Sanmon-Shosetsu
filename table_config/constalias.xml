@@ -1,7 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <module name="">
-  <constalias name="攻击" value="1001000001" />
-  <constalias name="受伤" value="1001000002" />
+  <constalias name="血痕" value="104101011" />
+  <constalias name="嗜血" value="104101012" />
+  <constalias name="战意" value="104101013" />
+  <constalias name="血性追击" value="104101021" />
+  <constalias name="杀戮回响" value="104101022" />
+  <constalias name="狂怒" value="104101031" />
+  <constalias name="血战姿态" value="104101032" />
+  <constalias name="鲜血沸腾" value="104101033" />
+  <constalias name="血神降临" value="104101041" />
+  <constalias name="鲜血盛宴" value="104101042" />
+  <constalias name="免疫所有伤害" value="1001000001" />
   <constalias name="冻伤" value="1002000001" />
   <constalias name="流血" value="1002000002" />
 </module>
