@@ -66,7 +66,7 @@ namespace Sanmon.Module
         {
             return _package.LoadAssetSync<T>(location);
         }
-        
+
         /// <summary>
         /// 异步加载
         /// </summary>

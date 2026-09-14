@@ -20,6 +20,8 @@ namespace Sanmon.Battle
         
         public readonly Dictionary<string, Effect> effects = new ();
         
+        public readonly Dictionary<string, List<EffectEvent>> events = new ();
+        
         public EffectManager()
         {
 #if UNITY_EDITOR

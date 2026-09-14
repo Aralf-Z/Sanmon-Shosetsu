@@ -26,6 +26,19 @@ namespace Sanmon.Battle
             }
         }
         
+        private static void DoDamageInfoEvent(string eventName, DamageInfo damageInfo)
+        {
+            //todo 全局广播的效果
+            if(damageInfo.isAbort) return;
+            
+            foreach (var effectEvent in EffectManager.Ins.events[eventName])
+            {
+                if(effectEvent.unitHolder.Contains(damageInfo.attacker) ||  effectEvent.unitHolder.Contains(damageInfo.defender))
+                    continue;
+                effectEvent.damageAction?.Invoke(damageInfo);
+            }
+        }
+        
         private static void DoBuffEvent(Unit unit, string eventName, DamageInfo damageInfo)
         {
             if(damageInfo.isAbort) return;
@@ -99,7 +112,7 @@ namespace Sanmon.Battle
                 //buff效果
                 DoBuffEvent(context.attacker, BuffEvent.ATTACKER_AFTER_HIT, context);
                 DoBuffEvent(context.defender, BuffEvent.DEFENDER_AFTER_HIT, context);
-                
+                //DoDamageInfoEvent()
                 return true;
             }
         }

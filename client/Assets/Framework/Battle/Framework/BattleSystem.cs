@@ -45,6 +45,8 @@ namespace Sanmon.Battle
             var eff = entity.GetOrAddComponent<CmEffect>();
             var trans =  entity.GetOrAddComponent<CmTransform>();
             var collider = entity.GetOrAddComponent<CmCollider>();
+
+            entity.GetOrAddFunction<BattleFunction>();
             
             if(transform)
             {
@@ -71,6 +73,8 @@ namespace Sanmon.Battle
             var eff = en.AddComponent<CmEffect>();
             var trans =  en.AddComponent<CmTransform>();
             var collider = en.AddComponent<CmCollider>();
+
+            en.AddFunction<BattleFunction>();
             
             trans.SetBind(transform);
             

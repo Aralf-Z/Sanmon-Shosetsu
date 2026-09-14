@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using ZLua;
 
@@ -36,6 +37,10 @@ namespace Sanmon.Battle
         public Effect effect;
 
         public EventType eventType;
+
+        public HashSet<Unit> unitHolder;
+
+        public HashSet<Buff> buffHolder;
         
         public Action<DamageInfo> damageAction;
         
