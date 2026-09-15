@@ -34,6 +34,9 @@ namespace Sanmon.Battle
             [FINAL_DEFENDER_DERIVE] = EventType.DamageInfo,
             [FINAL_ATTACKER_AFTER_FINAL] = EventType.DamageInfo,
             [FINAL_DEFENDER_AFTER_FINAL] = EventType.DamageInfo,
+            
+            // 广播
+            [DEAL_DAMAGE_ON_UNIT] = EventType.DamageInfo,
         };
         
         // ============================================================
@@ -113,5 +116,12 @@ namespace Sanmon.Battle
 
         /// <summary> 结算阶段-防御者-结算后 </summary>
         public const string FINAL_DEFENDER_AFTER_FINAL = "final_defender_after_final";
+        
+        // ============================================================
+        // 广播
+        // ============================================================
+        
+        /// <summary> 广播 </summary>
+        public const string DEAL_DAMAGE_ON_UNIT =  "deal_damage_on_unit";
     }
 }

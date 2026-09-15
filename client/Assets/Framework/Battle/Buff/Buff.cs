@@ -21,7 +21,7 @@ namespace Sanmon.Battle
         public BuffData data;
 
         /// <summary> 添加时的时间戳 </summary>
-        public float addTimeStamp;
+        public float AddTimeStamp { get;  private set; }
         /// <summary> 当前层数 </summary>
         public float stack;
         /// <summary> 计时器 </summary>
@@ -42,7 +42,7 @@ namespace Sanmon.Battle
         
         void IBufferItem.OnAdd()
         {
-            addTimeStamp = Time.realtimeSinceStartup;
+            
         }
 
         void IBufferItem.OnUpdate(float dt)

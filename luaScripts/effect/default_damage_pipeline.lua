@@ -54,6 +54,16 @@ local function _final_defender_check_state(damage_info)
     damage_info.defender.tag: Add(global.enum['Battle.Tag'].Dead)
 end
 
+local function _deal_damage_on_unit(damage_info)
+    
+    --[[ print("deal damage on unit")
+    print(Csharp)
+    print(global.framework)
+    print(global.game_logic)
+    print("deal damage on unit") ]]
+   -- global.game_logic.BattleSystem.OnUnitDealBuff(damage_info.attacker, damage_info.defender, 1002000001)
+end
+
 return {
     hit_attacker_before_hit = _hit_attacker_before_hit,
     hit_attacker_check_hit = _hit_attacker_check_hit,
@@ -64,4 +74,5 @@ return {
 
     final_defender_evaluation = _final_defender_evaluation,
     final_defender_check_state = _final_defender_check_state,
+    deal_damage_on_unit = _deal_damage_on_unit,
 }

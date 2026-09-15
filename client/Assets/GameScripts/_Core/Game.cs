@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Game.Config;
 using Sanmon.Core;
 using Sanmon.Module;
@@ -8,12 +6,13 @@ using Sanmon.Syztem;
 
 namespace GameScripts
 {
-    public static class Game
+    public static partial class Game
     {
         private class MyGame : IGetModule
             , IGetEntity
             , IGetSystem
             , IGetNote { }
+        
         private static readonly MyGame game = new MyGame();
 
         public static AssetModule Asset => game.Module().Asset;
@@ -31,6 +30,5 @@ namespace GameScripts
         public static T Sys<T>() where T: SystemBase => Systems.Get<T>();
         
         public static T Note<T>() where T: NoteBase => Notes.Get<T>();
-        
     }
 }

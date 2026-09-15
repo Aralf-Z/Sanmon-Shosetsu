@@ -1,6 +1,6 @@
 using Sanmon.Helper;
 
-namespace Framework.Pipeline
+namespace Sanmon.Pipeline
 {
     public abstract class Handler<TContext>
     {

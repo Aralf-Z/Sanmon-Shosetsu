@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Sanmon.Helper;
 
-namespace Framework.Pipeline
+namespace Sanmon.Pipeline
 {
     public abstract class Pipeline<TContext>
     {

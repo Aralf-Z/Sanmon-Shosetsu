@@ -58,6 +58,8 @@ namespace Sanmon.Battle
             
             _note.allUnits.Add(entity, newUnit);
             
+            eff.Add("default_damage_pipeline");
+            
             return newUnit;
         }
         
@@ -82,6 +84,8 @@ namespace Sanmon.Battle
             
             _note.allUnits.Add(en, newUnit);
             
+            eff.Add("default_damage_pipeline");
+            
             return newUnit;
         }
         
@@ -105,13 +109,15 @@ namespace Sanmon.Battle
 
         public void OnUnitDealBuff(Unit caster, Unit carrier, int buffId)
         {
-            var buff = new Buff(buffId);
+            Logger.LogInfo($"{caster.entity.GetComponent<CmInfo>()} add {buffId} buff on {carrier.entity.GetComponent<CmInfo>()}");
             
-            buff.caster = caster;
-            buff.carrier = carrier;
-            buff.addTimeStamp = Time.realtimeSinceStartup;
-            //todo effect
-            //todo event
+            var buff = new Buff(buffId)
+            {
+                caster = caster,
+                carrier = carrier,
+            };
+            
+            carrier.buff.Add(buff);
         }
         
         private void DealOnce()

@@ -10,17 +10,9 @@ namespace Sanmon.Battle
     {
         private static readonly List<EffectEvent> DEFAULT_EVENTS = new();
 
-        private Dictionary<string, List<EffectEvent>> _events = new();
-        private Dictionary<string, EffectInfo> _effects = new();
-
-        protected internal override void OnAdded()
-        {
-            base.OnAdded();
-
-            //todo default_damage_pipeline
-            Add("default_damage_pipeline");
-        }
-
+        private readonly Dictionary<string, List<EffectEvent>> _events = new();
+        private readonly Dictionary<string, EffectInfo> _effects = new();
+        
         internal IReadOnlyList<EffectEvent> FindEvent(string eventName)
         {
             var r = _events.GetValueOrDefault(eventName, DEFAULT_EVENTS);
@@ -35,7 +27,7 @@ namespace Sanmon.Battle
             }
             else
             {
-                var be = EffectManager.Ins.Require(effect);
+                var be = EffectManager.Ins.RequireEffect(effect);
                 info = new EffectInfo() { effect = be, count = 1 };
                 _effects[effect] = info;
 

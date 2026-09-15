@@ -5,10 +5,14 @@ using ZLua;
 
 namespace Sanmon.Battle
 {
-    internal class Effect
+    public class Effect
     {
         public string name;
         
+        public Script script;
+
+        public bool IsOverride { get; internal set; }
+
         public EffectEvent[] events;
 
         public EffectEvent GetEvent(string eventName)
@@ -19,7 +23,7 @@ namespace Sanmon.Battle
         }
     }
 
-    internal enum EventType
+    public enum EventType
     {
         DamageInfo,
         HealInfo,
@@ -28,7 +32,14 @@ namespace Sanmon.Battle
         BuffHealInfo,
     }
 
-    internal class EffectEvent
+    public enum Script
+    {
+        None,
+        CSharp,
+        Lua,
+    }
+    
+    public class EffectEvent
     {
         public int order;
 
@@ -38,9 +49,9 @@ namespace Sanmon.Battle
 
         public EventType eventType;
 
-        public HashSet<Unit> unitHolder;
+        public readonly HashSet<Unit> unitHolder = new ();
 
-        public HashSet<Buff> buffHolder;
+        public readonly HashSet<Buff> buffHolder = new ();
         
         public Action<DamageInfo> damageAction;
         

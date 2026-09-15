@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Framework.Module
+namespace Sanmon.Module
 {
     public static partial class LuaUtils
     {

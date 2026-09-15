@@ -17,6 +17,7 @@ end
 return{
     ac = CSharp['Assembly-CSharp'],
     framework = CSharp['Game.Framework'],
+    game_logic = CSharp['Game.Logic'],
     enum = luban.enums,
     new_list = _new_list,
     new_dict = _new_dict,

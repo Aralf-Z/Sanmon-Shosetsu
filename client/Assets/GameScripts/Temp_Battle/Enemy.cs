@@ -21,7 +21,7 @@ namespace GameScripts.Temp_Battle
         
         private void Awake()
         {
-            self = Game.Sys<BattleSystem>().RegisterUnit("player", transform);
+            self = Game.Sys<BattleSystem>().RegisterUnit("enemy", transform);
             
             var health = self.attri.AddValue(Attribute.Health, Random.Range(15, 25));
             self.attri.AddValue(Attribute.Attack, 10f);

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Framework.Pipeline;
+using Sanmon.Pipeline;
 using Sanmon.Helper;
 
 namespace Sanmon.Battle
@@ -28,13 +28,10 @@ namespace Sanmon.Battle
         
         private static void DoDamageInfoEvent(string eventName, DamageInfo damageInfo)
         {
-            //todo 全局广播的效果
             if(damageInfo.isAbort) return;
             
-            foreach (var effectEvent in EffectManager.Ins.events[eventName])
+            foreach (var effectEvent in EffectManager.Ins.RequireEvent(eventName))
             {
-                if(effectEvent.unitHolder.Contains(damageInfo.attacker) ||  effectEvent.unitHolder.Contains(damageInfo.defender))
-                    continue;
                 effectEvent.damageAction?.Invoke(damageInfo);
             }
         }
@@ -45,7 +42,7 @@ namespace Sanmon.Battle
             
             foreach (var effectEvent in unit.effect.FindEvent(eventName))
             {
-                if (unit.buff.buffOnEvent.TryGetValue(eventName, out var list))
+                if (unit.buff.BuffOnEvent.TryGetValue(eventName, out var list))
                 {
                     foreach (var buff in list) 
                         effectEvent.buffDamageAction?.Invoke(buff, damageInfo);
@@ -112,7 +109,9 @@ namespace Sanmon.Battle
                 //buff效果
                 DoBuffEvent(context.attacker, BuffEvent.ATTACKER_AFTER_HIT, context);
                 DoBuffEvent(context.defender, BuffEvent.DEFENDER_AFTER_HIT, context);
-                //DoDamageInfoEvent()
+                
+                //广播
+                DoDamageInfoEvent(DealDamageEvent.DEAL_DAMAGE_ON_UNIT, context);
                 return true;
             }
         }

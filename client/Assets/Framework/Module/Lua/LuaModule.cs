@@ -6,8 +6,9 @@ using Sanmon.Module;
 using Unity.Properties;
 using UnityEngine;
 using ZLua;
+using Logger = Sanmon.Helper.Logger;
 
-namespace Framework.Module
+namespace Sanmon.Module
 {
     public class LuaModule: MonoBehaviour
         , IModule

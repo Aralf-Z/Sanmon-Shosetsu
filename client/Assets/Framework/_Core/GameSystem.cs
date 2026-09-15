@@ -39,7 +39,7 @@ namespace Sanmon.Core
             if (@new is ISystemUpdater updater)
                 _systemUpdaters.Add(updater);
             
-            Logger.LogInfo($"create system '{type.FullName}'", "system");
+            Logger.LogInfo($"create system '{type.FullName}'", "SYSTEM");
             
             return @new;
         }

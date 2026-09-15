@@ -13,7 +13,7 @@ namespace Sanmon.Battle
 
         public override void OnLogicUpdate(float dt)
         {
-           _cmBuff.buffs.Update(dt);
+           _cmBuff.Buffs.Update(dt);
         }
 
         public override void OnRemoved()

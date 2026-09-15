@@ -20,18 +20,21 @@ namespace Sanmon.Utility.Set
     public class DualBufferSet<T> where T : IBufferItem
     {
         private readonly Dictionary<int, HashSet<T>> _mainSet = new ();
+        private readonly HashSet<T> _allSet = new ();
         private readonly List<int> _order = new ();
         private readonly List<T> _pendingAdd = new ();
         private readonly List<T> _pendingRemove = new ();
+
+        public IReadOnlyCollection<T> AllItem => _allSet;
         
-        public void Add(T item)
+        public virtual void Add(T item)
         {
             item.SetStatus(BufferStatus.PendingAdd);
             _pendingAdd.Add(item);
             item.OnAdd();
         }
         
-        private void Remove(T item)
+        protected virtual void Remove(T item)
         {
             item.SetStatus(BufferStatus.PendingRemove);
             _pendingRemove.Add(item);
@@ -79,6 +82,7 @@ namespace Sanmon.Utility.Set
             {
                 item.SetStatus(BufferStatus.Running);
                 item.OnAdd();
+                _allSet.Add(item);
                 if (_mainSet.TryGetValue(item.Order, out var set))
                 {
                     set.Add(item);
@@ -96,6 +100,7 @@ namespace Sanmon.Utility.Set
             {
                 item.OnRemove();
                 item.SetStatus(BufferStatus.None);
+                _allSet.Remove(item);
                 _mainSet[item.Order].Remove(item);
             }
             

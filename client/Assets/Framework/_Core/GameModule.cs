@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Framework.Module;
 using Sanmon.Module;
 using UnityEngine;
+using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Core
 {
@@ -54,6 +54,7 @@ namespace Sanmon.Core
             {
                 if (_modules[_initIndex].IsInit)
                 {
+                    Logger.LogInfo($"'{_modules[_initIndex].GetType().Name}'初始化成功", "MODULE");
                     _initIndex++;
                     if (_initIndex >= _modules.Count) 
                         IsInit = true;
