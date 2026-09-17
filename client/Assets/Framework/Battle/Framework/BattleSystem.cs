@@ -58,7 +58,7 @@ namespace Sanmon.Battle
             
             _note.allUnits.Add(entity, newUnit);
             
-            eff.Add("default_damage_pipeline");
+            eff.Add(EffectBuiltin.DAMAGE_PIPELINE);
             
             return newUnit;
         }
@@ -84,7 +84,7 @@ namespace Sanmon.Battle
             
             _note.allUnits.Add(en, newUnit);
             
-            eff.Add("default_damage_pipeline");
+            eff.Add(EffectBuiltin.DAMAGE_PIPELINE);
             
             return newUnit;
         }

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 namespace Sanmon.Battle
 {
     /// <summary> 伤害管线事件 </summary>
-    internal static class DealDamageEvent
+    public static class DealDamageEvent
     {
-        public static readonly Dictionary<string, EventType> DEAL_DAMAGE_EVENT = new ()
+        internal static readonly Dictionary<string, EventType> DEAL_DAMAGE_EVENT = new ()
         {
             // 命中阶段
             [HIT_ATTACKER_BEFORE_HIT] = EventType.DamageInfo,

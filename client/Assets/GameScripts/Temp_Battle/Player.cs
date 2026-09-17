@@ -1,14 +1,17 @@
-using Game.Config.Battle;
+using System;
 using Sanmon.Battle;
 using Sanmon.Core;
 using Sanmon.GameEntity;
 using Sanmon.Helper;
 using UnityEngine;
+using Attribute = Game.Config.Battle.Attribute;
 
 namespace GameScripts.Temp_Battle
 {
     public class Player : MonoBehaviour
     {
+        public static Player Ins {get; private set;}
+        
         public float moveSpeed = 3f;
 
         public Unit self;
@@ -18,6 +21,9 @@ namespace GameScripts.Temp_Battle
         
         private void Awake()
         {
+            if (!Ins) Ins = this;
+            else throw new Exception("Error player");
+            
             self = Game.Sys<BattleSystem>().RegisterUnit("player", transform);
             
             var health = self.attri.AddValue(Attribute.Health, 100f);
@@ -42,8 +48,16 @@ namespace GameScripts.Temp_Battle
             {
                 var start = transform.position.SetY(3);
                 var target = Game.Sys<BattleSystem>().SearchNearestUnit(self, Group.Enemy);
-                Bullet.Cast(self, start, target.transform.Position);
-                castTimer = castInterval;
+                if (target != null)
+                {
+                    Bullet.Cast(self, start, target.transform.Position);
+                    castTimer = castInterval;
+                }
+                else
+                {
+                    Bullet.Cast(self, start, transform.position + Vector3.forward * 10);
+                    castTimer = castInterval;
+                }
             }
         }
     }

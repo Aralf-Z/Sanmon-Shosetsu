@@ -193,7 +193,7 @@ namespace GameScript.ModuleName.SubModule
 |audio|``sfx``|``sfx_on_click_confirm``|
 |mesh|``mesh``|``mesh_player``|
 |material|``mat``|``mat_ui_common``|
-|prefab|``pr``|``pr_player``|
+|prefab|``pb``|``pb_player``|
 |prefab ui|``ui``|``ui_hud``|
 |prefab vfx|``vfx``|``vfx_on_enemy_spawn``|
 |shader|``s``|``s_dissolve``|

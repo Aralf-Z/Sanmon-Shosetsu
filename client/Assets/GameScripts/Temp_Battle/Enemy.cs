@@ -17,7 +17,6 @@ namespace GameScripts.Temp_Battle
         public float speed = .5f;
         
         [SerializeField] private BindUnitCollider unitCollider;
-        [SerializeField] private Player target;
         
         private void Awake()
         {
@@ -42,9 +41,9 @@ namespace GameScripts.Temp_Battle
             }
             else
             {
-                if (!target.self.tag.Check(Tag.Dead))
+                if (!Player.Ins.self.tag.Check(Tag.Dead))
                 {
-                    transform.position += (target.transform.position - transform.position) * speed * Time.deltaTime;
+                    transform.position += (Player.Ins.transform.position - transform.position) * speed * Time.deltaTime;
                 }
             }
         }

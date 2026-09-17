@@ -6,8 +6,6 @@ namespace GameScripts.Temp_Battle
 {
     public class EnemySpawner: MonoBehaviour
     {
-        public Enemy template;
-
         public float range;
         
         public float interval;
@@ -24,7 +22,7 @@ namespace GameScripts.Temp_Battle
             {
                 for (var i = 0; i < count; i++)
                 {
-                    var en = Instantiate(template.gameObject);
+                    var en = Game.Asset.LoadPrefabAndInstantiateNew("pb_enemy");
                     var pos = transform.position + new Vector3(Random.Range(0, 1f), 0, Random.Range(0, 1f)) * Random.Range(-range, range);
                     en.transform.position = new Vector3(pos.x, 2f, pos.z);
                 }

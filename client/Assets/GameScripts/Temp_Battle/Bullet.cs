@@ -29,13 +29,13 @@ namespace GameScripts.Temp_Battle
         public static void Cast(Unit caster, Vector3 start, Vector3 target)
         {
             var face = target - start;
-            var instance = Game.Asset.LoadPrefabAndInstantiateNew("Assets/GameAsset/prefab/bullet");
+            var instance = Game.Asset.LoadPrefabAndInstantiateNew("pb_bullet");
             var bullet = instance.GetComponent<Bullet>();
 
             bullet.caster = caster;
             
             bullet.transform.position = start;
-            bullet.direction = face;
+            bullet.direction = face.normalized;
             if(face != Vector3.zero)
                 bullet.transform.rotation = Quaternion.LookRotation(face);
         }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -60,23 +61,26 @@ namespace Sanmon.Module
 
         public IEnumerable<LuaInfo> GetLuaModule(string workspace)
         {
-            var path = Path.Combine(RootPath, workspace);
-
-            if (!Directory.Exists(path))
-                throw new InvalidPathException(path);
-
-            foreach (var file in Directory.EnumerateFiles(path, "*.lua", SearchOption.AllDirectories))
-            {
-                var fullPath = file.PathFormat();
-                var relativePath = Path.GetRelativePath(path, file);
-                var moduleName = Path.Combine(workspace, Path.ChangeExtension(relativePath, null));
-                var fileName = Path.GetFileNameWithoutExtension(file);
-
-                yield return new LuaInfo(fullPath, moduleName, fileName);
-            }  
+            return Array.Empty<LuaInfo>();
+            
+            // todo 暂时不用lua模块
+            // var path = Path.Combine(RootPath, workspace);
+            //
+            // if (!Directory.Exists(path))
+            //     throw new InvalidPathException(path);
+            //
+            // foreach (var file in Directory.EnumerateFiles(path, "*.lua", SearchOption.AllDirectories))
+            // {
+            //     var fullPath = file.PathFormat();
+            //     var relativePath = Path.GetRelativePath(path, file);
+            //     var moduleName = Path.Combine(workspace, Path.ChangeExtension(relativePath, null));
+            //     var fileName = Path.GetFileNameWithoutExtension(file);
+            //
+            //     yield return new LuaInfo(fullPath, moduleName, fileName);
+            // }  
         }
 
-        public struct LuaInfo
+        public readonly struct LuaInfo
         {
             public readonly string fullPath;
             public readonly string module;
