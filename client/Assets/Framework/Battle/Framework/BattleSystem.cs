@@ -31,6 +31,11 @@ namespace Sanmon.Battle
             _dealHealPipeline = new DealHealPipeline();
         }
 
+        public void RegisterEffect(List<Effect> newEffects)
+        {
+            EffectManager.Ins.RegisterEffect(newEffects);
+        }
+        
         public Unit RegisterUnit(Entity entity, Transform transform = null)
         {
             if(_note.allUnits.TryGetValue(entity, out var unit))

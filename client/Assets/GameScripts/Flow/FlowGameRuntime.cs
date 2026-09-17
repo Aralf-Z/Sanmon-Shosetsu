@@ -1,6 +1,7 @@
 using System;
+using System.Collections.Generic;
+using Sanmon.Battle;
 using Sanmon.Core;
-using Sanmon.Helper;
 using UnityEngine.SceneManagement;
 
 namespace GameScripts
@@ -16,6 +17,13 @@ namespace GameScripts
 
         protected override void Enter()
         {
+            var effList = new List<Effect>()
+            {
+                DealDamageEffect.effect,
+            };
+            
+            Game.BattleSystem.RegisterEffect(effList);
+            
             SceneManager.LoadScene("GameRuntime");
         }
 

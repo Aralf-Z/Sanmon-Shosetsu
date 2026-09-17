@@ -7,9 +7,14 @@ namespace Sanmon.Battle
 {
     internal static partial class EffectBuiltin
     {
-        public static readonly List<Effect> effects = new ()
+        public static readonly List<Effect> effects;
+
+        static EffectBuiltin()
         {
-            damageEffect,
-        };
+            effects = new ()
+            {
+                damageEffect,
+            };
+        }
     }
 }
