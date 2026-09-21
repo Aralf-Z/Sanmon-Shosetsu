@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
+using Sanmon.Helper;
 using UnityEngine;
-using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Core
 {
@@ -22,8 +22,8 @@ namespace Sanmon.Core
         {
             _timer = DateTime.Now;
             
-            Logger.LogInfo("初始化游戏", "初始化");
-            Logger.LogInfo($"unity version: {Application.unityVersion}", "初始化");
+            SanmonLogger.LogInfo("初始化游戏", "初始化");
+            SanmonLogger.LogInfo($"unity version: {Application.unityVersion}", "初始化");
             
             StartCoroutine(InitGame());
         }
@@ -37,7 +37,7 @@ namespace Sanmon.Core
 
         protected override void Exit()
         {
-            Logger.LogInfo($"初始化游戏模块结束, 耗时 [{(DateTime.Now - _timer).TotalMilliseconds / 1000:F5}s]", "初始化");
+            SanmonLogger.LogInfo($"初始化游戏模块结束, 耗时 [{(DateTime.Now - _timer).TotalMilliseconds / 1000:F5}s]", "初始化");
         }
 
         private IEnumerator InitGame()
@@ -46,22 +46,22 @@ namespace Sanmon.Core
             
             yield return new WaitUntil(() => App.gameModule.IsInit);
             
-            Logger.LogInfo("'Module'初始化完成", "初始化");
+            SanmonLogger.LogInfo("'Module'初始化完成", "初始化");
             App.gameEntity.Init();
             
             yield return new WaitUntil(() => App.gameEntity.IsInit);
             
-            Logger.LogInfo("'Entity'初始化完成", "初始化");
+            SanmonLogger.LogInfo("'Entity'初始化完成", "初始化");
             App.gameNote.Init();
             
             yield return new WaitUntil(() => App.gameNote.IsInit);
             
-            Logger.LogInfo("'Note'初始化完成", "初始化");
+            SanmonLogger.LogInfo("'Note'初始化完成", "初始化");
             App.gameSystem.Init();
             
             yield return new WaitUntil(() => App.gameSystem.IsInit);
             
-            Logger.LogInfo("'System'初始化完成", "初始化");
+            SanmonLogger.LogInfo("'System'初始化完成", "初始化");
             
             _done = true;
         }

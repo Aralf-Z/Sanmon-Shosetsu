@@ -7,7 +7,6 @@ using Sanmon.Module;
 using Unity.Properties;
 using UnityEngine;
 using ZLua;
-using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Module
 {

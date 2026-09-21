@@ -71,6 +71,35 @@ namespace GameScript.ModuleName.SubModule
 
 ## 代码布局与格式
 
+- **成员顺序**
+  ```csharp
+  //属性
+  public int Property1 { get; set; }
+  internal int Property2 { get; set; }
+  internal protected int Property3 { get; set; }
+  protected int Property4 { get; set; }
+  private int Property5 { get; set; }
+
+  //字段
+  xxxxx float field;
+
+  //构造/析构
+  xxxxx constructor
+  {
+
+  }
+
+  //方法
+  xxxxx void Method(){}
+
+  //父类
+  xxxxx override ParentMethod(){}
+
+  //接口
+  xxxxx void InterfaceMethod(){} 
+
+  ```
+
 - **花括号**：推荐换行.
   ```csharp
   if (condition)

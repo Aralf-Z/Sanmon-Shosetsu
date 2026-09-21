@@ -4,9 +4,7 @@ namespace Sanmon.Module
 {
     public interface IUIView
     {
-        UIHandle Handle { get; }
-        
-        void Open();
+        void Show();
         void Hide();
         void Close();
     }

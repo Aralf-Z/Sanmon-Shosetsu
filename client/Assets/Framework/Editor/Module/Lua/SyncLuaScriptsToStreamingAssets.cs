@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Sanmon.Helper;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
-using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Editor
 {
@@ -25,7 +25,7 @@ namespace Sanmon.Editor
 
             if (!Directory.Exists(sourceDir))
             {
-                Logger.LogWarning($"lua源文件路径错误: {sourceDir}", "lua");
+                SanmonLogger.LogWarning($"lua源文件路径错误: {sourceDir}", "lua");
                 return;
             }
 
@@ -69,7 +69,7 @@ namespace Sanmon.Editor
 
             AssetDatabase.Refresh();
 
-            Logger.LogInfo($"已将lua脚本从'{sourceDir}'同步到'{targetDir}'", "lua");
+            SanmonLogger.LogInfo($"已将lua脚本从'{sourceDir}'同步到'{targetDir}'", "lua");
         }
     }
 }

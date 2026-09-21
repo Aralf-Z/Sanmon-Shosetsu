@@ -5,7 +5,6 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Editor
 {
@@ -92,7 +91,7 @@ namespace Sanmon.Editor
                 }
             }
             
-            // Logger.LogInfo($"update scenes '{string.Join(", ", _scene)}'.", "Editor");
+            // SanmonLogger.LogInfo($"update scenes '{string.Join(", ", _scene)}'.", "Editor");
         }
     }
 }

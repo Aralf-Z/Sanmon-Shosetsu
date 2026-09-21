@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sanmon.Helper;
 using Sanmon.Note;
 using UnityEngine;
-using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Core
 {
@@ -37,7 +37,7 @@ namespace Sanmon.Core
             @new.Init();
             _notes.Add(type, @new);
             
-            Logger.LogInfo($"create note '{type.FullName}'", "NOTE");
+            SanmonLogger.LogInfo($"create note '{type.FullName}'", "NOTE");
             
             return @new;
         }

@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using Sanmon.Module;
 using Sanmon.Core;
+using Sanmon.Helper;
 using Sanmon.Utility.Singleton;
 using ZLua;
-using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Battle
 {
@@ -34,7 +34,7 @@ namespace Sanmon.Battle
             LoadLuaEffect();
             ImportEvents();
 #if UNITY_EDITOR
-            Logger.LogInfo($"EffectManager 初始化 cost '{UnityEngine.Time.realtimeSinceStartup - time}s'", "战斗");
+            SanmonLogger.LogInfo($"EffectManager 初始化 cost '{UnityEngine.Time.realtimeSinceStartup - time}s'", "战斗");
 #endif
         }
 
@@ -46,7 +46,7 @@ namespace Sanmon.Battle
             foreach (var effect in newEffects)
             {
                 if(effect.script is Script.None)
-                    Logger.LogWarning($"未知来源, effect '{effect.name}' 的脚本来源为{effect.script}", "Effect");
+                    SanmonLogger.LogWarning($"未知来源, effect '{effect.name}' 的脚本来源为{effect.script}", "Effect");
                 else
                 {
                     effect.IsOverride = effects.ContainsKey(effect.name);
@@ -148,7 +148,7 @@ namespace Sanmon.Battle
 #if UNITY_EDITOR
                 if (effect.IsOverride)
                 {
-                    Logger.LogWarning($"'{effect.name}' is override.", "Effect");
+                    SanmonLogger.LogWarning($"'{effect.name}' is override.", "Effect");
                 }
 #endif
                 

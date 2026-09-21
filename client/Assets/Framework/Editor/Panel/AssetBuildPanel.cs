@@ -52,17 +52,17 @@
 //                     }
 //
 //                     var name = AssetDatabase.LoadAssetAtPath<Object>(originalPath).name;
-//                     Helper.Logger.LogInfo($"资源录入 - '{name}'.","Asset");
+//                     Helper.SanmonLogger.LogInfo($"资源录入 - '{name}'.","Asset");
 //                     EditorUtility.DisplayProgressBar("ResourcesConfigBuilding", originalPath, (float) i / guids.Length);
 //                     resConfig.Add(name, path[0]);
 //                 }
 //                 
 //                 CreateAssetConfig(resConfig);
-//                 Helper.Logger.LogInfo("资源路径配置完成","Asset");
+//                 Helper.SanmonLogger.LogInfo("资源路径配置完成","Asset");
 //             }
 //             catch (Exception e)
 //             {
-//                 Helper.Logger.LogError($"资源路径配置失败:{e.Message}","Asset");
+//                 Helper.SanmonLogger.LogError($"资源路径配置失败:{e.Message}","Asset");
 //                 throw;
 //             }
 //             finally

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using YooAsset;
 using Object = UnityEngine.Object;
@@ -45,7 +46,7 @@ namespace Sanmon.Module
         private ResourcePackage _package;
         private AssetLogger _logger;
         private bool _isInit;
-
+        
         /// <summary>
         /// 同步加载预制体并且实例化
         /// </summary>
@@ -53,8 +54,8 @@ namespace Sanmon.Module
         /// <param name="options">实例化选项</param>
         public GameObject LoadPrefabAndInstantiateNew(string location, InstantiateOptions? options = null)
         {
-            //todo 引用计数，计时卸载优化？
             var handle = LoadSync<GameObject>(location);
+            
             return handle.InstantiateSync(options ?? new InstantiateOptions(true));
         }
         

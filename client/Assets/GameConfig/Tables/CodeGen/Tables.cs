@@ -30,6 +30,10 @@ public partial class Tables
     /// 天赋-04
     /// </summary>
     public Character.TbTalentData TbTalentData {get; }
+    /// <summary>
+    /// 界面UI-01
+    /// </summary>
+    public Module.TbUIData TbUIData {get; }
 
     public Tables(System.Func<string, JSONNode> loader)
     {
@@ -40,6 +44,7 @@ public partial class Tables
         TbBuffData = new Battle.TbBuffData(loader("battle_tbbuffdata"));
         TbEffectData = new Battle.TbEffectData(loader("battle_tbeffectdata"));
         TbTalentData = new Character.TbTalentData(loader("character_tbtalentdata"));
+        TbUIData = new Module.TbUIData(loader("module_tbuidata"));
         ResolveRef();
     }
     
@@ -52,6 +57,7 @@ public partial class Tables
         TbBuffData.ResolveRef(this);
         TbEffectData.ResolveRef(this);
         TbTalentData.ResolveRef(this);
+        TbUIData.ResolveRef(this);
     }
 }
 

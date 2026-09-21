@@ -5,7 +5,7 @@ namespace Sanmon.Utility.ObjectPool
     /// <summary>
     /// 对象接口
     /// </summary>
-    public interface IObject<T>
+    public interface IPooled
     {
         bool IsCollected { get; set; }
 

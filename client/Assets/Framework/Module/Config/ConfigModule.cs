@@ -5,9 +5,9 @@ using Cysharp.Threading.Tasks;
 using Game.Config;
 using Luban;
 using Luban.SimpleJSON;
+using Sanmon.Helper;
 using UnityEngine;
 using UnityEngine.Networking;
-using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Module
 {
@@ -26,15 +26,15 @@ namespace Sanmon.Module
         void IModule.Init()
         {
             Version = new Version();
-            Logger.LogInfo("版本信息加载成功！",  "CONFIG");
-            Logger.LogInfo($"游戏版本：{Version.GameVersion}",  "CONFIG");
-            Logger.LogInfo($"游戏内部版本：{Version.GameVersionInteral}",  "CONFIG");
+            SanmonLogger.LogInfo("版本信息加载成功！",  "CONFIG");
+            SanmonLogger.LogInfo($"游戏版本：{Version.GameVersion}",  "CONFIG");
+            SanmonLogger.LogInfo($"游戏内部版本：{Version.GameVersionInteral}",  "CONFIG");
             
             var tablesCtor = typeof(Tables).GetConstructors()[0];
             var loaderReturnType = tablesCtor.GetParameters()[0].ParameterType.GetGenericArguments()[1];
             
 #if (UNITY_WEBGL || UNITY_ANDROID) && !UNITY_EDITOR
-            Logger.LogWarning("Web和安卓模式尚未支持表格加载！", "CONFIG");
+            SanmonLogger.LogWarning("Web和安卓模式尚未支持表格加载！", "CONFIG");
             // try
             // {
             //     using var request = UnityWebRequest.Get(fileListPath);
@@ -78,7 +78,7 @@ namespace Sanmon.Module
             
                 Tables = (Tables)tablesCtor.Invoke(new object[] {loader});
                 
-                Logger.LogInfo("表配置加载成功！", "CONFIG");
+                SanmonLogger.LogInfo("表配置加载成功！", "CONFIG");
 
                 
                 

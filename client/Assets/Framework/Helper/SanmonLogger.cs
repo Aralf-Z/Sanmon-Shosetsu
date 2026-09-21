@@ -6,9 +6,8 @@ namespace Sanmon.Helper
     /// <summary>
     /// Unity的潜规则：Logger结尾的类 + Log开头的方法控制台双击跳转会到调用该方法的路径
     /// </summary>
-    public static class Logger
+    public static class SanmonLogger
     {
-        //todo Warning和Error不走Log
         private static LoggerConfig Config => LoggerConfig.Ins;
         
         private static void Log(string message, LoggerConfig.Level level, string title = null, Color? color = null)

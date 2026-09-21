@@ -2,23 +2,23 @@ using System.Collections.Generic;
 
 namespace Sanmon.Utility.ObjectPool
 {
-    public class ObjectPool<T> : IObjectPool<T> where T : class, IObject<T>, new()
+    public class Pool<T> : IPool<T> where T : class, IPooled, new()
     {
-        private readonly Queue<T> mPool = new ();
-        private readonly HashSet<T> mCached = new ();
+        private readonly Queue<T> _pool = new ();
+        private readonly HashSet<T> _cached = new ();
         
         public T Require()
         {
-            if (mPool.Count <= 0)
+            if (_pool.Count <= 0)
             {
                 var newObj = new T();
                 newObj.OnNew();
-                mPool.Enqueue(newObj);
+                _pool.Enqueue(newObj);
             }
-            var obj = mPool.Dequeue();
+            var obj = _pool.Dequeue();
             obj.IsCollected = false;
             obj.OnRequire();
-            mCached.Add(obj);
+            _cached.Add(obj);
             return obj;
         }
 
@@ -31,8 +31,8 @@ namespace Sanmon.Utility.ObjectPool
             if (obj.IsCollected) return;
             obj.IsCollected = true;
             obj.OnRecycle();
-            mPool.Enqueue(obj);
-            mCached.Remove(obj);
+            _pool.Enqueue(obj);
+            _cached.Remove(obj);
         }
 
         /// <summary>
@@ -49,13 +49,13 @@ namespace Sanmon.Utility.ObjectPool
         /// </summary>
         public void Recycle()
         {
-            foreach (var obj in mCached)
+            foreach (var obj in _cached)
             {
                 obj.IsCollected = true;
                 obj.OnRecycle();
-                mPool.Enqueue(obj);
+                _pool.Enqueue(obj);
             }
-            mCached.Clear();
+            _cached.Clear();
         }
         
         /// <summary>
@@ -64,7 +64,7 @@ namespace Sanmon.Utility.ObjectPool
         public void Clear()
         {
             Recycle();
-            mPool.Clear();
+            _pool.Clear();
         }
     }
 }

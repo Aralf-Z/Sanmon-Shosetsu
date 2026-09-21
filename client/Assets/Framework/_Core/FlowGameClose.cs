@@ -13,7 +13,7 @@ namespace Sanmon.Core
 
         protected internal override void Enter()
         {
-            Logger.LogInfo("关闭游戏管理器", "流程");
+            SanmonLogger.LogInfo("关闭游戏管理器", "流程");
             App.gameModule.Destroy();
             App.gameNote.Destroy();
             App.gameEntity.Destroy();
@@ -26,7 +26,7 @@ namespace Sanmon.Core
 
         protected override void Exit()
         {
-            Logger.LogInfo("关闭游戏管理器结束", "流程");
+            SanmonLogger.LogInfo("关闭游戏管理器结束", "流程");
         }
     }
 }

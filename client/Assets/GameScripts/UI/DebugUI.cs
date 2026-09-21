@@ -18,7 +18,7 @@ namespace GameScripts
             
         }
 
-        protected override void OnOpen()
+        protected override void OnShow()
         {
             
         }
@@ -32,8 +32,6 @@ namespace GameScripts
         {
             
         }
-
-        public override UIOrder Order => UIOrder.Tip;
     }
  
 }

@@ -3,7 +3,7 @@ using GameConsole.GameUI;
 using RedSaw.CommandLineInterface;
 using UnityEngine;
 using GameScripts;
-using Logger = Sanmon.Helper.Logger;
+using Sanmon.Helper;
 
 namespace GameConsole.Implementor
 {
@@ -14,7 +14,7 @@ namespace GameConsole.Implementor
         {
             foreach (var td in GameScripts.Game.Tables.TbTalentData.DataList)
             {
-                Logger.LogInfo(FormatDesc(td.Desc, td.DescParams));
+                SanmonLogger.LogInfo(FormatDesc(td.Desc, td.DescParams));
             }
         }
         

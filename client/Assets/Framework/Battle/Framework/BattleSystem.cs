@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Game.Config.Battle;
 using Sanmon.Core;
 using Sanmon.GameEntity;
+using Sanmon.Helper;
 using Sanmon.Syztem;
 using UnityEngine;
 using ZLinq;
-using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Battle
 {
@@ -114,7 +114,7 @@ namespace Sanmon.Battle
 
         public void OnUnitDealBuff(Unit caster, Unit carrier, int buffId)
         {
-            Logger.LogInfo($"{caster.entity.GetComponent<CmInfo>()} add {buffId} buff on {carrier.entity.GetComponent<CmInfo>()}");
+            SanmonLogger.LogInfo($"{caster.entity.GetComponent<CmInfo>()} add {buffId} buff on {carrier.entity.GetComponent<CmInfo>()}");
             
             var buff = new Buff(buffId)
             {
@@ -156,7 +156,7 @@ namespace Sanmon.Battle
             _isDealing = false;
             
             var time = ((Time.realtimeSinceStartup - timer) * 1000).ToString("F5");
-            Logger.LogDebug($"伤害处理流程花费[{time}ms]", "测试");
+            SanmonLogger.LogDebug($"伤害处理流程花费[{time}ms]", "测试");
         }
         
         public Unit SearchNearestUnit(Unit self, Group group)

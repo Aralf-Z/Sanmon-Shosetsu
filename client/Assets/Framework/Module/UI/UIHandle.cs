@@ -1,5 +1,9 @@
+using System;
+using Game.Config.Module;
 using Sanmon.Core;
+using Sanmon.Helper;
 using UnityEngine;
+using YooAsset;
 
 namespace Sanmon.Module
 {
@@ -8,32 +12,86 @@ namespace Sanmon.Module
         public bool IsLoaded { get; private set; }
         public bool IsVisible { get; private set; }
         public bool IsDestroy { get; private set; }
+        public UIWindow Window { get; private set; }
+        public UIData Config { get; private set; }
         
-        public IUIView View{ get; private set; }
+        internal UIMetaDataAttribute metaData;
+        
         private GameObject _go;
-
+        private Canvas _mainCanvas;
+        private AssetHandle _assetHandle;
+        
         internal UIHandle() { }
-
-        internal void Load(string path)
-        {
-            _go = this.Module().Asset.LoadPrefabAndInstantiateNew(path);
-            View = _go.GetComponent<IUIView>();
-            IsLoaded = true;
-        }
 
         public void Destroy()
         {
+            if (IsLoaded)
+            {
+                Window.Close();
+            }
             
+            IsDestroy = true;
+            _assetHandle.Dispose();
         }
         
         public void Show()
         {
-            
+            IsVisible = true;
+            SetVisible();
         }
 
         public void Hide()
         {
+            IsVisible = false;
+            SetVisible();
+        }
+        
+        internal void TryLoad()
+        {
+            if(IsLoaded) return;
+            if(metaData == null) return;
+
+            Config = this.Module().Config.Tables.TbUIData.GetOrDefault(metaData.id);
+
+            if (Config == null)
+            {
+                SanmonLogger.LogWarning($"未找到配置数据 -> '{metaData.id}'", UIModule.TITLE);
+            }
+            else
+            {
+                _assetHandle = this.Module().Asset.LoadAsync<GameObject>(Config.Asset);
+                _assetHandle.Completed += OnLoaded;
+            }
+        }
+
+        private void SetVisible()
+        {
+            if(!_assetHandle.IsDone) return;
             
+            if (IsVisible)
+            {
+                Window.Show();
+            }
+            else
+            {
+                Window.Hide();
+            }
+        }
+        
+        private void OnLoaded(AssetHandle handle)
+        {
+            _assetHandle = handle;
+            _go = handle.GetAssetObject<GameObject>();
+            _mainCanvas = _go.GetComponent<Canvas>();
+            Window = _go.GetComponent<UIWindow>();
+            
+            _go.transform.SetParent(this.Module().UI.Root);
+            _mainCanvas.sortingLayerName = Config.SortingLayer;
+            _mainCanvas.sortingOrder = Config.OrderInLayer;
+            Window.OnCreate();
+            
+            IsLoaded = true;
+            SetVisible();
         }
     }
 }

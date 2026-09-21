@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sanmon.Helper;
 using Sanmon.Syztem;
 using UnityEngine;
-using Logger = Sanmon.Helper.Logger;
 
 namespace Sanmon.Core
 {
@@ -39,7 +39,7 @@ namespace Sanmon.Core
             if (@new is ISystemUpdater updater)
                 _systemUpdaters.Add(updater);
             
-            Logger.LogInfo($"create system '{type.FullName}'", "SYSTEM");
+            SanmonLogger.LogInfo($"create system '{type.FullName}'", "SYSTEM");
             
             return @new;
         }

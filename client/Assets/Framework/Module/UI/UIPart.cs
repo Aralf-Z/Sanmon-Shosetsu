@@ -3,34 +3,55 @@ using UnityEngine;
 namespace Sanmon.Module
 {
     /// <summary>
-    /// ui视窗子元素
+    /// ui视窗元素
     /// </summary>
     public abstract partial class UIPart: MonoBehaviour
         , IUIView
     {
-        public UIHandle Handle { get; }
-
-        public void Open()
+        //todo focus & unfocus 功能开发
+        
+        /// <summary>
+        /// 显示
+        /// </summary>
+        public void Show()
         {
             gameObject.SetActive(true);
-            OnOpen();
+            OnShow();
         }
 
+        /// <summary>
+        /// 隐藏
+        /// </summary>
         public void Hide()
         {
             gameObject.SetActive(false);
             OnHide();
         }
 
+        /// <summary>
+        /// 关闭
+        /// </summary>
         public void Close()
         {
             Hide();
             OnClose();
         }
         
+        /// <summary>
+        /// 创建时
+        /// </summary>
         protected internal abstract void OnCreate();
-        protected abstract void OnOpen();
+        /// <summary>
+        /// 显示时
+        /// </summary>
+        protected abstract void OnShow();
+        /// <summary>
+        /// 隐藏时
+        /// </summary>
         protected abstract void OnHide();
+        /// <summary>
+        /// 关闭时
+        /// </summary>
         protected abstract void OnClose();
     }
 }

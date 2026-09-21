@@ -6,7 +6,7 @@ namespace Sanmon.Utility.ObjectPool
     /// 对象池接口
     /// </summary>
     /// <typeparam name="T">对象</typeparam>
-    public interface IObjectPool<T> where T : IObject<T>
+    public interface IPool<T> where T : IPooled
     {
         T Require();
     

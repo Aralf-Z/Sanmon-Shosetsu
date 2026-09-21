@@ -26,7 +26,7 @@ namespace GameScripts
                         if (d.defender.tag.Check(Tag.Dead))
                             d.isAbort = true;
                         
-                        Logger.LogDebug($"{d}", "测试");
+                        SanmonLogger.LogDebug($"{d}", "测试");
                     }
                 },
                 new()
