@@ -1,17 +1,35 @@
+using System;
 using System.Collections.Generic;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Sanmon.Utility.ObjectPool
 {
-    public class Pool<T> : IPool<T> where T : class, IPooled, new()
+    public class Pool<T> : IPool<T> where T : class, IPooled
     {
+        protected Func<T> _create;
+        
         private readonly Queue<T> _pool = new ();
         private readonly HashSet<T> _cached = new ();
         
+        protected Pool()
+        {
+        }
+
+        public Pool(Func<T> create)
+        {
+            _create = create ?? throw new ArgumentNullException(nameof(create));
+        }
+
+        /// <summary>
+        /// 请求对象
+        /// </summary>
+        /// <returns></returns>
         public T Require()
         {
             if (_pool.Count <= 0)
             {
-                var newObj = new T();
+                var newObj = _create.Invoke();
                 newObj.OnNew();
                 _pool.Enqueue(newObj);
             }
@@ -65,6 +83,37 @@ namespace Sanmon.Utility.ObjectPool
         {
             Recycle();
             _pool.Clear();
+        }
+    }
+
+    public class SimplePool<T> : Pool<T> where T : class, IPooled, new()
+    {
+        public SimplePool()
+        {
+            _create = () => new T();
+        }
+    }
+
+    public class MonoPool<T> : Pool<T> where T : MonoBehaviour, IPooled
+    {
+        private readonly GameObject _template;
+        private readonly Transform _parent;
+        
+        public MonoPool(GameObject template, Transform parent = null)
+        {
+            _template = template;
+            _parent = parent ?? template.transform.parent;
+
+            _template.SetActive(false);
+            
+            _create = Create;
+        }
+
+        private T Create()
+        {
+            var go = Object.Instantiate(_template, _parent);
+            go.SetActive(true);
+            return go.GetComponent<T>();
         }
     }
 }
