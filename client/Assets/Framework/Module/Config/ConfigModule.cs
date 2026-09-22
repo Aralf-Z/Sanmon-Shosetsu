@@ -21,20 +21,14 @@ namespace Sanmon.Module
         bool IModule.IsInit => _isInit;
 
         public Tables Tables { get; private set; }
-        public Version Version { get; private set; }
         
         void IModule.Init()
         {
-            Version = new Version();
-            SanmonLogger.LogInfo("版本信息加载成功！",  "CONFIG");
-            SanmonLogger.LogInfo($"游戏版本：{Version.GameVersion}",  "CONFIG");
-            SanmonLogger.LogInfo($"游戏内部版本：{Version.GameVersionInteral}",  "CONFIG");
-            
             var tablesCtor = typeof(Tables).GetConstructors()[0];
             var loaderReturnType = tablesCtor.GetParameters()[0].ParameterType.GetGenericArguments()[1];
             
 #if (UNITY_WEBGL || UNITY_ANDROID) && !UNITY_EDITOR
-            SanmonLogger.LogWarning("Web和安卓模式尚未支持表格加载！", "CONFIG");
+            SanmonLogger.LogWarning("Web和安卓模式尚未支持表格加载", "CONFIG");
             // try
             // {
             //     using var request = UnityWebRequest.Get(fileListPath);
@@ -78,7 +72,7 @@ namespace Sanmon.Module
             
                 Tables = (Tables)tablesCtor.Invoke(new object[] {loader});
                 
-                SanmonLogger.LogInfo("表配置加载成功！", "CONFIG");
+                SanmonLogger.LogInfo("表配置加载成功", "CONFIG");
 
                 
                 

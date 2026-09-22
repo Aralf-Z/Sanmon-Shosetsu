@@ -364,9 +364,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 753a2b639bf349aba93e014f3a8bd906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  template: {fileID: 0}
   range: 116.9
-  interval: 2
+  interval: 4
   count: 2
 --- !u!1 &995389163
 GameObject:

@@ -2,29 +2,31 @@ using UnityEngine;
 
 namespace Sanmon.Module
 {
-    public class Version
+    public static class Version
     {
-        private GameVersion _gameVersion;
+        private static GameVersion _gameVersion;
 
-        public Version()
+        static Version()
         {
             _gameVersion = Sanmon.Module.GameVersion.Ins;
 
-            var v1 = _gameVersion.versionCode / 100_000_000;
-            var v2 = v1 == 0 ? _gameVersion.versionCode / 1000_000 : _gameVersion.versionCode % v1 / 1000_000;
-            var v3 = v2 == 0 ? _gameVersion.versionCode / 1000 : _gameVersion.versionCode % v2 / 1000;
-            var v4 = v3 == 0 ? _gameVersion.versionCode : _gameVersion.versionCode % v3;
+            var versionCode = _gameVersion.versionCode;
 
-            GameVersion = $"version {v1:00}.{v2:00}.{v3:000}";
-            GameVersionInteral = $"version {v1:00}.{v2:00}.{v3:000}.{v4:000}";
+            var v1 = versionCode / 100_00_0000;
+            var v2 = versionCode / 100_0000 % 100;
+            var v3 = versionCode / 1_0000 % 100;
+            var v4 = versionCode % 1_0000;
+
+            GameVersion = $"v{v1:#0}.{v2:00}.{v3:00}";
+            GameVersionWithBuild = $"v{v1:#0}.{v2:00}.{v3:00}.{v4:0000}";
         }
 
-        public string UnityVersion => Application.unityVersion;
+        public static string UnityVersion => Application.unityVersion;
         
-        public string YooAssetVersion => AssetModule.YOO_ASSET_VERSION;
+        public static string YooAssetVersion => AssetModule.YOO_ASSET_VERSION;
         
-        public string GameVersion { get; }
+        public static string GameVersion { get; }
         
-        public string GameVersionInteral { get; }
+        public static string GameVersionWithBuild { get; }
     }
 }

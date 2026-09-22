@@ -14,7 +14,8 @@ namespace Sanmon.Module
         public bool IsDestroy { get; private set; }
         public UIWindow Window { get; private set; }
         public UIData Config { get; private set; }
-        
+
+        public UIContext context;
         internal UIMetaDataAttribute metaData;
         
         private GameObject _go;
@@ -84,7 +85,8 @@ namespace Sanmon.Module
             _go = handle.GetAssetObject<GameObject>();
             _mainCanvas = _go.GetComponent<Canvas>();
             Window = _go.GetComponent<UIWindow>();
-            
+
+            _go.name = Config.Name;
             _go.transform.SetParent(this.Module().UI.Root);
             _mainCanvas.sortingLayerName = Config.SortingLayer;
             _mainCanvas.sortingOrder = Config.OrderInLayer;

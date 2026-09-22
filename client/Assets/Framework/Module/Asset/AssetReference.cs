@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Sanmon.Core;
 using UnityEngine;
 using YooAsset;
@@ -9,11 +10,19 @@ namespace Sanmon.Module
     public class AssetReference: MonoBehaviour
         , IGetModule
     {
-        // internal AssetInfo info;
-        //
-        // private void OnDestroy()
-        // {
-        //     this.Module().Asset.AssetCountSubOne(info);
-        // }
+        private readonly HashSet<AssetHandle> handles = new ();
+
+        public void BindGo(AssetHandle handle)
+        {
+            handles.Add(handle);
+        }
+        
+        private void OnDestroy()
+        {
+            foreach (var handle in handles)
+            {
+                handle.Dispose();
+            }
+        }
     }
 }

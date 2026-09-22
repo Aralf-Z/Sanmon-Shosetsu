@@ -1,4 +1,5 @@
 using System;
+using Sanmon.Helper;
 using Sanmon.Module;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -17,18 +18,21 @@ namespace GameScripts.Temp_Battle
 
         private void Update()
         {
-            timer -= Time.deltaTime;
+            timer += Time.deltaTime;
             
-            if (timer < 0f)
+            if (timer >= interval)
             {
                 for (var i = 0; i < count; i++)
                 {
-                    var en = Game.Asset.LoadPrefabAndInstantiateNew("pb_enemy");
-                    var pos = transform.position + new Vector3(Random.Range(0, 1f), 0, Random.Range(0, 1f)) * Random.Range(-range, range);
-                    en.transform.position = new Vector3(pos.x, 2f, pos.z);
+                    var en = Game.Asset.LoadAsyncGo("pb_enemy");
+                    en.e_onLoaded += go =>
+                    {
+                        var pos = transform.position + new Vector3(Random.Range(0, 1f), 0, Random.Range(0, 1f)) * Random.Range(-range, range);
+                        go.transform.position = new Vector3(pos.x, 2f, pos.z);
+                    };
                 }
                 
-                timer = interval;
+                timer = 0;
             }
         }
 

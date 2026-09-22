@@ -22,7 +22,7 @@ namespace GameScripts
                 DealDamageEffect.effect,
             };
             
-            Game.BattleSystem.RegisterEffect(effList);
+            //Game.BattleSystem.RegisterEffect(effList);
             
             SceneManager.LoadScene("GameRuntime");
         }

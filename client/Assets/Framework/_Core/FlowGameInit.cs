@@ -23,7 +23,10 @@ namespace Sanmon.Core
             _timer = DateTime.Now;
             
             SanmonLogger.LogInfo("初始化游戏", "初始化");
-            SanmonLogger.LogInfo($"unity version: {Application.unityVersion}", "初始化");
+            SanmonLogger.LogInfo($"unity版本: {Module.Version.UnityVersion}", "初始化");
+            SanmonLogger.LogInfo($"yooAsset版本: {Module.Version.YooAssetVersion}", "初始化");
+            SanmonLogger.LogInfo($"游戏版本：{Module.Version.GameVersion}",  "初始化");
+            SanmonLogger.LogInfo($"游戏构建版本：{Module.Version.GameVersionWithBuild}",  "初始化");
             
             StartCoroutine(InitGame());
         }
@@ -37,7 +40,7 @@ namespace Sanmon.Core
 
         protected override void Exit()
         {
-            SanmonLogger.LogInfo($"初始化游戏模块结束, 耗时 [{(DateTime.Now - _timer).TotalMilliseconds / 1000:F5}s]", "初始化");
+            SanmonLogger.LogInfo($"游戏模块初始化结束, 耗时 [{(DateTime.Now - _timer).TotalMilliseconds / 1000:F5}s]", "初始化");
         }
 
         private IEnumerator InitGame()

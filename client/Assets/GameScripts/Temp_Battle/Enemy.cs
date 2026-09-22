@@ -1,8 +1,10 @@
+using System;
 using System.Collections;
 using Game.Config.Battle;
 using Sanmon.Battle;
 using Sanmon.Core;
 using Sanmon.GameEntity;
+using Sanmon.Helper;
 using UnityEngine;
 using Attribute = Game.Config.Battle.Attribute;
 using Random = UnityEngine.Random;
@@ -53,6 +55,11 @@ namespace GameScripts.Temp_Battle
             Game.Sys<BattleSystem>().UnregisterUnit(self);
             yield return new WaitForSeconds(.5f);
             Destroy(gameObject);
-        } 
+        }
+
+        private void OnDestroy()
+        {
+            SanmonLogger.LogDebug($"Enemy Dead {GetInstanceID()}");
+        }
     }
 }

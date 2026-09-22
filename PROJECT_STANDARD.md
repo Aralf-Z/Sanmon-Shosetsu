@@ -98,6 +98,10 @@ namespace GameScript.ModuleName.SubModule
   //接口
   xxxxx void InterfaceMethod(){} 
 
+  //类
+
+  xxxxx class SubClassA{}
+
   ```
 
 - **花括号**：推荐换行.

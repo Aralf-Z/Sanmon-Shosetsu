@@ -755,7 +755,7 @@ PlayerSettings:
     QNX: 
     Server: ZLUA_LUA_5_5
     Stadia: 
-    Standalone: ZLUA_LUA_5_5
+    Standalone: ZLUA_LUA_5_5;DEBUG_MODE
     VisionOS: 
     WebGL: 
     Windows Store Apps: 
@@ -869,7 +869,7 @@ PlayerSettings:
   hmiLogStartupTiming: 0
   hmiCpuConfiguration: 
   apiCompatibilityLevel: 6
-  activeInputHandler: 0
+  activeInputHandler: 2
   windowsGamepadBackendHint: 0
   cloudProjectId: 5f1dd2c0-2fc6-4596-8bbd-9eed05d06b9e
   framebufferDepthMemorylessMode: 0

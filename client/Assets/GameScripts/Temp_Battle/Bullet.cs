@@ -29,7 +29,7 @@ namespace GameScripts.Temp_Battle
         public static void Cast(Unit caster, Vector3 start, Vector3 target)
         {
             var face = target - start;
-            var instance = Game.Asset.LoadPrefabAndInstantiateNew("pb_bullet");
+            var instance = Game.Asset.LoadSyncGo("pb_bullet");
             var bullet = instance.GetComponent<Bullet>();
 
             bullet.caster = caster;

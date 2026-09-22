@@ -27,14 +27,16 @@ namespace Sanmon.Battle
         public EffectManager()
         {
 #if UNITY_EDITOR
-            var time = UnityEngine.Time.realtimeSinceStartup;
+            var time = UnityEngine.Time.time;
 #endif 
             LoadEffectManifest();
             LoadBuiltinEffect();
             LoadLuaEffect();
             ImportEvents();
 #if UNITY_EDITOR
-            SanmonLogger.LogInfo($"EffectManager 初始化 cost '{UnityEngine.Time.realtimeSinceStartup - time}s'", "战斗");
+            var elapsedTime = UnityEngine.Time.time - time;
+            // ReSharper disable once SimplifyStringInterpolation
+            SanmonLogger.LogInfo($"'EffectManager'初始化耗时 [{elapsedTime.ToString("F5")}s]", "战斗");
 #endif
         }
 
