@@ -15,11 +15,13 @@ namespace GameScripts
         
         private static readonly MyGame game = new MyGame();
 
-        public static AssetModule Asset => game.Module().Asset;
+        public static GameModule Module => game.Module();
         
-        public static UIModule UI => game.Module().UI;
+        public static AssetModule Asset => Module.Asset;
         
-        public static Tables Tables => game.Module().Config.Tables;
+        public static UIModule UI => Module.UI;
+        
+        public static Tables Tables => Module.Config.Tables;
         
         public static GameSystem Systems => game.System();
 

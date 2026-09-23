@@ -37,7 +37,7 @@ namespace Sanmon.Core
             @new.Init();
             _notes.Add(type, @new);
             
-            SanmonLogger.LogInfo($"create note '{type.FullName}'", "NOTE");
+            SanmonLogger.LogInfo($"创建游戏记录-'{type.FullName}'", "NOTE");
             
             return @new;
         }

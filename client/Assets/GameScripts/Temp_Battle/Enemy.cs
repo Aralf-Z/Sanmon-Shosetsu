@@ -59,7 +59,7 @@ namespace GameScripts.Temp_Battle
 
         private void OnDestroy()
         {
-            SanmonLogger.LogDebug($"Enemy Dead {GetInstanceID()}");
+           
         }
     }
 }

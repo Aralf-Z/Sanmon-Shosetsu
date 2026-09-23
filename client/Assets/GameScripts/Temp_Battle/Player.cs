@@ -34,6 +34,8 @@ namespace GameScripts.Temp_Battle
 
             var model = self.entity.AddComponent<CmModel>();
             model.SetModel(gameObject);
+            
+            Game.Module.Camera.SetMainFollower(transform);
         }
 
         private void Update()

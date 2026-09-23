@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Framework.Module;
 using Sanmon.Helper;
 using Sanmon.Module;
 using UnityEngine;
@@ -11,13 +12,14 @@ namespace Sanmon.Core
     /// </summary>
     public class GameModule: MonoBehaviour
     {
-        internal bool IsInit { get; private set; }
-        
         public AssetModule Asset { get; private set; }
         public UIModule UI { get; private set; }
         public ConfigModule Config { get; private set; }
         public LuaModule Lua { get; private set; }
         public InputModule Input { get; private set; }
+        public CameraModule Camera { get; private set; }
+        
+        internal bool IsInit { get; private set; }
         
         private List<IModule> _modules = new();
         private int _initIndex = 0;
@@ -34,9 +36,10 @@ namespace Sanmon.Core
             _modules.Add(Lua);
             Input = GetComponentInChildren<InputModule>();
             _modules.Add(Input);
+            Camera = GetComponentInChildren<CameraModule>();
+            _modules.Add(Camera);
 
             _modules = _modules.OrderBy(m => m.InitOrder).ToList();
-            
             _modules[_initIndex].Init();
         }
 
