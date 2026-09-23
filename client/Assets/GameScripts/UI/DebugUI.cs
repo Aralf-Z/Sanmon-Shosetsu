@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-namespace GameScripts
+namespace GameScripts.UI
 {
     public class DebugUI : UIWindow, IGetNote
     {

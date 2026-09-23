@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Alchemy.Inspector;
 using UnityEngine;
 
 namespace Sanmon.Core
@@ -11,7 +12,7 @@ namespace Sanmon.Core
     {
         private readonly Dictionary<Type, FlowBase> _flowMap = new ();
 
-        public FlowBase curFlow;
+        [LabelText("当前流程")] public FlowBase curFlow;
         
         internal void Init()
         {

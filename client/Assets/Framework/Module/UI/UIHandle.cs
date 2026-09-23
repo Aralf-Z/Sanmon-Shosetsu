@@ -87,7 +87,7 @@ namespace Sanmon.Module
             Window = _go.GetComponent<UIWindow>();
 
             _go.name = Config.Name;
-            _go.transform.SetParent(this.Module().UI.Root);
+            _go.transform.SetParent(this.Module().UI.root);
             _mainCanvas.sortingLayerName = Config.SortingLayer;
             _mainCanvas.sortingOrder = Config.OrderInLayer;
             Window.OnCreate();

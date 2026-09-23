@@ -6,7 +6,7 @@ namespace Sanmon.Editor
 {
     internal class UICodeGenerateConfig: EditorDevConfig<UICodeGenerateConfig>
     {
-        public string namespaceName = "ZGame.UI";
+        public string namespaceName = "GameScripts.UI";
         
         public string GenCodePath => Path.Combine(Application.dataPath, genCodePath);
         

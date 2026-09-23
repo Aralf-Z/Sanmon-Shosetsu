@@ -10,13 +10,13 @@ namespace Sanmon.Module
 
         internal InstantiateOptions? options;
         
-        public event Action<GameObject> e_onLoaded
+        public event Action<GameObject> e_onInstantiated
         {
             add
             {
-                if (info.handle.IsDone)
+                if (_instantiateOperation?.Result)
                 {
-                    value?.Invoke(info.NewOne(options));
+                    value?.Invoke(_instantiateOperation.Result);
                 }
                 else
                 {
@@ -27,6 +27,7 @@ namespace Sanmon.Module
         }
         
         private Action<GameObject> _callback;
+        private InstantiateOperation _instantiateOperation;
         
         internal GameObjectAsyncHandle(PrefabInfo info, InstantiateOptions? options)
         {
@@ -37,7 +38,13 @@ namespace Sanmon.Module
 
         private void OnGameObjectLoaded(AssetHandle handle)
         {
-            _callback?.Invoke(info.NewOne(options));
+            _instantiateOperation = info.AsyncNewOne(options);
+            _instantiateOperation.Completed += OnGameObjectInstantiated;
+        }
+
+        private void OnGameObjectInstantiated(AsyncOperationBase operation)
+        {
+            _callback?.Invoke(_instantiateOperation.Result);
         }
     }
 }

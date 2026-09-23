@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Alchemy.Inspector;
 using UnityEngine;
 using YooAsset;
 using Object = UnityEngine.Object;
@@ -11,37 +12,10 @@ namespace Sanmon.Module
     public class AssetModule: MonoBehaviour,
         IModule
     {
-        int IModule.InitOrder => InitOrderDefine.ASSET;
-        bool IModule.IsInit => _isInit;
-
-        void IModule.Init()
-        {
-            _logger = new AssetLogger();
-            
-            YooAssets.Initialize(_logger);
-            
-            if (!YooAssets.TryGetPackage(DEFAULT_PACKAGE, out var package))
-                package = YooAssets.CreatePackage(DEFAULT_PACKAGE);
-            _package = package;
-            
-            StartCoroutine(InitPackage());
-        }
-
-        void IModule.Deinit()
-        {
-            _package = null;
-            YooAssets.Destroy();
-        }
-        
-        void IModule.OnLogicUpdate(float dt)
-        {
-            CheckPrefabInfo(dt);
-        }
-        
         public const string DEFAULT_PACKAGE = "DefaultPackage";
         internal const string YOO_ASSET_VERSION = "3.0.5";
         
-        public EPlayMode playMode = EPlayMode.EditorSimulateMode;
+        [LabelText("资源加载模式")] public EPlayMode playMode = EPlayMode.EditorSimulateMode;
         
         private ResourcePackage _package;
         private AssetLogger _logger;
@@ -75,7 +49,7 @@ namespace Sanmon.Module
             }
 #endif
             
-            return prefabInfo.NewOne(options);
+            return prefabInfo.SyncNewOne(options);
         }
         
         /// <summary>
@@ -281,24 +255,36 @@ namespace Sanmon.Module
             }
             _prefabInfoPendingRemove.Clear();
         }
+     
+        int IModule.InitOrder => InitOrderDefine.ASSET;
+        bool IModule.IsInit => _isInit;
+
+        void IModule.Init()
+        {
+            _logger = new AssetLogger();
+            
+            YooAssets.Initialize(_logger);
+            
+            if (!YooAssets.TryGetPackage(DEFAULT_PACKAGE, out var package))
+                package = YooAssets.CreatePackage(DEFAULT_PACKAGE);
+            _package = package;
+            
+            StartCoroutine(InitPackage());
+        }
+
+        void IModule.Deinit()
+        {
+            _package = null;
+            YooAssets.Destroy();
+            _isInit = false;
+        }
+        
+        void IModule.OnLogicUpdate(float dt)
+        {
+            CheckPrefabInfo(dt);
+        }
         
         //todo 图集等
         //https://www.yooasset.com/docs/guide-runtime/ResourceLoad
-    }
-    
-    internal class PrefabInfo
-    {
-        public string assetLocation;
-        public AssetHandle handle;
-
-        public float lastUseTimestamp;
-            
-        public GameObject NewOne(InstantiateOptions? options)
-        {
-            var go = handle.InstantiateSync(options ?? new InstantiateOptions(true));
-            lastUseTimestamp = Time.time;
-            go.AddComponent<AssetReference>();
-            return go;
-        }
     }
 }

@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using Sanmon.Core;
-using Sanmon.Utility.Inspector;
+using Sanmon.Utility.Monitor;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
 namespace Sanmon.Editor
 {
-    [UnityEditor.CustomEditor(typeof(GameNote))]
+    //[UnityEditor.CustomEditor(typeof(GameNote))]
     public class GameNoteEditor : UnityEditor.Editor
     , IGetNote
     {
@@ -16,7 +16,7 @@ namespace Sanmon.Editor
         private Collector _collector;
         
         private TreeViewState _viewState;
-        private InspectorTreeView _view;
+        private Monitor _view;
         
         private void OnEnable()
         {
@@ -30,7 +30,7 @@ namespace Sanmon.Editor
         {
             _rootNode = _collector.Collect(_note.Notes);
             _viewState = new TreeViewState();
-            _view = new InspectorTreeView(_viewState, _rootNode);
+            _view = new Monitor(_viewState, _rootNode);
             
             _view.ExpandAll();
             

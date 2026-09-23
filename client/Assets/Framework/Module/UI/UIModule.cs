@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Alchemy.Inspector;
 using Sanmon.Core;
 using Sanmon.Helper;
 using UnityEngine;
@@ -12,8 +13,9 @@ namespace Sanmon.Module
         , IGetModule
     {
         internal const string TITLE = "ui";
-        
-        internal Transform Root { get; private set; }
+
+        [LabelText("UI控制器")] [SerializeField] internal UIController controller;
+        internal Transform root;
         
         private bool _isInit;
 
@@ -49,13 +51,14 @@ namespace Sanmon.Module
         
         void IModule.Init()
         {
-            Root = transform;
+            DontDestroyOnLoad(controller.gameObject);
+            root = controller.canvas.transform;
             _isInit = true;
         }
 
         void IModule.Deinit()
         {
-            
+            _isInit = false;
         }
 
         void IModule.OnLogicUpdate(float dt)

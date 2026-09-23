@@ -1,25 +1,25 @@
 using System;
 
-namespace Sanmon.Utility.Inspector
+namespace Sanmon.Utility.Monitor
 {
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-    public class InspectableAttribute : Attribute
+    public class MonitorAttribute : Attribute
     {
         public string Tag { get; }
 
-        public InspectableAttribute(string tag = null)
+        public MonitorAttribute(string tag = null)
         {
             Tag = tag;
         }
     }
     
     [AttributeUsage(AttributeTargets.Field/* | AttributeTargets.Property*/)]
-    public class InspectInfoAttribute : Attribute
+    public class MonitorInfoAttribute : Attribute
     {
         public string Name { get; }
         public int Order { get; }
 
-        public InspectInfoAttribute(string name = null, int order = 0)
+        public MonitorInfoAttribute(string name = null, int order = 0)
         {
             Name = name;
             Order = order;

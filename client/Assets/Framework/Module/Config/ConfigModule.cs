@@ -11,22 +11,72 @@ using UnityEngine.Networking;
 
 namespace Sanmon.Module
 {
-    public class ConfigModule: MonoBehaviour,
+    public class ConfigModule : MonoBehaviour,
         IModule
     {
         public static string ConfigFilePath => Path.Combine(Application.streamingAssetsPath, "tables");
         public static string CodeFilePath => Path.Combine(Application.dataPath, "Script/Table/CodeGen");
-        
+
+        public Tables Tables { get; private set; }
+
+        private bool _isInit;
+
+        private ByteBuf LoadByteBuf(string file)
+        {
+            return new(File.ReadAllBytes(Path.Combine(ConfigFilePath, $"{file}.bytes")));
+        }
+
+        private JSONNode LoadJson(string file)
+        {
+            return JSON.Parse(File.ReadAllText(Path.Combine(ConfigFilePath, $"{file}.json")));
+        }
+
+        private async UniTask<Dictionary<string, ByteBuf>> LoadByteBuf_Web(List<string> files)
+        {
+            var bytesMap = new Dictionary<string, ByteBuf>();
+
+            foreach (var file in files)
+            {
+                using var request = UnityWebRequest.Get(Path.Combine(ConfigFilePath, $"{file}.bytes"));
+                await request.SendWebRequest();
+
+                if (request.result == UnityWebRequest.Result.Success)
+                {
+                    var bytes = request.downloadHandler.data;
+                    bytesMap.Add(file, new ByteBuf(bytes));
+                }
+            }
+
+            return bytesMap;
+        }
+
+        private async UniTask<Dictionary<string, JSONNode>> LoadJson_Web(List<string> files)
+        {
+            var jsonMaps = new Dictionary<string, JSONNode>();
+
+            foreach (var file in files)
+            {
+                using var request = UnityWebRequest.Get(Path.Combine(ConfigFilePath, $"{file}.json"));
+                await request.SendWebRequest();
+
+                if (request.result == UnityWebRequest.Result.Success)
+                {
+                    var jsonStr = request.downloadHandler.text;
+                    jsonMaps.Add(file, JSON.Parse(jsonStr));
+                }
+            }
+
+            return jsonMaps;
+        }
+
         int IModule.InitOrder => InitOrderDefine.CONFIG;
         bool IModule.IsInit => _isInit;
 
-        public Tables Tables { get; private set; }
-        
         void IModule.Init()
         {
             var tablesCtor = typeof(Tables).GetConstructors()[0];
             var loaderReturnType = tablesCtor.GetParameters()[0].ParameterType.GetGenericArguments()[1];
-            
+
 #if (UNITY_WEBGL || UNITY_ANDROID) && !UNITY_EDITOR
             SanmonLogger.LogWarning("Web和安卓模式尚未支持表格加载", "CONFIG");
             // try
@@ -65,17 +115,16 @@ namespace Sanmon.Module
             // }
 #else
             try
-            { 
-                Delegate loader = loaderReturnType == typeof(ByteBuf) 
+            {
+                Delegate loader = loaderReturnType == typeof(ByteBuf)
                     ? new Func<string, ByteBuf>(LoadByteBuf)
                     : new Func<string, JSONNode>(LoadJson);
-            
-                Tables = (Tables)tablesCtor.Invoke(new object[] {loader});
-                
+
+                Tables = (Tables)tablesCtor.Invoke(new object[] { loader });
+
                 SanmonLogger.LogInfo("表配置加载成功", "CONFIG");
 
-                
-                
+
                 _isInit = true;
             }
             catch (Exception e)
@@ -85,65 +134,14 @@ namespace Sanmon.Module
             }
 #endif
         }
-        
-        void IModule. Deinit()
+
+        void IModule.Deinit()
         {
-            
+            _isInit = false;
         }
-        
+
         void IModule.OnLogicUpdate(float dt)
         {
-            
-        }
-        
-        private bool _isInit;
-        
-        private ByteBuf LoadByteBuf(string file)
-        {
-            return new (File.ReadAllBytes(Path.Combine(ConfigFilePath, $"{file}.bytes")));
-        }
-
-        private JSONNode LoadJson(string file)
-        {
-            return JSON.Parse(File.ReadAllText(Path.Combine(ConfigFilePath, $"{file}.json")));
-        }
-        
-        private async UniTask<Dictionary<string, ByteBuf>> LoadByteBuf_Web(List<string> files)
-        {
-            var bytesMap = new Dictionary<string, ByteBuf>();
-            
-            foreach (var file in files)
-            {
-                using var request = UnityWebRequest.Get(Path.Combine(ConfigFilePath, $"{file}.bytes"));
-                await request.SendWebRequest();
-            
-                if (request.result == UnityWebRequest.Result.Success)
-                {
-                    var bytes = request.downloadHandler.data;
-                    bytesMap.Add(file, new ByteBuf(bytes)); 
-                }
-            }
-
-            return bytesMap;
-        }
-
-        private async UniTask<Dictionary<string, JSONNode>> LoadJson_Web(List<string> files)
-        {
-            var jsonMaps = new Dictionary<string, JSONNode>();
-            
-            foreach (var file in files)
-            {
-                using var request = UnityWebRequest.Get(Path.Combine(ConfigFilePath, $"{file}.json"));
-                await request.SendWebRequest();
-            
-                if (request.result == UnityWebRequest.Result.Success)
-                {
-                    var jsonStr = request.downloadHandler.text;
-                    jsonMaps.Add(file, JSON.Parse(jsonStr)); 
-                }
-            }
-
-            return jsonMaps;
         }
     }
 }

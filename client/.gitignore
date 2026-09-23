@@ -116,3 +116,9 @@ InitTestScene*.unity*
 /[Aa]ssets/[Tt]est/*
 /[Aa]ssets/[Ss]amples/*
 /[Aa]ssets/[Ss]treamingAssets/[Yy]oo/*
+
+# tmp ignore
+/Assets/TextMesh Pro
+/Assets/TextMesh Pro.meta
+/Assets/GameRaw/Font/AliPuHu_Default_SDF.asset
+/Assets/GameRaw/Font/AliPuHu_Default_SDF.asset.meta

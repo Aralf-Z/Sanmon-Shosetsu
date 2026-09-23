@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Sanmon.GameEntity;
 
-namespace Sanmon.Utility.Inspector
+namespace Sanmon.Utility.Monitor
 {
     public abstract class Adapter
     {

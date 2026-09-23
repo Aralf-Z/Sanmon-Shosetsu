@@ -1,9 +1,9 @@
-using Sanmon.Utility.Inspector;
+using Sanmon.Utility.Monitor;
 using UnityEngine;
 
 namespace Sanmon.Note
 {
-    [Inspectable]
+    [Monitor]
     public abstract class NoteBase
     {
         protected internal abstract void Init();

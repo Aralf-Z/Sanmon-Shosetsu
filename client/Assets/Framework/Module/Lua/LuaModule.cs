@@ -13,25 +13,6 @@ namespace Sanmon.Module
     public class LuaModule: MonoBehaviour
         , IModule
     {
-        int IModule.InitOrder => InitOrderDefine.LUA;
-
-        bool IModule.IsInit => _isInit;
-
-        void IModule.Init()
-        {
-            _isInit = true;
-        }
-
-        void IModule.Deinit()
-        {
-            
-        }
-
-        void IModule.OnLogicUpdate(float dt)
-        {
-            
-        }
-        
         private bool _isInit = false;
 
         private static string RootPath 
@@ -79,6 +60,25 @@ namespace Sanmon.Module
             // }  
         }
 
+        int IModule.InitOrder => InitOrderDefine.LUA;
+
+        bool IModule.IsInit => _isInit;
+
+        void IModule.Init()
+        {
+            _isInit = true;
+        }
+
+        void IModule.Deinit()
+        {
+            _isInit = false;
+        }
+
+        void IModule.OnLogicUpdate(float dt)
+        {
+            
+        }
+        
         public readonly struct LuaInfo
         {
             public readonly string fullPath;

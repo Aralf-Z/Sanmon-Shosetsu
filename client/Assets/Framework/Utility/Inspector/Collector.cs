@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Sanmon.Utility.Inspector
+namespace Sanmon.Utility.Monitor
 {
     public class Collector
     {
@@ -43,7 +43,7 @@ namespace Sanmon.Utility.Inspector
             foreach (var obj in objects)
             {
                 var type = obj.GetType();
-                var attri = type.GetCustomAttribute<InspectableAttribute>();
+                var attri = type.GetCustomAttribute<MonitorAttribute>();
                 var nTag = attri?.Tag ?? type.Name;
                 var node = new RootNode()
                 {
@@ -91,7 +91,7 @@ namespace Sanmon.Utility.Inspector
                 else
                 {
                     
-                    var attri = type.GetCustomAttribute<InspectableAttribute>();
+                    var attri = type.GetCustomAttribute<MonitorAttribute>();
 
                     if (attri == null)
                     {

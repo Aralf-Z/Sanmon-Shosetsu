@@ -1,3 +1,4 @@
+using Alchemy.Inspector;
 using UnityEngine;
 
 namespace Sanmon.Core
@@ -7,7 +8,7 @@ namespace Sanmon.Core
     /// </summary>
     public abstract class FlowBase : MonoBehaviour
     {
-        [SerializeField] public FlowBase nextFlow;
+        [LabelText("下一个流程")] public FlowBase nextFlow;
 
         protected static GameFlow Flow => GameApplication.instance.gameFlow;
 

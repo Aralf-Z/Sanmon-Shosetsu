@@ -25,7 +25,7 @@ namespace GameScripts.Temp_Battle
                 for (var i = 0; i < count; i++)
                 {
                     var en = Game.Asset.LoadAsyncGo("pb_enemy");
-                    en.e_onLoaded += go =>
+                    en.e_onInstantiated += go =>
                     {
                         var pos = transform.position + new Vector3(Random.Range(0, 1f), 0, Random.Range(0, 1f)) * Random.Range(-range, range);
                         go.transform.position = new Vector3(pos.x, 2f, pos.z);

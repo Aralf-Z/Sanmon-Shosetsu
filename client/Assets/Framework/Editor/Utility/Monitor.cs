@@ -1,14 +1,14 @@
-using Sanmon.Utility.Inspector;
+using Sanmon.Utility.Monitor;
 using UnityEditor.IMGUI.Controls;
 
 namespace Sanmon.Editor
 {
-    public class InspectorTreeView : TreeView
+    public class Monitor : TreeView
     {
         public NodeBase Root { get; }
         public TreeViewItem ViewRoot { get; private set; }
         
-        public InspectorTreeView(TreeViewState state, NodeBase inspectorRoot) : base(state)
+        public Monitor(TreeViewState state, NodeBase inspectorRoot) : base(state)
         {
             Root = inspectorRoot;
             Reload();

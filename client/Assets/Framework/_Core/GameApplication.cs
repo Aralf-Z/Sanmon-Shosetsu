@@ -1,4 +1,5 @@
 using System;
+using Alchemy.Inspector;
 using UnityEngine;
 
 namespace Sanmon.Core
@@ -10,15 +11,18 @@ namespace Sanmon.Core
     {
         public static GameApplication instance;
         
-        [SerializeField] internal GameNote gameNote;
-        [SerializeField] internal GameEntity gameEntity;
-        [SerializeField] internal GameModule gameModule;
-        [SerializeField] internal GameSystem gameSystem;
-        [SerializeField] internal GameFlow   gameFlow;
+        [LabelText("游戏记录")][SerializeField] internal GameNote gameNote;
+        [LabelText("游戏实体")][SerializeField] internal GameEntity gameEntity;
+        [LabelText("游戏模块")][SerializeField] internal GameModule gameModule;
+        [LabelText("游戏系统")][SerializeField] internal GameSystem gameSystem;
+        [LabelText("游戏流程")][SerializeField] internal GameFlow gameFlow;
 
+        internal bool isRunning;
+        
         public void StartGame()
         {
             instance = this;
+            isRunning = true;
             gameFlow.Init();
         }
         
@@ -45,6 +49,7 @@ namespace Sanmon.Core
 
         public void ShutDown()
         {
+            isRunning = false;
 #if UNITY_EDITOR
             UnityEditor.EditorApplication.isPlaying = false;
 #else

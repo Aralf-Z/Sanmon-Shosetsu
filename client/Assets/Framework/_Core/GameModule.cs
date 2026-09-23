@@ -17,13 +17,13 @@ namespace Sanmon.Core
         public UIModule UI { get; private set; }
         public ConfigModule Config { get; private set; }
         public LuaModule Lua { get; private set; }
+        public InputModule Input { get; private set; }
         
         private List<IModule> _modules = new();
         private int _initIndex = 0;
         
         internal void Init()
         {
-            _modules = new List<IModule>();
             Asset = GetComponentInChildren<AssetModule>();
             _modules.Add(Asset);
             UI = GetComponentInChildren<UIModule>();
@@ -32,6 +32,8 @@ namespace Sanmon.Core
             _modules.Add(Config);
             Lua = GetComponentInChildren<LuaModule>();
             _modules.Add(Lua);
+            Input = GetComponentInChildren<InputModule>();
+            _modules.Add(Input);
 
             _modules = _modules.OrderBy(m => m.InitOrder).ToList();
             
@@ -40,6 +42,14 @@ namespace Sanmon.Core
 
         internal void Destroy()
         {
+            foreach (var module in _modules)
+                module.Deinit();
+            _modules.Clear();
+            Asset = null;
+            UI = null;
+            Config = null;
+            Lua = null;
+            Input = null;
             IsInit = false;
         }
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Sanmon.Utility.Inspector
+namespace Sanmon.Utility.Monitor
 {
     public abstract class NodeBase
     {
