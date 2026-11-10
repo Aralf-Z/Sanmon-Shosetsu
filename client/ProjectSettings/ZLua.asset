@@ -17,6 +17,7 @@ MonoBehaviour:
   marshalAsXmlPaths: []
   luaAliasXmlPaths: []
   luaExtensionXmlPaths: []
+  enableUnityOptimizations: 1
   enableDebugger: 0
   debuggerPort: 9966
   debuggerWaitIDE: 0

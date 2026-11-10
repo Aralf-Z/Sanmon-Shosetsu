@@ -36,28 +36,30 @@ namespace Sanmon.Module
         private static string LoadLuaModule(string module)
         {
             var path = Path.Combine(RootPath, module + ".lua");
-            return File.Exists(path) ? File.ReadAllText(path, Encoding.UTF8) : null;
+            var content = File.Exists(path) ? File.ReadAllText(path, Encoding.UTF8) : null;
+            SanmonLogger.LogInfo($"load at {path}.\ncontent:\n{content}");
+            return content;
         }
 
         public IEnumerable<LuaInfo> GetLuaModule(string workspace)
         {
-            return Array.Empty<LuaInfo>();
+            // return Array.Empty<LuaInfo>();
+            //
+            // // todo 暂时不用lua模块
+            var path = Path.Combine(RootPath, workspace);
             
-            // todo 暂时不用lua模块
-            // var path = Path.Combine(RootPath, workspace);
-            //
-            // if (!Directory.Exists(path))
-            //     throw new InvalidPathException(path);
-            //
-            // foreach (var file in Directory.EnumerateFiles(path, "*.lua", SearchOption.AllDirectories))
-            // {
-            //     var fullPath = file.PathFormat();
-            //     var relativePath = Path.GetRelativePath(path, file);
-            //     var moduleName = Path.Combine(workspace, Path.ChangeExtension(relativePath, null));
-            //     var fileName = Path.GetFileNameWithoutExtension(file);
-            //
-            //     yield return new LuaInfo(fullPath, moduleName, fileName);
-            // }  
+            if (!Directory.Exists(path))
+                throw new InvalidPathException(path);
+            
+            foreach (var file in Directory.EnumerateFiles(path, "*.lua", SearchOption.AllDirectories))
+            {
+                var fullPath = file.PathFormat();
+                var relativePath = Path.GetRelativePath(path, file);
+                var moduleName = Path.Combine(workspace, Path.ChangeExtension(relativePath, null));
+                var fileName = Path.GetFileNameWithoutExtension(file);
+            
+                yield return new LuaInfo(fullPath, moduleName, fileName);
+            }  
         }
 
         int IModule.InitOrder => InitOrderDefine.LUA;

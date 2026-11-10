@@ -15,7 +15,7 @@ local function _new_dict(key_type, value_type)
 end
 
 return{
-    ac = CSharp['Assembly-CSharp'],
+    --ac = CSharp['Assembly-CSharp'],
     framework = CSharp['Game.Framework'],
     game_logic = CSharp['Game.Logic'],
     enum = luban.enums,

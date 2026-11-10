@@ -142,7 +142,9 @@ PlayerSettings:
   visionOSBundleVersion: 1.0
   tvOSBundleVersion: 1.0
   bundleVersion: 0.1
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: 11400000, guid: 4302c39d53f149b4d96ab73a0fd97084, type: 2}
+  - {fileID: -944628639613478452, guid: f438dea5507753549b5cecce72ce4d32, type: 3}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -755,7 +757,7 @@ PlayerSettings:
     QNX: 
     Server: ZLUA_LUA_5_5
     Stadia: 
-    Standalone: ZLUA_LUA_5_5;DEBUG_MODE
+    Standalone: DEBUG_MODE;ZLUA_LUA_5_5
     VisionOS: 
     WebGL: 
     Windows Store Apps: 

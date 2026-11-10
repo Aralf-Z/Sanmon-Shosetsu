@@ -35,7 +35,6 @@ namespace Sanmon.Battle
             ImportEvents();
 #if UNITY_EDITOR
             var elapsedTime = UnityEngine.Time.time - time;
-            // ReSharper disable once SimplifyStringInterpolation
             SanmonLogger.LogInfo($"'EffectManager'初始化耗时 [{elapsedTime.ToString("F5")}s]", "战斗");
 #endif
         }

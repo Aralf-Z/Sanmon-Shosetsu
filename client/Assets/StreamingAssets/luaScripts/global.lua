@@ -1,5 +1,4 @@
-CSharp['AC'] = CSharp['Assembly-CSharp']
-CSharp['S'] = CSharp['Sanmon']
+local luban = require ("config/schema")
 
 local function _new_list(type)
     local list_type = zlua.make_generic_type(
@@ -16,8 +15,10 @@ local function _new_dict(key_type, value_type)
 end
 
 return{
-    ac = CSharp['AC'],
-    framework = CSharp['S'],
+    --ac = CSharp['Assembly-CSharp'],
+    framework = CSharp['Game.Framework'],
+    game_logic = CSharp['Game.Logic'],
+    enum = luban.enums,
     new_list = _new_list,
     new_dict = _new_dict,
 }

@@ -21,6 +21,7 @@ namespace Sanmon.Battle
 
         public void Add(string effect)
         {
+            //自己拥有的插入
             if (_effects.TryGetValue(effect, out var info))
             {
                 info.count++;
@@ -50,6 +51,7 @@ namespace Sanmon.Battle
                 }
             }
             
+            //事件中注册自己
             foreach (var @event in info.effect.events)
             {
                 var unit = this.Note().Get<BattleNote>().allUnits[Owner];

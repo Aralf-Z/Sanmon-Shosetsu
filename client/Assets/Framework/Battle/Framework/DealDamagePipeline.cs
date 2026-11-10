@@ -32,7 +32,10 @@ namespace Sanmon.Battle
             
             foreach (var effectEvent in EffectManager.Ins.RequireEvent(eventName))
             {
-                effectEvent.damageAction?.Invoke(damageInfo);
+                foreach (var unit in effectEvent.unitHolder)
+                {
+                    effectEvent.globalDamageAction?.Invoke(damageInfo, unit);
+                }
             }
         }
         
