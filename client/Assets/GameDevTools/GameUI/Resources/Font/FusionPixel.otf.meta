@@ -9,11 +9,10 @@ TrueTypeFontImporter:
   characterPadding: 1
   includeFontData: 1
   fontNames:
-  - DevTools Pixel 12 CJK
-  fallbackFontReferences: 
-  - {fileID: 12800000, guid: 7afc65c9f4874881b9cdb2d913d0689a, type: 3}
+  - FusionPixel
+  fallbackFontReferences: []
   customCharacters: 
-  fontRenderingMode: 2
+  fontRenderingMode: 0
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0
   shouldRoundAdvanceValue: 1

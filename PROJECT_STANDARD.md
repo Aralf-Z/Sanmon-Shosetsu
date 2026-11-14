@@ -1,140 +1,202 @@
-# 代码风格
-
 ## 命名规范
 
-### 字段（Field）
+### 字段 (Field)
 
 | 访问级别 / 修饰符 | 命名风格 | 示例 |
-|-------------------|----------|------|
-| `private`、`protected` | `_camelCase`（以下划线开头的小驼峰） | `_userName` |
-| 其他（`internal`、`public` 等） | `camelCase`（小驼峰） | `userName` |
-| `const`、`static readonly` | `ALL_UPPER_SNAKE`（全大写, 下划线分隔） | `MAX_RETRY_COUNT` |
+|---|---|---|
+| `private`, `protected`, `protected internal`, `private protected` | `_camelCase`, 以下划线开头的小驼峰 | `_userName` |
+| 其他, 如 `internal`, `public` | `camelCase`, 小驼峰 | `userName` |
+| 值类型(string除外)的 `const`, `static readonly` | `ALL_UPPER_SNAKE`, 全大写, 下划线分隔 | `MAX_RETRY_COUNT` |
+| 标记为 `[SerializeField]` | `camelCase`, 不加下划线 | `btnCancel` |
 
-> **注1**：只有 `static` 或者 `readonly` 修饰使用普通字段规则（`private`/`protected` 用 `_camel`, 其他用 `camel`）.  
-> **注2**：**所有实例字段应明确访问修饰符, 避免隐式 `private`**.
+命名规则按以下优先级应用:
 
-### 属性（Property）
+1. 标记为 `[SerializeField]` 的字段统一使用 `camelCase`, 不加下划线; UI 字段保留组件前缀.
+2. 值类型(string除外)的 `const` 和 `static readonly` 字段使用 `ALL_UPPER_SNAKE`, 优先于访问级别规则.
+3. 其他字段按访问级别命名.
 
-统一使用 `PascalCase`（大驼峰）  
+补充说明:
+
+- 上述值类型规则是命名约定, 不表示 C# 对字段类型的限制. `const` 可以用于字符串, `static readonly` 可以用于引用类型.
+- 引用类型的 `const` 和 `static readonly` 字段按访问级别命名.
+- 仅有 `static` 或仅有 `readonly` 修饰时, 仍使用普通字段规则.
+- 所有实例字段必须明确访问修饰符, 避免隐式 `private`.
+
+```csharp
+private string _userName;
+protected int _retryCount;
+protected internal int _sharedCount;
+private protected int _stateId;
+public int userCount;
+internal static int instanceCount;
+private readonly List<int> _itemIds = new();
+private const int MAX_RETRY_COUNT = 3;
+private const string _defaultUserName = "Guest";
+private static readonly Vector3 DEFAULT_POSITION = Vector3.zero;
+private static readonly List<int> _defaultItemIds = new();
+
+[SerializeField] private Button btnCancel;
+[SerializeField] private int maxRetryCount;
+```
+
+### 属性 (Property)
+
+统一使用 `PascalCase`, 大驼峰.
+
 ```csharp
 public string UserName { get; set; }
 ```
 
-### 事件（Event）
+### 事件 (Event)
 
-event Action 格式：`e_camelCase`（以 `e_` 前缀 + 小驼峰）, 其余使用Pascal格式
+- `event Action` (包括 `Action<T>` 等泛型形式) 使用 `e_camelCase`, 即 `e_` 前缀加小驼峰.
+- 其他事件使用 `PascalCase`.
+- 此规则针对事件成员; 普通 `Action` 字段仍遵循字段命名规则.
+- `event Action` 是项目常见成员, 特殊前缀便于识别和调试.
+
 ```csharp
 public event Action e_onTakeDamage;
+public event Action<int> e_onHealthChanged;
+public event EventHandler StateChanged;
 ```
-> **注3**：event Action 为项目常见成员, 特殊标记用以区别方便调试.
 
-### 方法（Method）
+### 方法 (Method)
 
-统一使用 `PascalCase`（大驼峰）  
+统一使用 `PascalCase`; 异步方法必须添加 `Async` 后缀.
+
 ```csharp
 public void GetUserInfo() { }
+public Task LoadAsync() { return Task.CompletedTask; }
 ```
 
-> **注4**：异步方法需要添加 `Async` 后缀（如 `LoadAsync`）.
+### 参数 (Parameter)
 
-### 参数（Parameter）
+统一使用 `camelCase`.
 
-统一使用 `camelCase`（小驼峰）  
 ```csharp
 public void SetName(string userName) { }
 ```
 
-### 局部变量（Local Variable）
+### 局部变量 (Local Variable)
 
-统一使用 `camelCase`（小驼峰）  
+统一使用 `camelCase`.
+
 ```csharp
 var userCount = 10;
 ```
 
-### 类、结构、接口、枚举
+### 类, 结构, 接口, 枚举
 
-| 类型 | 命名风格 | 前缀/后缀建议 |
-|------|----------|--------------|
-| 类（Class） | `PascalCase` | 无 |
-| 结构（Struct） | `PascalCase` | 无 |
-| 接口（Interface） | `PascalCase` | 以 `I` 前缀（如 `IUserService`） |
-| 枚举（Enum） | `PascalCase` | 无；枚举值同样 `PascalCase` |
+| 类型 | 命名风格 | 前缀 / 后缀建议 |
+|---|---|---|
+| 类 (Class) | `PascalCase` | 无 |
+| 结构 (Struct) | `PascalCase` | 无 |
+| 接口 (Interface) | `PascalCase` | 使用 `I` 前缀, 如 `IUserService` |
+| 枚举 (Enum) | `PascalCase` | 无; 枚举值同样使用 `PascalCase` |
 
-> **注5**：泛型类型参数建议使用 `T` 或 `TKey`、`TValue` 等, 遵循 `PascalCase`.
+泛型类型参数建议使用 `T`, `TKey`, `TValue` 等, 遵循 `PascalCase`.
 
-#### 命名空间（Namespace）
+### 命名空间 (Namespace)
 
-统一使用 `PascalCase`, 按层级用点分隔  
+统一使用 `PascalCase`, 按层级用点分隔.
+
 ```csharp
 namespace GameScript.ModuleName.SubModule
+{
+}
 ```
 
 ## 代码布局与格式
 
-- **成员顺序**
-  ```csharp
-  //属性
-  public int Property1 { get; set; }
-  internal int Property2 { get; set; }
-  internal protected int Property3 { get; set; }
-  protected int Property4 { get; set; }
-  private int Property5 { get; set; }
+### 成员顺序
 
-  //字段
-  xxxxx float field;
+先按特殊修饰符分组: `const` 成员置顶, `static` 成员紧随其后, 其他成员在后. 先按成员类别排序, 再按访问级别排序, 如下:
 
-  //构造/析构
-  xxxxx constructor
-  {
+1. 属性/字段.
+2. 构造函数.
+3. 析构函数.
+4. 抽象方法.
+5. 虚方法.
+6. 普通方法.
+7. 父类重写方法.
+8. 接口实现方法.
+9. 嵌套类.
 
-  }
+各组内的访问级别顺序:
+1. public.
+2. internal.
+3. protected internal.
+4. protected.
+5. private protected.
+6. private.
 
-  //方法
-  xxxxx void Method(){}
+事件在上述列表中未指定单独位置, 可与相关成员就近组织, 保持所在类内一致.
 
-  //父类
-  xxxxx override ParentMethod(){}
+注意: 特殊修饰符分组优先于访问级别和成员类别排序. 不要用region分割区域. region仅能用于功能区分
 
-  //接口
-  xxxxx void InterfaceMethod(){} 
+### 缩进与空格
 
-  //类
+- 使用 4 个空格缩进, 不使用 Tab.
+- 逗号和分号后接同一行内容时, 保留一个空格.
+- 括号内侧不加空格.
+- 控制流关键字与左括号之间保留一个空格, 如 `if (condition)`.
+- 方法名与左括号之间不加空格, 如 `Handle(item)`.
+- C# 方法声明和方法调用的参数列表必须保持在同一行, 不因参数数量或行长度换行.
+- 二元运算符两侧保留空格, 如 `count = total + 1`.
 
-  xxxxx class SubClassA{}
+### 花括号
 
-  ```
+推荐花括号换行. 
 
-- **花括号**：推荐换行.
-  ```csharp
-  if (condition)
-  {
-        // code
-  }
-  ```
-  局部代码块只有一行可以忽略{}, 且可以不用换行
-  ```csharp
-  if (condition)
-        return null;
-  ```
+```csharp
+if (condition)
+{
+    Handle();
+}
+```
 
-  ```csharp
-  foreach(var item in itemList) Handle(item);
-  ```
-- **空行**：类成员之间建议保留一个空行；不同逻辑块之间可加空行.
-- **using 语句**：置于命名空间声明之外；按系统、第三方、内部顺序排列.
-- **行数**：行数建议不要超过400行, 超过建议拆分
+仅return时, 省略花括号且压行.
 
----
+```csharp
 
-## UI命名前缀：
+if (condition) return null;
 
-以下为 Unity UI 及常用组件的**前缀命名规范**, 均作为变量/字段名称的前缀使用（驼峰式, 首字母小写）.
+```
+
+### 空行, using 与行数
+
+- 类成员之间建议保留一个空行; 不同逻辑块之间可加空行.
+- `using` 语句置于命名空间声明之外, 按系统, 第三方, 内部顺序排列.
+- 单个代码文件建议不超过 400 行; 超过时建议按职责拆分.
+
+### 边界与禁用
+
+- 纯数值运算指直接对已有数值进行比较, 选择或算术运算, 不调用方法或其他外部逻辑. 三目运算符仅允许用于纯数值运算.
+- 如果有非纯数值运算三目运算符, 必须换行;
+- 三目运算符禁止嵌套
+
+```csharp
+
+var result = isSuccess ? value++ : value--;
+var dmg = isCritical 
+        ? DealNormal() 
+        : DealCrit() ;
+
+```
+
+- 尽量减少if嵌套, 如果嵌套过深, 建议使用return提前退出, 或者将if逻辑拆分成方法.
+- `++` 和 `--` 运算符仅允许用于纯数值运算.
+- 方法行数尽量不要超过30行(包括存在局部方法的情况).
+- 仅当同时满足职责单一, 用于复用所属方法内的重复逻辑, 且不捕获 `this` 或其他外部实例时, 才使用局部方法; 否则提取为类方法.
+
+## UI 命名前缀
+
+以下前缀用于 Unity UI 及常用组件的变量 / 字段名称. 前缀全部小写, 与后续单词组成驼峰名称.
 
 | 组件类型 | 前缀 | 示例 |
-|---------|------|------|
-| UIPart | `part` | `partHeader` |
-| Image/RawImage | `img` | `imgIcon` |
-| Text/TextMeshPro | `txt` | `txtTitle` |
+|---|---|---|
+| Image / RawImage | `img` | `imgIcon` |
+| Text / TextMeshPro / TMP_Text | `txt` | `txtTitle` |
 | Button | `btn` | `btnConfirm` |
 | Transform | `tf` | `tfRoot` |
 | RectTransform | `rect` | `rectPanel` |
@@ -145,93 +207,151 @@ namespace GameScript.ModuleName.SubModule
 | Scrollbar | `scb` | `scbVertical` |
 | Slider | `sld` | `sldVolume` |
 | Toggle | `tog` | `togMusic` |
-| InputField | `input` | `inputName` |
-| Dropdown| `drop` | `dropLanguage` |
+| InputField / TMP_InputField | `input` | `inputName` |
+| Dropdown / TMP_Dropdown | `drop` | `dropLanguage` |
 | Mask | `mask` | `maskAvatar` |
 | HorizontalLayoutGroup | `hl` | `hlButtons` |
 | VerticalLayoutGroup | `vl` | `vlItems` |
 | GridLayoutGroup | `gl` | `glIcons` |
 
+- UI 前缀与字段命名规则组合使用: 普通私有字段为 `_btnConfirm`, 公开字段为 `btnConfirm`, 局部变量为 `btnConfirm`.
+- 标记为 `[SerializeField]` 的字段优先使用 `camelCase`, 不加下划线, 如 `[SerializeField] private Button btnCancel;`.
+- 属性仍使用 `PascalCase`, 如 `BtnConfirm`.
 
-> **注6** 所有前缀均为**小写**, 与后续单词构成驼峰命名（如 `btnConfirm`）.  
-> **注7** `UIPart` 统一使用 `part` 前缀, 便于识别为局部视图模块.
+## 注释
 
-# 文件路径
+新增或修改的成员按以下规则添加注释, 重点说明用途, 单位, 边界和特殊行为. 局部变量及直观语句无需逐行注释.
 
-## Client
+注释内容使用中文汉字或者英文. 标点统一使用英文字符和英文标点习惯, 不使用 emoji, 颜文字等可读性差的符号.
 
-### Assets
-  - Editor #``开发期间的配置文件``
-  - Framework #``代码框架, 需用程序集定义``
-  - GameAsset #``加载资源包, 路径下文件均以英文、snake格式命名``
-    - Atlas #``图集``
-    - Audio #``音频``
-    - Prefab #``预制体``
-      - UI #``ui预制体``
-      - Vfx #``特效``
-      - ...
-    - Sprite #``精灵图``
-        - UI
-        - ...
-    - Video #``视频``
-    - ...
-  - GameRaw #``资产原始文件, 路径下文件均以英文、snake格式命名``
-    - Font #``字体``
-    - Material #``材质``
-    - Mesh #``模型``
-    - Shader #``着色器``
-    - Texture #``材质``
-    - ...
-  - GameConfig #``配置程序代码, 需用程序集定义``
-    - Tables #``表格配置``
-    - App #``软件设置相关``
-  - GameScript #``脚本代码, 需用程序集定义``
-  - Plugins #``第三方插件``
-  - StreamingAssets
-    - Tables
-    - ...
-  - Temp
-  - Test
-  - ...
-### Library
-### Logs
-### obj
-### CustomPackages #``第三方自定义包，便于修改代码查看索引``
-### Packages
-### ProjectSettings
-### Temp
-### UserSettings
-### ...
+### 字段, 属性
 
-## Config
-### _Tables
-### ...
+- `private`, `protected`, `protected internal`, `private protected` 成员的注释放在其后, 如:
 
-# 资源命名规范
+```csharp
+private int _configId; // 配置表 ID.
+```
 
-## 基础命名
+- 其他访问等级使用单行 XML 注释, 如:
 
-### 前缀
-  - 所有的资源都需要有前缀, 前缀的意义是方便检索和识别
-  - 资源前缀保持在四个字母以内, 全小写, 下划线链接名称
+```csharp
+/// <summary> 配置表 ID. </summary>
+public int ConfigId { get; private set; }
+```
 
-### 名称
-  - 必须是英文名
-  - 全小写, snake格式
+### 方法
 
-### 常见前缀.....
-| 类型 | 前缀 | 示例 |
-|---------|------|------|
-|animation clip/controller|``a``|``a_player_walk``|0...
-|audio|``sfx``|``sfx_on_click_confirm``|
-|mesh|``mesh``|``mesh_player``|
-|material|``mat``|``mat_ui_common``|
-|prefab|``pb``|``pb_player``|
-|prefab ui|``ui``|``ui_hud``|
-|prefab vfx|``vfx``|``vfx_on_enemy_spawn``|
-|shader|``s``|``s_dissolve``|
-|sprite|``pic``|``pic_player``|
-|sprite ui|``ui_xxx``|``ui_hud_hp_bar``|
-|texture|``t``|``t_gound_grass``|
-|timeline|``tl``|``tl_fire_ball_loop``|
-|vidio|``vd``|``vd_on_boss1_challenged``|
+- `private`, `protected`, `protected internal`, `private protected` 方法的注释放在其上, 通常不逐项解释参数. 参数存在特殊单位或约束时, 在注释中说明.这些注释如果命名足够明确规范, 可以省略
+
+```csharp
+// 生成新的敌人.
+private void SpawnNewEnemy(int id)
+{
+}
+```
+
+- 其他访问等级使用单行 XML 注释, 非必要不做参数解释, 如:
+
+```csharp
+/// <summary> 生成新的敌人. </summary>
+public void SpawnNewEnemy(int id)
+{
+}
+```
+
+### 其他备注
+
+其他格式备注按常见备注方式处理.
+
+示例:
+```csharp
+using System;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.UI;
+
+namespace GameScript.Examples
+{
+    /// <summary> 用户面板格式示例. </summary>
+    public class UserPanelExample : MonoBehaviour
+    {
+        /// <summary> 最大重试次数. </summary>
+        public const int MAX_RETRY_COUNT = 3;
+
+        protected const string DEFAULT_USER_NAME = "Guest"; // 默认用户名称.
+
+        private static readonly Vector3 DEFAULT_POSITION = Vector3.zero; // 默认位置.
+
+        /// <summary> 当前用户名称. </summary>
+        public string UserName { get; private set; }
+
+        /// <summary> 面板是否已打开. </summary>
+        public bool IsOpen { get; private set; }
+
+        /// <summary> 用户配置 ID. </summary>
+        public int configId;
+
+        /// <summary> 确认操作时触发. </summary>
+        public event Action e_onConfirm;
+
+        /// <summary> 用户名称变化时触发. </summary>
+        public event Action<string> e_onUserNameChanged;
+
+        /// <summary> 打开面板并设置用户名称. </summary>
+        public void Open(string userName)
+        {
+            var displayName = string.IsNullOrEmpty(userName) ? DEFAULT_USER_NAME : userName;
+
+            UserName = displayName;
+            IsOpen = true;
+
+            RefreshTitle(displayName);
+            e_onUserNameChanged?.Invoke(displayName);
+        }
+
+        /// <summary> 加载面板数据. </summary>
+        public async Task LoadAsync()
+        {
+            if (_isLoading) return;
+
+            _isLoading = true;
+
+            try
+            {
+                await Task.CompletedTask;
+            }
+            finally
+            {
+                _isLoading = false;
+            }
+        }
+
+        protected int _retryCount; // 当前重试次数.
+
+        // 处理面板关闭后的扩展行为.
+        protected virtual void OnClosed()
+        {
+        }
+
+        [SerializeField] private Button btnConfirm; // 确认按钮.
+
+        [SerializeField] private Text txtTitle; // 标题文本.
+
+        [SerializeField] private RectTransform rectPanel; // 面板节点.
+
+        private bool _isLoading; // 是否正在加载.
+
+        // 刷新面板标题.
+        private void RefreshTitle(string userName)
+        {
+            txtTitle.text = userName;
+        }
+
+        // 处理确认按钮点击.
+        private void OnConfirmClicked()
+        {
+            e_onConfirm?.Invoke();
+        }
+    }
+}
+```
