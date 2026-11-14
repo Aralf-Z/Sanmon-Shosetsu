@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="GameDevToolLayout.uss" />
+    <ui:Style src="ToolkitControls.uss" />
+    <ui:VisualElement name="floatingSettingsContent" class="floating-settings-content">
+        <ui:VisualElement class="toolbar">
+            <ui:Label text="@loc:ui.FloatingSettings.label1.text" class="section-title" />
+            <ui:Button name="helpFloatingSettings" text="@loc:icon.help" tooltip="@loc:ui.FloatingSettings.helpFloatingSettings.tooltip" class="help-button" />
+            <ui:VisualElement class="help-control-separator" picking-mode="Ignore" />
+            <ui:Button name="closeFloatingSettings" text="@loc:icon.close" tooltip="@loc:ui.FloatingSettings.closeFloatingSettings.tooltip" class="window-control-button" />
+        </ui:VisualElement>
+        <ui:VisualElement class="floating-settings-form">
+            <ui:Label text="@loc:ui.FloatingSettings.label6.text" class="muted floating-settings-hint" />
+            <ui:Toggle name="floatingPopupShowLogs" label="@loc:ui.FloatingSettings.floatingPopupShowLogs.label" class="setting-row" />
+            <ui:SliderInt name="floatingPopupLogLines" label="@loc:ui.FloatingSettings.floatingPopupLogLines.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
+            <ui:SliderInt name="floatingPopupBackgroundOpacity" label="@loc:ui.FloatingSettings.floatingPopupBackgroundOpacity.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
+            <ui:SliderInt name="floatingPopupTextOpacity" label="@loc:ui.FloatingSettings.floatingPopupTextOpacity.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

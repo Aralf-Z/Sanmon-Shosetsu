@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="GameDevToolLayout.uss" />
+    <ui:Style src="ToolkitControls.uss" />
+    <ui:Button name="categoryButton" text="" class="category-button" />
+</ui:UXML>

@@ -1,0 +1,10 @@
+/* 自定义属性会继承, 每个节点重置标记后才读取当前选择器声明的表面颜色. */
+* {
+    --dev-opacity-local: 1;
+    --dev-opacity-background-set: 0;
+    --dev-opacity-border-top-set: 0;
+    --dev-opacity-border-right-set: 0;
+    --dev-opacity-border-bottom-set: 0;
+    --dev-opacity-border-left-set: 0;
+    --dev-opacity-image-tint-set: 0;
+}

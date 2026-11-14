@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="GameDevToolLayout.uss" />
+    <ui:Style src="ToolkitControls.uss" />
+    <ui:Button name="presetButton" class="preset-button">
+        <ui:Image name="presetIcon" class="preset-icon is-hidden" picking-mode="Ignore" />
+        <ui:Label name="presetName" text="" enable-rich-text="false" class="preset-name" picking-mode="Ignore" />
+    </ui:Button>
+</ui:UXML>

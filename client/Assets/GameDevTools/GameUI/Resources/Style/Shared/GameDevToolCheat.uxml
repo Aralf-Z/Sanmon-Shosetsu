@@ -1,0 +1,74 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="GameDevToolLayout.uss" />
+    <ui:Style src="ToolkitControls.uss" />
+    <ui:Template name="macroGridTemplate" src="ToolkitMacroGrid.uxml" />
+    <ui:VisualElement name="cheatContent" class="page cheat-page">
+        <ui:VisualElement class="cheat-toolbar">
+            <ui:ScrollView class="command-tags-scroll" mode="Horizontal" vertical-scroller-visibility="Hidden">
+                <ui:VisualElement name="commandTags" class="command-tags" />
+            </ui:ScrollView>
+            <ui:TextField name="commandSearch" tooltip="@loc:ui.Cheat.commandSearch.tooltip" placeholder-text="搜索命令 / 别名 / 标签 / 描述" class="command-search" />
+            <ui:Button name="commandSearchHistory" text="@loc:icon.log" tooltip="@loc:ui.Cheat.commandSearchHistory.tooltip" class="search-history-button" />
+        </ui:VisualElement>
+        <ui:VisualElement name="cheatColumns" class="cheat-columns">
+            <ui:VisualElement name="commandsColumn" class="commands-column">
+                <ui:VisualElement class="help-heading">
+                    <ui:Label name="commandCount" text="" class="section-title" />
+                    <ui:Button name="helpCheatCommands" text="@loc:icon.help" tooltip="@loc:ui.Cheat.helpCheatCommands.tooltip" class="help-button" />
+                </ui:VisualElement>
+                <ui:Button name="showMacros" text="@loc:ui.Cheat.showMacros.text" class="command-button fixed-macro-entry" />
+                <ui:ListView name="commandList" class="command-list" fixed-item-height="46" />
+            </ui:VisualElement>
+            <ui:VisualElement name="cheatSplitter" class="cheat-splitter" tooltip="@loc:ui.Cheat.cheatSplitter.tooltip">
+                <ui:Label text="@loc:ui.Cheat.label8.text" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:VisualElement class="details-column">
+                <ui:VisualElement class="help-heading">
+                    <ui:Label name="commandDescription" text="" class="command-description" />
+                    <ui:Button name="helpCheatDetails" text="@loc:icon.help" tooltip="@loc:ui.Cheat.helpCheatDetails.tooltip" class="help-button" />
+                </ui:VisualElement>
+                <ui:Instance template="macroGridTemplate" name="macroGridHost" class="macro-grid-host" />
+                <ui:VisualElement name="presetsBox" class="presets-box is-hidden">
+                    <ui:VisualElement class="preset-toolbar">
+                        <ui:TextField name="presetSearch" placeholder-text="搜索预设名称 / 参数 / 标签" tooltip="@loc:ui.Cheat.presetSearch.tooltip" class="preset-search" />
+                        <ui:Button name="presetSearchHistory" text="@loc:icon.log" tooltip="@loc:ui.Cheat.presetSearchHistory.tooltip" class="search-history-button" />
+                        <ui:SliderInt name="presetButtonSize" tooltip="@loc:ui.Cheat.presetButtonSize.tooltip" class="preset-size-slider dev-horizontal-slider" />
+                    </ui:VisualElement>
+                    <ui:ScrollView name="presetScroll" class="preset-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden">
+                        <ui:VisualElement name="presetGrid" class="preset-grid" />
+                        <ui:Label name="presetEmpty" text="@loc:ui.Cheat.presetEmpty.text" class="muted wrap is-hidden" />
+                    </ui:ScrollView>
+                    <ui:VisualElement name="presetPager" class="preset-pager preset-pager-stacked">
+                        <ui:VisualElement class="preset-page-navigation">
+                            <ui:Button name="previousPresets" text="@loc:ui.Cheat.previousPresets.text" />
+                            <ui:Label name="presetPageInfo" text="" class="muted preset-page-info" />
+                            <ui:Button name="nextPresets" text="@loc:ui.Cheat.nextPresets.text" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="preset-page-jump">
+                            <ui:Label text="@loc:ui.Cheat.label18.text" />
+                            <ui:IntegerField name="presetJumpPage" value="1" is-delayed="true" tooltip="@loc:ui.Cheat.presetJumpPage.tooltip" class="preset-jump-page" />
+                            <ui:Label text="@loc:ui.Cheat.label20.text" />
+                            <ui:Button name="jumpPresets" text="@loc:ui.Cheat.jumpPresets.text" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="parameterForm" class="parameter-form">
+                    <ui:ScrollView class="details-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden">
+                        <ui:VisualElement name="parameterFields" />
+                        <ui:Label text="@loc:ui.Cheat.label22.text" class="muted wrap parameter-hint" />
+                    </ui:ScrollView>
+                    <ui:Button name="executeCommand" text="@loc:ui.Cheat.executeCommand.text" class="execute-button" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+        <ui:VisualElement class="cheat-status-toolbar">
+            <ui:Label name="cheatStatus" text="" class="muted wrap status" />
+            <ui:SliderInt name="cheatLogLineCount" label="@loc:ui.Cheat.cheatLogLineCount.label" tooltip="@loc:ui.Cheat.cheatLogLineCount.tooltip" class="cheat-log-count dev-horizontal-slider" />
+        </ui:VisualElement>
+        <ui:VisualElement name="cheatLogPreview" class="cheat-log-preview">
+            <ui:Label name="cheatLatestLog0" text="@loc:ui.Cheat.cheatLatestLog0.text" enable-rich-text="true" class="cheat-latest-log" picking-mode="Ignore" />
+            <ui:Label name="cheatLatestLog1" enable-rich-text="true" class="cheat-latest-log is-hidden" picking-mode="Ignore" />
+            <ui:Label name="cheatLatestLog2" enable-rich-text="true" class="cheat-latest-log is-hidden" picking-mode="Ignore" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="GameDevToolLayout.uss" />
+    <ui:Style src="ToolkitControls.uss" />
+    <ui:VisualElement class="hover-details-content">
+        <ui:Label name="hoverDetailsTitle" text="@loc:ui.CommandDetails.hoverDetailsTitle.text" class="section-title" />
+        <ui:VisualElement class="hover-details-fields">
+            <ui:Image name="hoverDetailIcon" class="hover-detail-icon is-hidden" picking-mode="Ignore" />
+            <ui:Label name="hoverDetailName" enable-rich-text="false" class="hover-detail-name wrap" picking-mode="Ignore" />
+            <ui:Label name="hoverDetailKind" enable-rich-text="false" class="hover-detail-kind muted wrap" picking-mode="Ignore" />
+            <ui:Label name="hoverDetailBody" enable-rich-text="false" class="hover-detail-body wrap" picking-mode="Ignore" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

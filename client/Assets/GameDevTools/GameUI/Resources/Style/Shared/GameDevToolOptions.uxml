@@ -1,0 +1,109 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="GameDevToolLayout.uss" />
+    <ui:Style src="ToolkitControls.uss" />
+    <ui:VisualElement name="optionContent" class="page options-page">
+        <ui:ScrollView name="optionsScroll" class="settings-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden">
+            <ui:VisualElement name="settingsContent" class="settings-content">
+                <ui:VisualElement name="interfaceSettingsSection" class="settings-section">
+                    <ui:VisualElement class="help-heading">
+                        <ui:Label name="interfaceSettingsTitle" text="@loc:ui.Options.interfaceSettingsTitle.text" class="settings-section-title" />
+                        <ui:Button name="helpInterfaceSettings" text="@loc:icon.help" tooltip="@loc:ui.Options.helpInterfaceSettings.tooltip" class="help-button" />
+                    </ui:VisualElement>
+                    <ui:Label text="@loc:ui.Options.label4.text" class="settings-section-hint" />
+                    <ui:VisualElement class="settings-section-rows">
+                        <ui:VisualElement class="setting-row unity-base-field ui-style-option">
+                            <ui:Label text="@loc:ui.Options.label5.text" class="unity-base-field__label" />
+                            <ui:Button name="uiStyle" tooltip="@loc:ui.Options.uiStyle.tooltip" class="ui-style-picker">
+                                <ui:Label text="@loc:icon.open" class="ui-style-arrow" picking-mode="Ignore" />
+                                <ui:Label name="uiStyleName" text="@loc:ui.Options.uiStyleName.text" class="ui-style-name" picking-mode="Ignore" />
+                            </ui:Button>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="setting-row unity-base-field ui-style-option">
+                            <ui:Label text="@loc:ui.Options.label9.text" class="unity-base-field__label" />
+                            <ui:Button name="uiFont" tooltip="@loc:ui.Options.uiFont.tooltip" class="ui-style-picker">
+                                <ui:Label text="@loc:icon.open" class="ui-style-arrow" picking-mode="Ignore" />
+                                <ui:Label name="uiFontName" text="@loc:ui.Options.uiFontName.text" class="ui-style-name" picking-mode="Ignore" />
+                            </ui:Button>
+                        </ui:VisualElement>
+                        <ui:VisualElement class="setting-row unity-base-field ui-style-option">
+                            <ui:Label text="@loc:options.language" class="unity-base-field__label" />
+                            <ui:Button name="uiLanguage" tooltip="@loc:options.language.tooltip" class="ui-style-picker">
+                                <ui:Label text="@loc:icon.open" class="ui-style-arrow" picking-mode="Ignore" />
+                                <ui:Label name="uiLanguageName" class="ui-style-name" picking-mode="Ignore" />
+                            </ui:Button>
+                        </ui:VisualElement>
+                        <ui:Slider name="panelOpacity" label="@loc:ui.Options.panelOpacity.label" tooltip="@loc:ui.Options.panelOpacity.tooltip" class="setting-row floating-setting-slider dev-horizontal-slider" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="toolSettingsSection" class="settings-section">
+                    <ui:VisualElement class="help-heading">
+                        <ui:Label name="toolSettingsTitle" text="@loc:options.tool.title" class="settings-section-title" />
+                        <ui:Button name="helpToolSettings" text="@loc:icon.help" tooltip="@loc:options.tool.help" class="help-button" />
+                    </ui:VisualElement>
+                    <ui:Label text="@loc:options.tool.hint" class="settings-section-hint" />
+                    <ui:VisualElement class="settings-section-rows">
+                        <ui:VisualElement class="setting-row unity-base-field">
+                            <ui:Label name="shortcutSettingLabel" text="@loc:options.shortcut.label" class="unity-base-field__label" />
+                            <ui:VisualElement class="shortcut-picker unity-base-field__input">
+                                <ui:Button name="shortcutModifier" tooltip="@loc:options.shortcut.modifier.tooltip" class="ui-style-picker shortcut-modifier-picker">
+                                    <ui:Label text="@loc:icon.open" class="ui-style-arrow" picking-mode="Ignore" />
+                                    <ui:Label name="shortcutModifierName" class="ui-style-name" picking-mode="Ignore" />
+                                </ui:Button>
+                                <ui:Button name="shortcutKey" tooltip="@loc:options.shortcut.key.tooltip" class="ui-style-picker">
+                                    <ui:Label text="@loc:icon.open" class="ui-style-arrow" picking-mode="Ignore" />
+                                    <ui:Label name="shortcutKeyName" class="ui-style-name" picking-mode="Ignore" />
+                                </ui:Button>
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                        <ui:Toggle name="minimizeOnShortcut" label="@loc:options.shortcut.minimize.label" tooltip="@loc:options.shortcut.minimize.tooltip" class="setting-row" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="consoleSettingsSection" class="settings-section">
+                    <ui:VisualElement class="help-heading">
+                        <ui:Label name="consoleSettingsTitle" text="@loc:ui.Options.consoleSettingsTitle.text" class="settings-section-title" />
+                        <ui:Button name="helpConsoleSettings" text="@loc:icon.help" tooltip="@loc:ui.Options.helpConsoleSettings.tooltip" class="help-button" />
+                    </ui:VisualElement>
+                    <ui:Label text="@loc:ui.Options.label18.text" class="settings-section-hint" />
+                    <ui:VisualElement class="settings-section-rows">
+                        <ui:IntegerField name="inputHistoryCapacity" label="@loc:ui.Options.inputHistoryCapacity.label" is-delayed="true" class="setting-row" />
+                        <ui:IntegerField name="commandQueryCacheCapacity" label="@loc:ui.Options.commandQueryCacheCapacity.label" is-delayed="true" class="setting-row" />
+                        <ui:IntegerField name="alternativeCommandCount" label="@loc:ui.Options.alternativeCommandCount.label" is-delayed="true" class="setting-row" />
+                        <ui:Toggle name="consoleShowLogIcons" label="@loc:ui.Options.consoleShowLogIcons.label" tooltip="@loc:ui.Options.consoleShowLogIcons.tooltip" class="setting-row" />
+                        <ui:Toggle name="consoleShowTimestamps" label="@loc:ui.Options.consoleShowTimestamps.label" tooltip="@loc:ui.Options.consoleShowTimestamps.tooltip" class="setting-row" />
+                        <ui:Toggle name="consoleCollapseLogs" label="@loc:ui.Options.consoleCollapseLogs.label" class="setting-row" />
+                        <ui:Toggle name="recordFailedCommand" label="@loc:ui.Options.recordFailedCommand.label" class="setting-row" />
+                        <ui:Toggle name="outputVmExceptionStack" label="@loc:ui.Options.outputVmExceptionStack.label" class="setting-row" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="cheatSettingsSection" class="settings-section">
+                    <ui:VisualElement class="help-heading">
+                        <ui:Label name="cheatSettingsTitle" text="@loc:ui.Options.cheatSettingsTitle.text" class="settings-section-title" />
+                        <ui:Button name="helpCheatSettings" text="@loc:icon.help" tooltip="@loc:ui.Options.helpCheatSettings.tooltip" class="help-button" />
+                    </ui:VisualElement>
+                    <ui:Label text="@loc:ui.Options.label32.text" class="settings-section-hint" />
+                    <ui:VisualElement class="settings-section-rows">
+                        <ui:SliderInt name="cheatPreviewLogLines" label="@loc:ui.Options.cheatPreviewLogLines.label" class="setting-row floating-setting-slider dev-horizontal-slider cheat-log-option" />
+                        <ui:IntegerField name="cheatSearchHistoryCapacity" label="@loc:ui.Options.cheatSearchHistoryCapacity.label" is-delayed="true" tooltip="@loc:ui.Options.cheatSearchHistoryCapacity.tooltip" class="setting-row" />
+                        <ui:VisualElement class="setting-row search-history-actions">
+                            <ui:Button name="clearCheatSearchHistory" text="@loc:ui.Options.clearCheatSearchHistory.text" tooltip="@loc:ui.Options.clearCheatSearchHistory.tooltip" />
+                            <ui:Button name="viewCheatSearchHistory" text="@loc:ui.Options.viewCheatSearchHistory.text" tooltip="@loc:ui.Options.viewCheatSearchHistory.tooltip" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="floatingSettingsSection" class="settings-section">
+                    <ui:VisualElement class="help-heading">
+                        <ui:Label name="floatingSettingsTitle" text="@loc:ui.Options.floatingSettingsTitle.text" class="settings-section-title" />
+                        <ui:Button name="helpFloatingOptions" text="@loc:icon.help" tooltip="@loc:ui.Options.helpFloatingOptions.tooltip" class="help-button" />
+                    </ui:VisualElement>
+                    <ui:Label text="@loc:ui.Options.label43.text" class="settings-section-hint" />
+                    <ui:VisualElement class="settings-section-rows">
+                        <ui:Toggle name="floatingShowLogs" label="@loc:ui.Options.floatingShowLogs.label" class="setting-row" />
+                        <ui:SliderInt name="floatingLogLines" label="@loc:ui.Options.floatingLogLines.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
+                        <ui:SliderInt name="floatingBackgroundOpacity" label="@loc:ui.Options.floatingBackgroundOpacity.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
+                        <ui:SliderInt name="floatingTextOpacity" label="@loc:ui.Options.floatingTextOpacity.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:ScrollView>
+    </ui:VisualElement>
+</ui:UXML>

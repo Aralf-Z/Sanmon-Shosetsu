@@ -1,0 +1,18 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="GameDevToolLayout.uss" />
+    <ui:Style src="ToolkitControls.uss" />
+    <ui:VisualElement name="searchHistoryDialog" class="search-history-dialog">
+        <ui:VisualElement class="theme-shadow" picking-mode="Ignore" />
+        <ui:VisualElement class="theme-dialog-surface">
+            <ui:VisualElement class="search-history-window-header">
+                <ui:Label text="@loc:ui.SearchHistoryWindow.label1.text" class="search-history-window-title" />
+                <ui:Label name="searchHistoryWindowCount" text="@loc:ui.SearchHistoryWindow.searchHistoryWindowCount.text" class="muted" />
+                <ui:Button name="closeSearchHistoryWindow" text="@loc:icon.close" tooltip="@loc:ui.SearchHistoryWindow.closeSearchHistoryWindow.tooltip" class="window-control-button" />
+            </ui:VisualElement>
+            <ui:Label text="@loc:ui.SearchHistoryWindow.label5.text" class="settings-section-hint" />
+            <ui:ScrollView name="searchHistoryWindowScroll" class="search-history-window-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Auto">
+                <ui:VisualElement name="searchHistoryEntries" class="search-history-records" />
+            </ui:ScrollView>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

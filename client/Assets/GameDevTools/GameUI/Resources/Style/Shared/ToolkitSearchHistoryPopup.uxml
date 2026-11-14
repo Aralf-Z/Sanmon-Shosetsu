@@ -1,0 +1,9 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="GameDevToolLayout.uss" />
+    <ui:Style src="ToolkitControls.uss" />
+    <ui:VisualElement name="searchHistoryPopup" class="search-history-popup">
+        <ui:VisualElement class="theme-shadow" picking-mode="Ignore" />
+        <ui:VisualElement class="theme-popup-outline" picking-mode="Ignore" />
+        <ui:ScrollView name="searchHistoryScroll" class="search-history-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Auto" />
+    </ui:VisualElement>
+</ui:UXML>

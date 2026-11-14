@@ -1,0 +1,46 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="GameDevToolLayout.uss" />
+    <ui:Style src="ToolkitControls.uss" />
+    <ui:VisualElement name="consoleContent" class="page console-page">
+        <ui:VisualElement class="toolbar">
+            <ui:Label name="consoleTitle" text="" class="section-title" />
+            <ui:Button name="helpConsole" text="@loc:icon.help" tooltip="@loc:ui.Console.helpConsole.tooltip" class="help-button" />
+        </ui:VisualElement>
+        <ui:VisualElement name="consoleColumns" class="console-columns">
+            <ui:VisualElement name="consoleMainColumn" class="console-main-column">
+                <ui:VisualElement class="console-filter-toolbar">
+                    <ui:Button name="consoleNewLogs" text="@loc:ui.Console.consoleNewLogs.text" class="is-hidden" />
+                    <ui:VisualElement class="console-display-options">
+                        <ui:Toggle name="consoleIconsToggle" text="@loc:icon.type" tooltip="@loc:ui.Console.consoleIconsToggle.tooltip" class="console-display-toggle" />
+                        <ui:Toggle name="consoleTimestampsToggle" text="@loc:icon.timestamp" tooltip="@loc:ui.Console.consoleTimestampsToggle.tooltip" class="console-display-toggle" />
+                        <ui:Toggle name="consoleCollapseToggle" text="@loc:icon.fold" tooltip="@loc:ui.Console.consoleCollapseToggle.tooltip" class="console-display-toggle" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="console-command-actions">
+                        <ui:Button name="clearOutput" text="@loc:ui.Console.clearOutput.text" />
+                        <ui:Button name="consoleFilterDev" text="@loc:icon.dev" tooltip="@loc:ui.Console.consoleFilterDev.tooltip" />
+                        <ui:Button name="consoleFilterLog" text="@loc:icon.log" />
+                        <ui:Button name="consoleFilterWarning" text="@loc:icon.warning" />
+                        <ui:Button name="consoleFilterError" text="@loc:icon.error" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:ScrollView name="outputList" class="output-list" mode="Vertical" horizontal-scroller-visibility="Hidden" />
+                <ui:ListView name="suggestionList" class="suggestion-list is-hidden" fixed-item-height="24" selection-type="None" />
+                <ui:TextField name="commandInput" label="@loc:ui.Console.commandInput.label" class="command-input" />
+                <ui:Label name="consoleInputHint" text="@loc:ui.Console.consoleInputHint.text" class="muted input-hint" />
+            </ui:VisualElement>
+            <ui:VisualElement name="consoleLogDetails" class="console-log-details is-hidden">
+                <ui:VisualElement class="help-heading">
+                    <ui:Label text="@loc:ui.Console.label18.text" class="section-title" />
+                    <ui:Button name="helpStack" text="@loc:icon.help" tooltip="@loc:ui.Console.helpStack.tooltip" class="help-button" />
+                </ui:VisualElement>
+                <ui:Label name="consoleLogMetadata" text="" class="console-log-metadata" />
+                <ui:Button name="copyConsoleLogStack" text="@loc:ui.Console.copyConsoleLogStack.text" />
+                <ui:Label text="@loc:ui.Console.label22.text" class="console-stack-caption" />
+                <ui:ScrollView name="consoleStackScroll" class="console-stack-scroll" mode="Vertical" vertical-scroller-visibility="AlwaysVisible" horizontal-scroller-visibility="Hidden">
+                    <ui:VisualElement name="consoleLogStack" class="console-stack-entries" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+            <ui:Button name="toggleConsoleLogDetails" text="@loc:icon.expandLeft" class="console-details-toggle" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

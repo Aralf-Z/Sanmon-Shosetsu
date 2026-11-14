@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:VisualElement class="macro-cell">
+        <ui:VisualElement class="macro-cell-tools">
+            <ui:Label name="macroDragHandle" text="@loc:ui.MacroButton.macroDragHandle.text" tooltip="@loc:ui.MacroButton.macroDragHandle.tooltip" class="pin-drag-handle is-hidden" />
+            <ui:Label name="macroPinned" text="@loc:icon.pin" class="macro-pin-marker is-hidden" />
+        </ui:VisualElement>
+        <ui:Button name="macroButton" class="preset-button macro-grid-button">
+            <ui:Label name="macroButtonName" enable-rich-text="false" class="preset-name" picking-mode="Ignore" />
+        </ui:Button>
+    </ui:VisualElement>
+</ui:UXML>

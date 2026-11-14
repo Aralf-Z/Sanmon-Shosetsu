@@ -1,0 +1,29 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:dev="GameConsole.UI" editor-extension-mode="False">
+    <ui:VisualElement name="helpBackdrop" class="help-backdrop">
+        <ui:VisualElement name="helpDialog" class="help-dialog" focusable="true">
+            <ui:VisualElement class="theme-shadow" picking-mode="Ignore" />
+            <ui:VisualElement class="theme-dialog-surface">
+                <ui:VisualElement name="helpHeader" class="help-heading help-header">
+                    <ui:Label text="@loc:ui.HelpWindow.label1.text" class="section-title" picking-mode="Ignore" />
+                    <dev:ToolkitHeaderPattern class="window-header-pattern" picking-mode="Ignore" />
+                    <ui:Button name="closeHelp" text="@loc:icon.close" tooltip="@loc:ui.HelpWindow.closeHelp.tooltip" class="window-control-button" />
+                </ui:VisualElement>
+                <ui:VisualElement class="help-columns">
+                    <ui:ScrollView name="helpNavigation" class="help-navigation" mode="Vertical" horizontal-scroller-visibility="Hidden" />
+                    <ui:VisualElement class="help-content">
+                        <ui:Label name="helpAreaTitle" class="help-area-title" />
+                        <ui:Label name="helpFeatureTitle" class="help-feature-title" />
+                        <ui:VisualElement name="helpBodyViewport" class="help-body-viewport">
+                            <ui:Label name="helpBody" enable-rich-text="false" focusable="true" class="help-body" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="help-pager">
+                            <ui:Button name="previousHelp" text="@loc:ui.HelpWindow.previousHelp.text" />
+                            <ui:Label name="helpPageInfo" text="" class="help-page-info" />
+                            <ui:Button name="nextHelp" text="@loc:ui.HelpWindow.nextHelp.text" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

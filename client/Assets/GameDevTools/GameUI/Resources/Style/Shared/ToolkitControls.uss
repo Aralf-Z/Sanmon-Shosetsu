@@ -1,0 +1,36 @@
+/* Common control states and geometry, applied after the selected appearance. */
+.console-log-body, .console-log-type, .suggestion-list .list-item-text { color: #e2e8f0; }
+.console-stack-text { color: #e2e8f0; }
+.cheat-latest-log { color: #e2e8f0; }
+.macro-native-text { color: transparent; }
+.macro-diagnostics.macro-error { color: #f27a5f; }
+.floating-log-line { color: #e2e8f0; }
+.macro-source-scroll { flex-grow: 1; flex-basis: 0; min-width: 0; min-height: 0; }
+.macro-source-scroll > .unity-scroll-view__content-and-vertical-scroll-container { flex-grow: 1; flex-basis: 0; min-height: 0; }
+.macro-source-scroll .macro-source { flex-grow: 0; flex-shrink: 0; flex-basis: auto; min-width: 0; min-height: 0; margin: 0; }
+.macro-source-scroll .macro-source > .unity-base-field__input { flex-grow: 1; flex-basis: auto; min-width: 0; min-height: 0; -unity-text-align: upper-left; white-space: nowrap; }
+.macro-source .macro-inner-scroll { flex-grow: 1; flex-basis: 0; min-width: 0; min-height: 0; }
+.macro-source .macro-inner-scroll > .unity-scroll-view__content-and-vertical-scroll-container { flex-grow: 1; flex-basis: 0; min-height: 0; }
+.macro-initialization-error { white-space: normal; flex-shrink: 0; margin: 12px; }
+#windowHeader { background-image: none; }
+#helpHeader > .section-title { flex-grow: 0; flex-basis: auto; margin-right: 12px; }
+.help-navigation .help-tree-branch > .unity-foldout__toggle, .help-navigation Button.help-tree-entry { --dev-opacity-background: transparent; --dev-opacity-background-set: 1; background-color: var(--dev-opacity-background); background-image: none; border-width: 0; border-radius: 6px; color: var(--dev-text); }
+.help-navigation .help-tree-branch > .unity-foldout__toggle { padding: 6px 4px; }
+.help-navigation .help-tree-branch > .unity-foldout__toggle .unity-toggle__input { --dev-opacity-background: transparent; --dev-opacity-background-set: 1; background-color: var(--dev-opacity-background); border-width: 0; }
+.help-navigation Button.help-tree-entry { padding: 4px 8px; }
+.help-navigation .help-tree-branch > .unity-foldout__toggle:hover, .help-navigation .help-tree-branch > .unity-foldout__toggle:focus, .help-navigation Button.help-tree-entry:hover, .help-navigation Button.help-tree-entry:focus { --dev-opacity-background: var(--help-hover-background); }
+.help-navigation Button.help-tree-entry.selected { --dev-opacity-background: var(--help-selected-background); color: var(--help-selected-text); -unity-font-style: bold; }
+.floating-log-preview { padding-top: 10px; padding-bottom: 10px; }
+.floating-settings .setting-row.unity-toggle > .unity-toggle__input { --dev-opacity-background: transparent; --dev-opacity-background-set: 1; background-color: var(--dev-opacity-background); border-width: 0; }
+
+.window-header-pattern {
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 0;
+    min-height: 30px;
+    align-self: stretch;
+    --header-pattern-fade: 32;
+    --dev-opacity-image-tint: #ffffff;
+    --dev-opacity-image-tint-set: 1;
+    -unity-background-image-tint-color: var(--dev-opacity-image-tint);
+}

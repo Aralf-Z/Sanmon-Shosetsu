@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="GameDevToolLayout.uss" />
+    <ui:Style src="ToolkitControls.uss" />
+    <ui:VisualElement class="pinned-drag-preview-content" picking-mode="Ignore">
+        <ui:Label text="@loc:ui.PinnedDragPreview.label1.text" class="pinned-drag-preview-icon" picking-mode="Ignore" />
+        <ui:Label name="pinnedDragPreviewName" enable-rich-text="false" class="pinned-drag-preview-name" picking-mode="Ignore" />
+    </ui:VisualElement>
+</ui:UXML>

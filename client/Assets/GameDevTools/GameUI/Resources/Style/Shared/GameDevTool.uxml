@@ -1,0 +1,83 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:dev="GameConsole.UI" editor-extension-mode="False">
+    <ui:Template name="optionPageTemplate" src="GameDevToolOptions.uxml" />
+    <ui:Template name="cheatPageTemplate" src="GameDevToolCheat.uxml" />
+    <ui:Template name="consolePageTemplate" src="GameDevToolConsole.uxml" />
+    <ui:Template name="macroPageTemplate" src="GameDevToolMacro.uxml" />
+    <ui:Template name="floatingSettingsTemplate" src="ToolkitFloatingSettings.uxml" />
+    <ui:Template name="commandDetailsTemplate" src="ToolkitCommandDetails.uxml" />
+    <ui:Template name="helpWindowTemplate" src="ToolkitHelpWindow.uxml" />
+    <ui:Style src="GameDevToolLayout.uss" />
+    <ui:Style src="ToolkitControls.uss" />
+    <ui:VisualElement name="toolkitLayers" class="dev-layers" picking-mode="Ignore">
+        <ui:VisualElement name="floatingLogPreview" class="floating-log-preview is-hidden" picking-mode="Ignore">
+            <ui:VisualElement name="floatingPreviewLines" class="floating-log-lines" picking-mode="Ignore" />
+        </ui:VisualElement>
+        <ui:VisualElement name="toolkitDesktop" class="dev-desktop" picking-mode="Ignore">
+            <ui:VisualElement name="toolkitWindow" class="dev-window">
+                <ui:VisualElement class="theme-shadow" picking-mode="Ignore" />
+                <ui:VisualElement class="theme-window-surface">
+                    <ui:VisualElement name="windowHeader" class="header">
+                        <ui:VisualElement class="window-heading" picking-mode="Ignore">
+                            <ui:Label name="windowTitle" text="@loc:ui.Window.windowTitle.text" class="title" />
+                            <dev:ToolkitHeaderPattern class="window-header-pattern" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                        <ui:VisualElement class="window-controls" picking-mode="Ignore">
+                            <ui:Button name="helpWindow" text="@loc:icon.help" tooltip="@loc:ui.Window.helpWindow.tooltip" class="help-button" />
+                            <ui:VisualElement class="help-control-separator" picking-mode="Ignore" />
+                            <ui:Button name="minimizeWindow" text="@loc:icon.minimize" tooltip="@loc:ui.Window.minimizeWindow.tooltip" class="window-button window-control-button" />
+                            <ui:Button name="closeWindow" text="@loc:icon.close" tooltip="@loc:ui.Window.closeWindow.tooltip" class="window-button window-control-button" />
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement name="windowBody" class="window-body">
+                        <ui:VisualElement name="consolePage" class="page-host">
+                            <ui:Instance template="consolePageTemplate" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="cheatPage" class="page-host is-hidden">
+                            <ui:Instance template="cheatPageTemplate" />
+                        </ui:VisualElement>
+                        <ui:VisualElement name="secondaryPages" class="secondary-pages is-hidden">
+                            <ui:VisualElement name="macroPage" class="page-host is-hidden">
+                                <ui:Instance template="macroPageTemplate" />
+                            </ui:VisualElement>
+                            <ui:VisualElement name="optionPage" class="page-host is-hidden">
+                                <ui:Instance template="optionPageTemplate" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:VisualElement class="footer muted" picking-mode="Ignore">
+                        <ui:Label name="shortcutHint" class="shortcut-hint" picking-mode="Ignore" />
+                        <ui:Label name="toolkitVersion" class="toolkit-version" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="windowResizeHandle" class="resize-handle">
+                        <ui:Label text="@loc:ui.Window.label8.text" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="windowRail" class="window-rail" picking-mode="Ignore">
+                <ui:VisualElement name="windowSideTabs" class="side-tabs" picking-mode="Ignore">
+                    <ui:Button name="consoleTab" text="@loc:ui.Window.consoleTab.text" class="side-tab" />
+                    <ui:Button name="cheatTab" text="@loc:ui.Window.cheatTab.text" class="side-tab" />
+                    <ui:Button name="macroTab" text="@loc:ui.Window.macroTab.text" class="side-tab" />
+                    <ui:Button name="optionTab" text="@loc:ui.Window.optionTab.text" class="side-tab" />
+                </ui:VisualElement>
+                <ui:VisualElement name="commandHoverDetails" class="command-hover-details is-hidden">
+                    <ui:VisualElement class="theme-shadow" picking-mode="Ignore" />
+                    <ui:Instance template="commandDetailsTemplate" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:VisualElement name="windowResizePreview" class="resize-preview is-hidden" picking-mode="Ignore" />
+            <ui:VisualElement name="floatingTool" class="floating-tool is-hidden">
+                <ui:VisualElement class="floating-badge-frame" picking-mode="Ignore" />
+                <ui:VisualElement class="floating-badge-mark-a" picking-mode="Ignore" />
+                <ui:VisualElement class="floating-badge-mark-b" picking-mode="Ignore" />
+                <ui:Label text="@loc:floating.badgePrefix" class="floating-badge-prefix" picking-mode="Ignore" />
+                <ui:Label text="@loc:ui.Window.label13.text" class="floating-icon" picking-mode="Ignore" />
+                <ui:Button name="floatingSettingsButton" text="@loc:ui.Window.floatingSettingsButton.text" tooltip="@loc:ui.Window.floatingSettingsButton.tooltip" class="floating-settings-button" />
+            </ui:VisualElement>
+            <ui:VisualElement name="floatingSettings" class="floating-settings is-hidden">
+                <ui:Instance template="floatingSettingsTemplate" />
+            </ui:VisualElement>
+            <ui:Instance name="helpWindowHost" template="helpWindowTemplate" class="help-layer is-hidden" picking-mode="Ignore" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

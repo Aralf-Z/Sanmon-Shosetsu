@@ -1,0 +1,93 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="GameDevToolLayout.uss" />
+    <ui:Style src="ToolkitControls.uss" />
+    <ui:VisualElement name="macroContent" class="page macro-page">
+        <ui:ScrollView name="macroColumnsScroll" mode="Horizontal" vertical-scroller-visibility="Hidden" class="macro-layout-scroll">
+            <ui:VisualElement name="macroColumns" class="macro-columns">
+                <ui:VisualElement name="macroLibrary" class="macro-library">
+                    <ui:VisualElement class="help-heading">
+                        <ui:Label text="@loc:ui.Macro.label1.text" class="section-title" />
+                        <ui:Button name="helpMacroLibrary" text="@loc:icon.help" tooltip="@loc:ui.Macro.helpMacroLibrary.tooltip" class="help-button" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="toolbar">
+                        <ui:Button name="newMacro" text="@loc:ui.Macro.newMacro.text" />
+                        <ui:Button name="copyMacro" text="@loc:ui.Macro.copyMacro.text" />
+                    </ui:VisualElement>
+                    <ui:ScrollView mode="Vertical" horizontal-scroller-visibility="Hidden" class="macro-library-scroll">
+                        <ui:Foldout text="@loc:ui.Macro.label6.text" value="true">
+                            <ui:VisualElement name="customMacroList" />
+                        </ui:Foldout>
+                        <ui:Foldout text="@loc:ui.Macro.label7.text" value="true">
+                            <ui:VisualElement name="builtInMacroList" />
+                        </ui:Foldout>
+                    </ui:ScrollView>
+                </ui:VisualElement>
+                <ui:VisualElement class="macro-sidebar-gap" picking-mode="Ignore" />
+                <ui:VisualElement class="macro-editor">
+                    <ui:TextField name="macroName" label="@loc:ui.Macro.macroName.label" />
+                    <ui:TextField name="macroDescription" label="@loc:ui.Macro.macroDescription.label" />
+                    <ui:VisualElement class="toolbar">
+                        <ui:Label text="@loc:ui.Macro.label10.text" class="section-title" />
+                        <ui:Button name="toggleMacroHelp" text="@loc:ui.Macro.toggleMacroHelp.text" class="is-hidden" />
+                        <ui:Button name="formatMacro" text="@loc:ui.Macro.formatMacro.text" />
+                        <ui:Button name="helpMacroEditor" text="@loc:icon.help" tooltip="@loc:ui.Macro.helpMacroEditor.tooltip" class="help-button" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="macro-source-frame">
+                        <ui:VisualElement class="macro-source-row">
+                            <ui:VisualElement class="macro-gutter" picking-mode="Ignore">
+                                <ui:VisualElement name="macroLineNumberViewport" class="macro-line-number-viewport" picking-mode="Ignore">
+                                    <ui:Label name="macroLineNumbers" text="" class="macro-line-numbers" picking-mode="Ignore" />
+                                </ui:VisualElement>
+                            </ui:VisualElement>
+                            <ui:ScrollView name="macroSourceScroll" class="macro-source-native-scroll macro-source-scroll" mode="VerticalAndHorizontal" vertical-scroller-visibility="AlwaysVisible" horizontal-scroller-visibility="Auto">
+                                <ui:TextField name="macroBody" multiline="true" tooltip="@loc:ui.Macro.macroBody.tooltip" class="macro-source" />
+                            </ui:ScrollView>
+                        </ui:VisualElement>
+                    </ui:VisualElement>
+                    <ui:ScrollView mode="Vertical" horizontal-scroller-visibility="Hidden" class="macro-diagnostics-scroll">
+                        <ui:Label name="macroDiagnostics" text="" class="wrap macro-diagnostics" tooltip="@loc:ui.Macro.macroDiagnostics.tooltip" />
+                    </ui:ScrollView>
+                    <ui:VisualElement class="macro-actions">
+                        <ui:Button name="saveMacro" text="@loc:ui.Macro.saveMacro.text" />
+                        <ui:Button name="deleteMacro" text="@loc:ui.Macro.deleteMacro.text" />
+                        <ui:VisualElement class="macro-action-spacer" />
+                        <ui:Button name="runMacro" text="@loc:ui.Macro.runMacro.text" />
+                        <ui:Button name="stopMacroEditor" text="@loc:ui.Macro.stopMacroEditor.text" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="macroRightGap" class="macro-sidebar-gap" picking-mode="Ignore" />
+                <ui:VisualElement name="macroHelpHost" class="macro-help-host">
+                    <ui:VisualElement name="macroHelpPanel" class="macro-help">
+                        <ui:VisualElement class="help-heading">
+                            <ui:Label text="@loc:ui.Macro.label21.text" class="section-title" />
+                            <ui:Button name="helpMacroSyntax" text="@loc:icon.help" tooltip="@loc:ui.Macro.helpMacroSyntax.tooltip" class="help-button" />
+                        </ui:VisualElement>
+                        <ui:ScrollView mode="Vertical" horizontal-scroller-visibility="Hidden" class="macro-keywords-scroll">
+                            <ui:VisualElement name="macroKeywords" />
+                        </ui:ScrollView>
+                        <ui:ScrollView name="macroHelpDetailsScroll" mode="Vertical" horizontal-scroller-visibility="Hidden" class="macro-help-details-scroll">
+                            <ui:Label name="macroHelpTitle" class="section-title wrap" />
+                            <ui:Label name="macroHelpDescription" enable-rich-text="false" class="wrap" />
+                            <ui:Label name="macroHelpExample" enable-rich-text="false" class="macro-help-example" />
+                            <ui:VisualElement name="macroColorOptions">
+                                <ui:Label text="@loc:ui.Macro.label24.text" class="section-title" />
+                                <ui:VisualElement name="macroColorPalette" class="macro-color-palette">
+                                    <ui:Button name="macroColor0" text="@loc:ui.Macro.macroColor0.text" class="macro-color-blue" />
+                                    <ui:Button name="macroColor1" text="@loc:ui.Macro.macroColor1.text" class="macro-color-green" />
+                                    <ui:Button name="macroColor2" text="@loc:ui.Macro.macroColor2.text" class="macro-color-yellow" />
+                                    <ui:Button name="macroColor3" text="@loc:ui.Macro.macroColor3.text" class="macro-color-orange" />
+                                    <ui:Button name="macroColor4" text="@loc:ui.Macro.macroColor4.text" class="macro-color-purple" />
+                                    <ui:Button name="macroColor5" text="@loc:ui.Macro.macroColor5.text" class="macro-color-white" />
+                                </ui:VisualElement>
+                                <ui:Button name="resetMacroColor" text="@loc:ui.Macro.resetMacroColor.text" />
+                            </ui:VisualElement>
+                        </ui:ScrollView>
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:ScrollView>
+        <ui:Label name="macroEditorStatus" text="" class="muted wrap status" />
+        <ui:VisualElement name="macroHelpBackdrop" class="macro-help-backdrop is-hidden" />
+        <ui:VisualElement name="macroHelpDrawer" class="macro-help-drawer is-hidden" />
+    </ui:VisualElement>
+</ui:UXML>

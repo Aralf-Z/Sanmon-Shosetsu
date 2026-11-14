@@ -1,0 +1,22 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="macroGridBox" class="presets-box is-hidden">
+        <ui:Label text="@loc:ui.MacroGrid.label1.text" class="muted wrap" />
+        <ui:VisualElement class="preset-toolbar">
+            <ui:TextField name="macroGridSearch" placeholder-text="搜索宏名称 / 描述 / 正文" class="preset-search" />
+            <ui:Button name="macroGridSearchHistory" text="@loc:icon.log" tooltip="@loc:ui.MacroGrid.macroGridSearchHistory.tooltip" class="search-history-button" />
+            <ui:SliderInt name="macroButtonSize" tooltip="@loc:ui.MacroGrid.macroButtonSize.tooltip" class="preset-size-slider dev-horizontal-slider" />
+        </ui:VisualElement>
+        <ui:ScrollView name="macroGridScroll" mode="Vertical" horizontal-scroller-visibility="Hidden" class="preset-scroll">
+            <ui:VisualElement name="macroGrid" class="preset-grid" />
+        </ui:ScrollView>
+        <ui:VisualElement class="pager">
+            <ui:Button name="previousMacros" text="@loc:ui.MacroGrid.previousMacros.text" />
+            <ui:Label name="macroPageInfo" text="" class="muted" />
+            <ui:Button name="nextMacros" text="@loc:ui.MacroGrid.nextMacros.text" />
+        </ui:VisualElement>
+        <ui:VisualElement class="macro-actions">
+            <ui:Label name="macroGridStatus" text="@loc:ui.MacroGrid.macroGridStatus.text" class="muted wrap macro-grid-status" />
+            <ui:Button name="stopMacroGrid" text="@loc:ui.MacroGrid.stopMacroGrid.text" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

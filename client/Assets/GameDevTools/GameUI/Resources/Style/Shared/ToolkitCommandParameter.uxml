@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <ui:Style src="GameDevToolLayout.uss" />
+    <ui:Style src="ToolkitControls.uss" />
+    <ui:TextField name="parameterInput" label="@loc:ui.CommandParameter.parameterInput.label" class="parameter-field" />
+</ui:UXML>
