@@ -114,7 +114,7 @@ Resources/
 - 普通界面使用 `ToolkitTextOpacity` 的统一流程, 字体最低透明度保留现有 0.6 规则. 不叠加父节点 opacity 导致文字重复变淡.
 - 背景、边框和图片颜色按现有 `--dev-opacity-*` 标记声明; 悬停等状态只覆盖颜色值. 参考现有风格的同类控件写法.
 - 浮窗日志背景使用 `--floating-log-background`, 背景和文字继续由独立选项控制, 不改为整体透明度.
-- 使用 Unity 2022.3 公开的 UI Toolkit API. 不增加版本兼容宏、私有接口反射或 Unity 6 专属属性.
+- 兼容Unity 2022.3.x +.
 - 使用 USS 支持的属性, 不引入网页 CSS 的渐变、阴影、gap、z-index 或伪元素. 现有渐隐花纹由公共 `ToolkitHeaderPattern` 实现.
 
 ## 6. 新增与维护流程
