@@ -6,19 +6,19 @@
 |---|---|---|
 | `private`, `protected`, `protected internal`, `private protected` | `_camelCase`, 以下划线开头的小驼峰 | `_userName` |
 | 其他, 如 `internal`, `public` | `camelCase`, 小驼峰 | `userName` |
-| 值类型(string除外)的 `const`, `static readonly` | `ALL_UPPER_SNAKE`, 全大写, 下划线分隔 | `MAX_RETRY_COUNT` |
+| 值类型与string的 `const`, `static readonly` | `ALL_UPPER_SNAKE`, 全大写, 下划线分隔 | `MAX_RETRY_COUNT` |
 | 标记为 `[SerializeField]` | `camelCase`, 不加下划线 | `btnCancel` |
 
 命名规则按以下优先级应用:
 
 1. 标记为 `[SerializeField]` 的字段统一使用 `camelCase`, 不加下划线; UI 字段保留组件前缀.
-2. 值类型(string除外)的 `const` 和 `static readonly` 字段使用 `ALL_UPPER_SNAKE`, 优先于访问级别规则.
+2. 值类型与string的 `const` 和 `static readonly` 字段使用 `ALL_UPPER_SNAKE`, 优先于访问级别规则.
 3. 其他字段按访问级别命名.
 
 补充说明:
 
 - 上述值类型规则是命名约定, 不表示 C# 对字段类型的限制. `const` 可以用于字符串, `static readonly` 可以用于引用类型.
-- 引用类型的 `const` 和 `static readonly` 字段按访问级别命名.
+- 引用类型(string除外)的 `const` 和 `static readonly` 字段按访问级别命名.
 - 仅有 `static` 或仅有 `readonly` 修饰时, 仍使用普通字段规则.
 - 所有实例字段必须明确访问修饰符, 避免隐式 `private`.
 
@@ -31,7 +31,7 @@ public int userCount;
 internal static int instanceCount;
 private readonly List<int> _itemIds = new();
 private const int MAX_RETRY_COUNT = 3;
-private const string _defaultUserName = "Guest";
+private const string DEFAULT_USER_NAME = "Guest";
 private static readonly Vector3 DEFAULT_POSITION = Vector3.zero;
 private static readonly List<int> _defaultItemIds = new();
 
@@ -132,7 +132,7 @@ namespace GameScript.ModuleName.SubModule
 
 事件在上述列表中未指定单独位置, 可与相关成员就近组织, 保持所在类内一致.
 
-注意: 特殊修饰符分组优先于访问级别和成员类别排序. 不要用region分割区域. region仅能用于功能区分
+注意: 特殊修饰符分组优先于访问级别和成员类别排序. 不按访问级别或成员类别建立 `region`, 仅允许按功能模块分组.
 
 ### 缩进与空格
 
@@ -141,7 +141,23 @@ namespace GameScript.ModuleName.SubModule
 - 括号内侧不加空格.
 - 控制流关键字与左括号之间保留一个空格, 如 `if (condition)`.
 - 方法名与左括号之间不加空格, 如 `Handle(item)`.
-- C# 方法声明和方法调用的参数列表必须保持在同一行, 不因参数数量或行长度换行.
+- C# 方法声明和方法调用的参数列表必须保持在同一行, 方法调用参数中建议避免嵌套复杂方法调用. 在不改变求值顺序、执行条件和副作用的前提下, 优先将中间结果保存到局部变量后传入. 除下述复杂参数例外外.
+- C# 方法参数包含多行 Lambda、对象初始化器时, 允许按其内部结构换行.
+- C# 方法链式调用除首个方法, 其余建议换行，换行时每个调用独占一行，行首的 . 对齐
+
+```csharp
+
+    var target = allEntities.Where(en => en.group == "enemy")
+            .OrderBy(en => en.transform.position.Distance(oriPos))
+            .FirstOrDefault();
+    
+    target?.OnDealDamage(tar =>
+    {
+        tar.attri.hp += 10;
+        tar.attri.shield += 5;
+    });
+
+```
 - 二元运算符两侧保留空格, 如 `count = total + 1`.
 
 ### 花括号
@@ -155,11 +171,15 @@ if (condition)
 }
 ```
 
-仅return时, 省略花括号且压行.
+当 if 分支仅包含一条 return 语句时, 可以省略花括号, 将条件与返回语句写在同一行. 采用该格式时, 相邻提前返回语句之间保留一个空行.
 
 ```csharp
 
-if (condition) return null;
+if (condition1) return null;
+
+if (condition2) return null;
+
+return result;
 
 ```
 
@@ -168,26 +188,42 @@ if (condition) return null;
 - 类成员之间建议保留一个空行; 不同逻辑块之间可加空行.
 - `using` 语句置于命名空间声明之外, 按系统, 第三方, 内部顺序排列.
 - 单个代码文件建议不超过 400 行; 超过时建议按职责拆分.
+- 方法内的临时变量与逻辑块推荐空行分隔
+
+```csharp
+
+private void Method1(int param1, float param2, string str)
+{
+    var newParam1 = param1 * 10;
+    var newParam2 = param2 * .5f;
+    var strWithPre = $"pre_{str}";
+
+    ProcessParam(newParam1, newParam2);
+    ProcessStr(strWithPre);
+}
+
+```
 
 ### 边界与禁用
 
-- 纯数值运算指直接对已有数值进行比较, 选择或算术运算, 不调用方法或其他外部逻辑. 三目运算符仅允许用于纯数值运算.
+- 纯数值运算指直接对已有数值进行比较, 选择或算术运算, 不调用方法或其他外部逻辑. 三目运算符推荐只用于纯数值运算.
 - 如果有非纯数值运算三目运算符, 必须换行;
 - 三目运算符禁止嵌套
 
 ```csharp
 
-var result = isSuccess ? value++ : value--;
+var result = isSuccess ? value + 1 : value - 1;
 var dmg = isCritical 
-        ? DealNormal() 
-        : DealCrit() ;
+        ? DealCrit() 
+        : DealNormal();
 
 ```
 
 - 尽量减少if嵌套, 如果嵌套过深, 建议使用return提前退出, 或者将if逻辑拆分成方法.
 - `++` 和 `--` 运算符仅允许用于纯数值运算.
 - 方法行数尽量不要超过30行(包括存在局部方法的情况).
-- 仅当同时满足职责单一, 用于复用所属方法内的重复逻辑, 且不捕获 `this` 或其他外部实例时, 才使用局部方法; 否则提取为类方法.
+- 仅当职责单一, 且用于复用所属方法内的重复逻辑时, 才使用局部方法; 否则提取为类方法. 局部方法允许捕获所属方法的参数和局部变量, 但不得捕获 this 或隐式访问实例成员.
+- 赋值、方法实参、条件表达式中建议不要使用 `++`、`--`, 个别情况保持可读性情况下可以适当使用
 
 ## UI 命名前缀
 
@@ -241,7 +277,7 @@ public int ConfigId { get; private set; }
 
 ### 方法
 
-- `private`, `protected`, `protected internal`, `private protected` 方法的注释放在其上, 通常不逐项解释参数. 参数存在特殊单位或约束时, 在注释中说明.这些注释如果命名足够明确规范, 可以省略
+- `private`, `protected`, `protected internal`, `private protected` 方法的注释放在其上, 通常不逐项解释参数. 参数存在特殊单位或约束时, 在注释中说明. 当命名已充分表达用途时, 可以省略重复说明用途的注释; 特殊单位、约束、边界和非直观行为仍需说明.
 
 ```csharp
 // 生成新的敌人.
@@ -259,99 +295,6 @@ public void SpawnNewEnemy(int id)
 }
 ```
 
-### 其他备注
+### 其他注释
 
-其他格式备注按常见备注方式处理.
-
-示例:
-```csharp
-using System;
-using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.UI;
-
-namespace GameScript.Examples
-{
-    /// <summary> 用户面板格式示例. </summary>
-    public class UserPanelExample : MonoBehaviour
-    {
-        /// <summary> 最大重试次数. </summary>
-        public const int MAX_RETRY_COUNT = 3;
-
-        protected const string DEFAULT_USER_NAME = "Guest"; // 默认用户名称.
-
-        private static readonly Vector3 DEFAULT_POSITION = Vector3.zero; // 默认位置.
-
-        /// <summary> 当前用户名称. </summary>
-        public string UserName { get; private set; }
-
-        /// <summary> 面板是否已打开. </summary>
-        public bool IsOpen { get; private set; }
-
-        /// <summary> 用户配置 ID. </summary>
-        public int configId;
-
-        /// <summary> 确认操作时触发. </summary>
-        public event Action e_onConfirm;
-
-        /// <summary> 用户名称变化时触发. </summary>
-        public event Action<string> e_onUserNameChanged;
-
-        /// <summary> 打开面板并设置用户名称. </summary>
-        public void Open(string userName)
-        {
-            var displayName = string.IsNullOrEmpty(userName) ? DEFAULT_USER_NAME : userName;
-
-            UserName = displayName;
-            IsOpen = true;
-
-            RefreshTitle(displayName);
-            e_onUserNameChanged?.Invoke(displayName);
-        }
-
-        /// <summary> 加载面板数据. </summary>
-        public async Task LoadAsync()
-        {
-            if (_isLoading) return;
-
-            _isLoading = true;
-
-            try
-            {
-                await Task.CompletedTask;
-            }
-            finally
-            {
-                _isLoading = false;
-            }
-        }
-
-        protected int _retryCount; // 当前重试次数.
-
-        // 处理面板关闭后的扩展行为.
-        protected virtual void OnClosed()
-        {
-        }
-
-        [SerializeField] private Button btnConfirm; // 确认按钮.
-
-        [SerializeField] private Text txtTitle; // 标题文本.
-
-        [SerializeField] private RectTransform rectPanel; // 面板节点.
-
-        private bool _isLoading; // 是否正在加载.
-
-        // 刷新面板标题.
-        private void RefreshTitle(string userName)
-        {
-            txtTitle.text = userName;
-        }
-
-        // 处理确认按钮点击.
-        private void OnConfirmClicked()
-        {
-            e_onConfirm?.Invoke();
-        }
-    }
-}
-```
+其他格式注释按常见注释方式处理.
