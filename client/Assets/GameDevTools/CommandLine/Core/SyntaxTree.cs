@@ -6,25 +6,18 @@ namespace RedSaw.CommandLineInterface
     /// <summary> syntax tree, tree type, and represent the whole execution logic. </summary>
     public class SyntaxTree
     {
-        /// <summary> Data. </summary>
         public readonly string data;
 
-        /// <summary> Opcode. </summary>
         public readonly SyntaxTreeCode opcode;
 
-        /// <summary> Children. </summary>
         public readonly SyntaxTree[] children;
 
-        /// <summary> L. </summary>
         public SyntaxTree L => children[0];
 
-        /// <summary> R. </summary>
         public SyntaxTree R => children[1];
 
-        /// <summary> Is leaf. </summary>
         public bool IsLeaf => children.Length == 0;
 
-        /// <summary> provide debug info about current node. </summary>
         public string DebugInfo
         {
             get
@@ -51,7 +44,6 @@ namespace RedSaw.CommandLineInterface
             }
         }
 
-        /// <summary> Create a SyntaxTree instance. </summary>
         public SyntaxTree(SyntaxTreeCode opcode, string data)
         {
             this.opcode = opcode;
@@ -59,30 +51,22 @@ namespace RedSaw.CommandLineInterface
             this.children = Array.Empty<SyntaxTree>();
         }
 
-        /// <summary> Create a SyntaxTree instance. </summary>
         public SyntaxTree(SyntaxTreeCode opcode, string data, SyntaxTree l)
         {
             this.opcode = opcode;
             this.data = data;
             this.children = new SyntaxTree[]
-            {
-                l
-            };
+            { l };
         }
 
-        /// <summary> Create a SyntaxTree instance. </summary>
         public SyntaxTree(SyntaxTreeCode opcode, string data, SyntaxTree l, SyntaxTree r)
         {
             this.opcode = opcode;
             this.data = data;
             this.children = new SyntaxTree[]
-            {
-                l,
-                r
-            };
+            { l, r };
         }
 
-        /// <summary> Create a SyntaxTree instance. </summary>
         public SyntaxTree(SyntaxTreeCode opcode, string data, SyntaxTree[] children)
         {
             this.opcode = opcode;
@@ -90,11 +74,10 @@ namespace RedSaw.CommandLineInterface
             this.children = children;
         }
 
-        /// <summary> To string. </summary>
         public override string ToString()
         {
-            if (data != null || data.Length > 0)
-                return data;
+            if (data != null || data.Length > 0) return data;
+
             return opcode.ToString();
         }
     }

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,27 +9,42 @@ namespace GameConsole.UI
     /// <summary> 编辑控制台, Cheat 与浮标配置, 保留各项设置的生效和保存时机. </summary>
     public sealed partial class ToolkitOptionsPanel : IDisposable
     {
+        private readonly List<Action> _unbind = new();
 
-        private readonly List<Action> _unbind = new(); // 释放设置控件的事件绑定.
-        private readonly List<Action> _refresh = new(); // 配置保存后同步 Inspector 和 Options.
+        private readonly List<Action> _refresh = new();
+
         private readonly List<VisualElement> _rows = new(); // UXML 中现有设置项, 分帧显示且保留编辑值.
-        private readonly ToolkitFloatingSettingsControls _floatingSettings; // 与图标弹窗共用的即时设置.
-        private readonly ToolkitAppearanceController _appearance; // 准备成功后才提交字体或风格并保存.
+
+        private readonly ToolkitFloatingSettingsControls _floatingSettings;
+
+        private readonly ToolkitAppearanceController _appearance;
+
         private readonly ToolkitTextDisplay _text = new(); // 仅处理固定标签, 不省略可编辑数值.
-        private readonly ToolkitOptionsLayout _layout; // 按每个设置分区的真实宽度划分四成和六成.
-        private readonly VisualElement _root; // 历史管理窗口的所属设置页.
-        private readonly Button _clearHistory; // 清空三处搜索共用的历史.
-        private readonly Button _viewHistory; // 查看完整历史并逐条删除.
-        private ToolkitSearchHistoryWindow _historyWindow; // 按需创建的独立历史管理窗口.
-        private ToolkitDropdownPopup _styleMenu; // 与搜索历史共用弹层, 最多显示五项.
-        private ToolkitDropdownPopup _fontMenu; // 全部 UI 风格共用的即时字体选择.
-        private int _nextRow; // 下一项待显示的设置.
-        private int _visibleFrame; // 切页当帧只呈现页面框架.
+
+        private readonly ToolkitOptionsLayout _layout;
+
+        private readonly VisualElement _root;
+
+        private readonly Button _clearHistory;
+
+        private readonly Button _viewHistory;
+
+        private ToolkitSearchHistoryWindow _historyWindow;
+
+        private ToolkitDropdownPopup _styleMenu;
+
+        private ToolkitDropdownPopup _fontMenu;
+
+        private int _nextRow;
+
+        private int _visibleFrame;
+
         private int _lastLoadFrame = -1; // 同一帧不重复推进显示.
-        private bool _visible; // 隐藏时暂停显示剩余设置.
+
+        private bool _visible;
+
         private bool _dirty; // 仅修改配置后进行保存.
 
-        /// <summary> 将现有配置绑定到 UXML 中的整数输入和开关. </summary>
         public ToolkitOptionsPanel(VisualElement root, ToolkitWindowSettings windowSettings, ToolkitAppearanceController appearance)
         {
             _root = root;
@@ -65,7 +79,14 @@ namespace GameConsole.UI
             BindToggle(root, "recordFailedCommand", () => Config.RecordFailedCommand, value => Config.RecordFailedCommand = value);
             BindToggle(root, "outputVmExceptionStack", () => Config.OutputVmExceptionStack, value => Config.OutputVmExceptionStack = value);
             _floatingSettings = new ToolkitFloatingSettingsControls(root, windowSettings, "floating");
-            Action refresh = () => { foreach (var action in _refresh) action(); };
+            Action refresh = () =>
+            {
+                foreach (var action in _refresh)
+                {
+                    action();
+                }
+            };
+
             windowSettings.e_onChanged += refresh;
             _unbind.Add(() => windowSettings.e_onChanged -= refresh);
             Config.e_onChanged += refresh;
@@ -74,11 +95,10 @@ namespace GameConsole.UI
             _unbind.Add(() => _appearance.e_onChanging -= OnAppearanceChanging);
         }
 
-        /// <summary> 每次切入都逐帧显示已有控件, 不重建或重置设置值. </summary>
         public void SetVisible(bool visible)
         {
-            if (_visible == visible)
-                return;
+            if (_visible == visible) return;
+
             _visible = visible;
             if (!visible)
             {
@@ -86,21 +106,26 @@ namespace GameConsole.UI
                 _historyWindow?.Close();
                 return;
             }
+
             _visibleFrame = Time.frameCount;
             _layout.Invalidate();
             _nextRow = 0;
             foreach (var row in _rows)
+            {
                 row.AddToClassList("is-hidden");
+            }
         }
 
-        /// <summary> 切页后一帧开始逐项呈现, 只处理当前可见设置页. </summary>
         public void Tick()
         {
-            if (!_visible || Time.frameCount <= _visibleFrame || _lastLoadFrame == Time.frameCount)
-                return;
+            if (!_visible || Time.frameCount <= _visibleFrame || _lastLoadFrame == Time.frameCount) return;
+
             _lastLoadFrame = Time.frameCount;
             for (var added = 0; added < Config.OPTIONS_ROWS_PER_FRAME && _nextRow < _rows.Count; added++)
+            {
                 _rows[_nextRow++].RemoveFromClassList("is-hidden");
+            }
+
             _layout.Tick();
             _floatingSettings.Tick();
             _text.Tick();
@@ -109,12 +134,14 @@ namespace GameConsole.UI
         /// <summary> 切页和关闭时保存, 失败时保留待保存标记. </summary>
         public void Save()
         {
-            if (!_dirty)
-                return;
-            if (Config.Save()) _dirty = false;
+            if (!_dirty) return;
+
+            if (Config.Save())
+            {
+                _dirty = false;
+            }
         }
 
-        /// <summary> 解除所有设置回调. </summary>
         public void Dispose()
         {
             _visible = false;
@@ -133,11 +160,13 @@ namespace GameConsole.UI
             _floatingSettings.Dispose();
             _text.Dispose();
             foreach (var unbind in _unbind)
+            {
                 unbind();
+            }
+
             _unbind.Clear();
         }
 
-        /// <summary> 切页, 帮助或隐藏时关闭临时选择菜单, 不修改配置. </summary>
         internal void CloseSelectionMenus()
         {
             _styleMenu?.Close();
@@ -155,71 +184,86 @@ namespace GameConsole.UI
             _historyWindow?.Refresh();
         }
 
-        // 只在用户首次查看时创建管理窗口.
         private void ViewHistory()
         {
             _historyWindow ??= new ToolkitSearchHistoryWindow(_root, _viewHistory);
             _historyWindow.Show();
         }
 
-        // 空历史仍可查看提示, 清空按钮在没有记录时禁用.
         private void RefreshHistoryButtons() => _clearHistory.SetEnabled(Config.CheatSearchHistory.Count > 0);
 
         // 复用窗口设置的即时通知及合并保存, 不触发重新构造页面.
         private void BindPanelOpacity(VisualElement root, ToolkitWindowSettings settings)
         {
             var field = ToolkitView.Require<Slider>(root, "panelOpacity");
+
             field.lowValue = Config.MIN_OPACITY;
             field.highValue = Config.MAX_OPACITY;
             _text.Track(field.labelElement);
             Action refresh = () =>
             {
                 var value = settings.PanelOpacity;
+
                 field.SetValueWithoutNotify(value);
                 _text.SetText(field.labelElement, ToolkitLocalization.Format("ui.OptionsPanel.BindPanelOpacity", ("p0", (object)(value.ToString("0.00", CultureInfo.InvariantCulture)))));
             };
+
             refresh();
             EventCallback<ChangeEvent<float>> change = evt =>
             {
-                var value = float.IsNaN(evt.newValue) || float.IsInfinity(evt.newValue) ? Config.DEFAULT_PANEL_OPACITY : Mathf.Clamp(evt.newValue, Config.MIN_PANEL_OPACITY, Config.MAX_OPACITY);
+                var value = float.IsNaN(evt.newValue) || float.IsInfinity(evt.newValue)
+                    ? Config.DEFAULT_PANEL_OPACITY
+                    : Mathf.Clamp(evt.newValue, Config.MIN_PANEL_OPACITY, Config.MAX_OPACITY);
+
                 field.SetValueWithoutNotify(value);
                 settings.PanelOpacity = value;
             };
+
             field.RegisterValueChangedCallback(change);
             _unbind.Add(() => field.UnregisterValueChangedCallback(change));
             _refresh.Add(refresh);
         }
 
-        // 显示名称和资源路径分开, 准备好新资源后才原位替换.
         private void BindStyle(VisualElement root)
         {
             var field = ToolkitView.Require<Button>(root, "uiStyle");
             var title = ToolkitView.Require<Label>(root, "uiStyleName");
+
             _text.Track(field.parent.Q<Label>(className: "unity-base-field__label"));
             title.enableRichText = false;
             title.parseEscapeSequences = false;
             _text.Track(title);
             Action refresh = () => _text.SetText(title, ToolkitFactory.GetStyleName(Config.UIStyle));
+
             refresh();
             Action click = () =>
             {
                 if (_appearance.IsChanging) return;
+
                 if (_styleMenu?.IsOpen == true)
                 {
                     _styleMenu.Close(true);
                     return;
                 }
+
                 _styleMenu ??= new ToolkitDropdownPopup(field, field, Config.SELECTOR_VISIBLE_ITEMS);
                 CloseSelectionMenus();
                 var styles = ToolkitFactory.Styles;
                 var names = new List<string>(styles.Count);
-                foreach (var entry in styles) names.Add(entry.name);
+
+                foreach (var entry in styles)
+                {
+                    names.Add(entry.name);
+                }
+
                 _styleMenu.Show(names, index =>
                 {
                     if (!_visible || _appearance.IsChanging) return;
+
                     _appearance.RequestStyle(styles[index].path);
                 });
             };
+
             field.clicked += click;
             _unbind.Add(() => field.clicked -= click);
             _refresh.Add(refresh);
@@ -230,61 +274,93 @@ namespace GameConsole.UI
         {
             var field = ToolkitView.Require<Button>(root, "uiFont");
             var title = ToolkitView.Require<Label>(root, "uiFontName");
+
             title.enableRichText = false;
             title.parseEscapeSequences = false;
             _text.Track(field.parent.Q<Label>(className: "unity-base-field__label"));
             _text.Track(title);
             Action refresh = () => _text.SetText(title, ToolkitFactory.GetFontName(Config.UIFont));
+
             refresh();
             Action click = () =>
             {
                 if (_appearance.IsChanging) return;
+
                 if (_fontMenu?.IsOpen == true)
                 {
                     _fontMenu.Close(true);
                     return;
                 }
+
                 _fontMenu ??= new ToolkitDropdownPopup(field, field, Config.SELECTOR_VISIBLE_ITEMS);
                 CloseSelectionMenus();
                 var fonts = ToolkitFactory.Fonts;
                 var names = new List<string>(fonts.Count);
-                foreach (var entry in fonts) names.Add(entry.name);
+
+                foreach (var entry in fonts)
+                {
+                    names.Add(entry.name);
+                }
+
                 _fontMenu.Show(names, index =>
                 {
                     if (!_visible || _appearance.IsChanging) return;
+
                     _appearance.RequestFont(fonts[index].path);
                 });
             };
+
             field.clicked += click;
             _unbind.Add(() => field.clicked -= click);
             _refresh.Add(refresh);
         }
 
-        // 两个入口共同加锁, 不影响其他设置, 日志或正在运行的宏.
         private void OnAppearanceChanging(bool changing)
         {
-            if (!changing) _layout.Invalidate();
-            if (changing) CloseSelectionMenus();
-            ToolkitView.Require<Button>(_root, "uiStyle").SetEnabled(!changing);
-            ToolkitView.Require<Button>(_root, "uiFont").SetEnabled(!changing);
-            ToolkitView.Require<Button>(_root, "uiLanguage").SetEnabled(!changing);
-            if (!changing) foreach (var refresh in _refresh) refresh();
+            if (!changing)
+            {
+                _layout.Invalidate();
+            }
+
+            if (changing)
+            {
+                CloseSelectionMenus();
+            }
+
+            ToolkitView.Require<Button>(_root, "uiStyle")
+                .SetEnabled(!changing);
+            ToolkitView.Require<Button>(_root, "uiFont")
+                .SetEnabled(!changing);
+            ToolkitView.Require<Button>(_root, "uiLanguage")
+                .SetEnabled(!changing);
+            if (!changing)
+            {
+                foreach (var refresh in _refresh)
+                {
+                    refresh();
+                }
+            }
         }
 
-        // 输入结束后使用统一定义校正配置值.
         private void BindInteger(VisualElement root, string name, Func<int> getter, Action<int> setter, int minimum = Config.MIN_COMMAND_CAPACITY, int maximum = Config.MAX_COMMAND_CAPACITY, bool saveImmediately = false)
         {
             var field = ToolkitView.Require<IntegerField>(root, name);
+
             _text.Track(field.labelElement);
             field.SetValueWithoutNotify(getter());
             EventCallback<ChangeEvent<int>> changed = evt =>
             {
                 var value = Mathf.Clamp(evt.newValue, minimum, maximum);
+
                 field.SetValueWithoutNotify(value);
                 setter(value);
                 _dirty = true;
-                if (saveImmediately) Save();
+                if (saveImmediately)
+                {
+                    Save();
+                }
             };
+
             field.RegisterValueChangedCallback(changed);
             _unbind.Add(() => field.UnregisterValueChangedCallback(changed));
             _refresh.Add(() => field.SetValueWithoutNotify(getter()));
@@ -294,14 +370,19 @@ namespace GameConsole.UI
         private void BindToggle(VisualElement root, string name, Func<bool> getter, Action<bool> setter, bool saveImmediately = false)
         {
             var field = ToolkitView.Require<Toggle>(root, name);
+
             _text.Track(field.labelElement);
             field.SetValueWithoutNotify(getter());
             EventCallback<ChangeEvent<bool>> changed = evt =>
             {
                 setter(evt.newValue);
                 _dirty = true;
-                if (saveImmediately) Save();
+                if (saveImmediately)
+                {
+                    Save();
+                }
             };
+
             field.RegisterValueChangedCallback(changed);
             _unbind.Add(() => field.UnregisterValueChangedCallback(changed));
             _refresh.Add(() => field.SetValueWithoutNotify(getter()));

@@ -4,60 +4,96 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
+using GameConsole.UI;
 
 namespace GameConsole
 {
     /// <summary> JSON 校验和格式化只处理数据, 不访问 Unity 或执行命令. </summary>
     internal static class ToolkitLocalizationData
     {
-        private static readonly Regex _placeholder = new(@"(?<!\{)\{([A-Za-z_][A-Za-z0-9_]*)\}(?!\})", RegexOptions.Compiled); // 只识别命名占位符.
-        private static readonly Regex _reference = new(@"(?<!\{)\{([A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z0-9_-]+)+)\}(?!\})", RegexOptions.Compiled); // 带点的占位符引用语言词条, 与运行时参数分开处理.
+        private static readonly Regex _placeholder = new(@"(?<!\{)\{([A-Za-z_][A-Za-z0-9_]*)\}(?!\})", RegexOptions.Compiled);
 
-        /// <summary> 拒绝重复键和非字符串值, 不静默覆盖错误定义. </summary>
+        private static readonly Regex _reference = new(@"(?<!\{)\{([A-Za-z_][A-Za-z0-9_]*(?:\.[A-Za-z0-9_-]+)+)\}(?!\})", RegexOptions.Compiled);
+
         internal static Dictionary<string, string> Read(string json, string source)
         {
             try
             {
                 var result = new Dictionary<string, string>(StringComparer.Ordinal);
                 var root = JObject.Parse(json, new JsonLoadSettings { DuplicatePropertyNameHandling = DuplicatePropertyNameHandling.Error });
+
                 foreach (var property in root.Properties())
                 {
                     if (string.IsNullOrWhiteSpace(property.Name) || property.Value.Type != JTokenType.String)
+                    {
                         throw new FormatException("Localization keys must have string values: " + property.Name);
+                    }
+
                     result.Add(property.Name, property.Value.Value<string>());
                 }
+
                 return result;
             }
-            catch (Exception exception) { throw new FormatException(source + ": " + exception.Message, exception); }
+            catch (Exception exception)
+            {
+                throw new FormatException(source + ": " + exception.Message, exception);
+            }
         }
 
         /// <summary> 每个语言包内各模块的键必须唯一. </summary>
         internal static void AddModule(Dictionary<string, string> target, Dictionary<string, string> module, string source)
         {
             foreach (var pair in module)
-                if (!target.TryAdd(pair.Key, pair.Value)) throw new FormatException(source + ": duplicate localization key " + pair.Key);
+            {
+                if (!target.TryAdd(pair.Key, pair.Value))
+                {
+                    throw new FormatException(source + ": duplicate localization key " + pair.Key);
+                }
+            }
         }
 
-        /// <summary> 替换词条引用后校验运行时参数, 翻译参数与默认语言保持一致. </summary>
         internal static void Validate(Dictionary<string, string> values, IReadOnlyDictionary<string, string> fallback)
         {
             var resolved = ResolveReferences(values, fallback);
             var defaults = ResolveReferences(fallback);
+
             foreach (var pair in values)
-                if (defaults.TryGetValue(pair.Key, out var original) && !Placeholders(resolved[pair.Key]).SetEquals(Placeholders(original)))
+            {
+                if (defaults.TryGetValue(pair.Key, out var original) && !Placeholders(resolved[pair.Key])
+                    .SetEquals(Placeholders(original)))
+                {
                     throw new FormatException("Localization placeholder mismatch: " + pair.Key);
+                }
+            }
         }
 
-        /// <summary> 单层取用词条原值, 不解析引用值中的占位符, 缺失时保留原占位符. </summary>
+        /// <summary> 普通词条只替换一层引用, 图标保留展示标记, 缺失时保留原占位符. </summary>
         internal static Dictionary<string, string> ResolveReferences(IReadOnlyDictionary<string, string> values, IReadOnlyDictionary<string, string> fallback = null)
         {
             var source = new Dictionary<string, string>(StringComparer.Ordinal);
+
             if (fallback != null)
-                foreach (var pair in fallback) source[pair.Key] = pair.Value;
-            foreach (var pair in values) source[pair.Key] = pair.Value;
+            {
+                foreach (var pair in fallback)
+                {
+                    source[pair.Key] = pair.Value;
+                }
+            }
+
+            foreach (var pair in values)
+            {
+                source[pair.Key] = pair.Value;
+            }
+
             var resolved = new Dictionary<string, string>(StringComparer.Ordinal);
+
             foreach (var pair in source)
-                resolved[pair.Key] = _reference.Replace(pair.Value, match => source.TryGetValue(match.Groups[1].Value, out var value) ? value : match.Value);
+            {
+                resolved[pair.Key] = pair.Key.StartsWith("icon.", StringComparison.Ordinal)
+                    ? ToolkitIcons.Token(pair.Value)
+                    : _reference.Replace(pair.Value, match => ResolveReference(source, match));
+            }
+
             return resolved;
         }
 
@@ -65,7 +101,12 @@ namespace GameConsole
         internal static string Format(string source, params (string name, object value)[] arguments)
         {
             var values = new Dictionary<string, object>(StringComparer.Ordinal);
-            foreach (var argument in arguments) values[argument.name] = argument.value;
+
+            foreach (var argument in arguments)
+            {
+                values[argument.name] = argument.value;
+            }
+
             return Format(source, values);
         }
 
@@ -75,7 +116,22 @@ namespace GameConsole
             return _placeholder.Replace(source, match => values.TryGetValue(match.Groups[1].Value, out var value) ? Convert.ToString(value, CultureInfo.InvariantCulture) ?? string.Empty : match.Value);
         }
 
+        // 保持原有单层词条引用规则, 图标保留独立标记直到展示时再按风格解析.
+        private static string ResolveReference(IReadOnlyDictionary<string, string> source, Match match)
+        {
+            var key = match.Groups[1].Value;
+
+            if (!source.TryGetValue(key, out var value)) return match.Value;
+
+            if (key.StartsWith("icon.", StringComparison.Ordinal)) return ToolkitIcons.Token(value);
+
+            return value;
+        }
+
         // 同名占位符重复出现不改变模板签名.
-        private static HashSet<string> Placeholders(string text) => _placeholder.Matches(text).Cast<Match>().Select(match => match.Groups[1].Value).ToHashSet(StringComparer.Ordinal);
+        private static HashSet<string> Placeholders(string text) => _placeholder.Matches(text)
+            .Cast<Match>()
+            .Select(match => match.Groups[1].Value)
+            .ToHashSet(StringComparer.Ordinal);
     }
 }

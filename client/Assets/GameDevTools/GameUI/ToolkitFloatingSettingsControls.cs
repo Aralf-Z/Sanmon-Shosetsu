@@ -9,18 +9,30 @@ namespace GameConsole.UI
     /// <summary> Options 与浮标弹窗共用的滑动条绑定, 即时预览并合并保存. </summary>
     public sealed class ToolkitFloatingSettingsControls : IDisposable
     {
-        private readonly ToolkitWindowSettings _settings; // 唯一的配置入口.
-        private readonly Toggle _show; // 日志显示开关.
-        private readonly SliderInt _count; // 日志条数.
-        private readonly SliderInt _background; // 背景显示比例, 100 表示全显示, 0 表示全透明.
-        private readonly SliderInt _text; // 文字显示比例, 100 表示全显示, 0 表示全透明.
+        private readonly ToolkitWindowSettings _settings;
+
+        private readonly Toggle _show;
+
+        private readonly SliderInt _count;
+
+        private readonly SliderInt _background;
+
+        private readonly SliderInt _text;
+
         private readonly string _countTitle; // 保留 UXML 中可编辑的滑动条标题.
-        private readonly string _backgroundTitle; // 背景透明度标题.
-        private readonly string _textTitle; // 文字透明度标题.
-        private readonly string _countKey; // UXML 绑定的语言键, 与初始数值分离.
-        private readonly string _backgroundKey; // 背景透明度标题键.
-        private readonly string _textKey; // 文字透明度标题键.
-        private readonly List<Action> _unbind = new(); // 解除所有字段回调.
+
+        private readonly string _backgroundTitle;
+
+        private readonly string _textTitle;
+
+        private readonly string _countKey;
+
+        private readonly string _backgroundKey;
+
+        private readonly string _textKey;
+
+        private readonly List<Action> _unbind = new();
+
         private readonly ToolkitTextDisplay _labels = new(); // 只省略字段标题, 保留设置值与标题原文.
 
         /// <summary> 按前缀连接 UXML 控件, 避免弹窗与 Options 控件同名. </summary>
@@ -46,6 +58,7 @@ namespace GameConsole.UI
             _labels.Track(_background.labelElement);
             _labels.Track(_text.labelElement);
             EventCallback<ChangeEvent<bool>> changed = evt => _settings.ShowLatestLogs = evt.newValue;
+
             _show.RegisterValueChangedCallback(changed);
             _unbind.Add(() => _show.UnregisterValueChangedCallback(changed));
             BindInteger(_count, value => _settings.LogLineCount = value);
@@ -55,20 +68,20 @@ namespace GameConsole.UI
             Refresh();
         }
 
-        /// <summary> 销毁任意入口时解除设置事件. </summary>
         public void Dispose()
         {
             _settings.e_onChanged -= Refresh;
             foreach (var unbind in _unbind)
+            {
                 unbind();
+            }
+
             _unbind.Clear();
             _labels.Dispose();
         }
 
-        /// <summary> 由可见设置面板合并标题变化及尺寸变化. </summary>
         internal void Tick() => _labels.Tick();
 
-        /// <summary> 不更改配置, 重新解析三项滑动条的完整标题. </summary>
         internal void RefreshLanguage() => Refresh();
 
         // 使用无通知同步, 不因配置刷新再次写入 JSON.
@@ -90,16 +103,23 @@ namespace GameConsole.UI
         private static string SettingTitle(string label)
         {
             var title = (label ?? string.Empty).Split(':', '：')[0].Trim();
-            return Regex.Replace(title, @"\s*[\(（]\s*\d+\s*[-~～]\s*\d+\s*[\)）]\s*$", string.Empty).TrimEnd();
+
+            return Regex.Replace(title, @"\s*[\(（]\s*\d+\s*[-~～]\s*\d+\s*[\)）]\s*$", string.Empty)
+                .TrimEnd();
         }
 
-        // 没有本地化键的自定义字段沿用作者原始标题.
-        private static string Title(string key, string fallback) => key == null ? fallback : SettingTitle(ToolkitLocalization.Get(key));
+        private static string Title(string key, string fallback) => key == null
+            ? fallback
+            : SettingTitle(ToolkitLocalization.Get(key));
 
-        // 拖动时立即更新预览, 磁盘写入由设置模型合并处理.
         private void BindInteger(SliderInt field, Action<int> setter)
         {
-            EventCallback<ChangeEvent<int>> changed = evt => { setter(evt.newValue); Refresh(); };
+            EventCallback<ChangeEvent<int>> changed = evt =>
+            {
+                setter(evt.newValue);
+                Refresh();
+            };
+
             field.RegisterValueChangedCallback(changed);
             _unbind.Add(() => field.UnregisterValueChangedCallback(changed));
         }

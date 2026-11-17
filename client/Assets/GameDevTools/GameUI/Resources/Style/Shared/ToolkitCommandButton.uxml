@@ -4,6 +4,6 @@
     <ui:VisualElement name="commandRow" class="command-row">
         <ui:Label name="commandDragHandle" text="@loc:ui.CommandButton.commandDragHandle.text" tooltip="@loc:ui.CommandButton.commandDragHandle.tooltip" class="pin-drag-handle is-hidden" />
         <ui:Button name="commandButton" text="" class="command-button" />
-        <ui:Label name="commandPinned" text="@loc:icon.pin" class="macro-pin-marker is-hidden" picking-mode="Ignore" />
+        <ui:Label name="commandPinned" text="@loc:icon.pin" class="macro-pin-marker toolkit-icon-indicator is-hidden" picking-mode="Ignore" />
     </ui:VisualElement>
 </ui:UXML>

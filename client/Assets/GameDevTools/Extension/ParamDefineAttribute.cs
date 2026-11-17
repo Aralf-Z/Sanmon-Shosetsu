@@ -6,13 +6,10 @@ namespace GameConsole.Extension
     [AttributeUsage(AttributeTargets.Method)]
     public class ParamDefineAttribute : Attribute
     {
-        /// <summary> Collect class. </summary>
         public readonly Type collectClass;
 
-        /// <summary> Collect method. </summary>
         public readonly string collectMethod;
 
-        /// <summary> Create a ParamDefineAttribute instance. </summary>
         public ParamDefineAttribute(Type collectClass, string collectMethod)
         {
             this.collectClass = collectClass;

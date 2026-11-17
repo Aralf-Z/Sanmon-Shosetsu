@@ -5,7 +5,6 @@ namespace GameConsole
 {
     internal static partial class ToolkitLocalization
     {
-        // JSON 使用 {Config_常量名称} 引用限制值, 新增引用时在此登记, 不读取运行时配置或反射字段.
         private static readonly IReadOnlyDictionary<string, object> _configArguments = new Dictionary<string, object>(StringComparer.Ordinal)
         {
             ["Config_" + nameof(Config.MIN_CHEAT_SEARCH_HISTORY_CAPACITY)] = Config.MIN_CHEAT_SEARCH_HISTORY_CAPACITY,
@@ -31,6 +30,8 @@ namespace GameConsole
         };
 
         // 只解析保留前缀的配置占位符, 普通文案和界面图标直接返回, 业务参数不参与再次解析.
-        private static string FormatConfig(string source) => source.IndexOf("{Config_", StringComparison.Ordinal) < 0 ? source : ToolkitLocalizationData.Format(source, _configArguments);
+        private static string FormatConfig(string source) => source.IndexOf("{Config_", StringComparison.Ordinal) < 0
+            ? source
+            : ToolkitLocalizationData.Format(source, _configArguments);
     }
 }

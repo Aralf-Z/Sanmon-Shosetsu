@@ -6,16 +6,12 @@ namespace RedSaw.CommandLineInterface
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false, Inherited = false)]
     public class CommandPropertyAttribute : Attribute
     {
-        /// <summary> Name. </summary>
         public readonly string name;
 
-        /// <summary> Tag. </summary>
         public readonly string tag;
 
-        /// <summary> Desc. </summary>
         public readonly string desc;
 
-        /// <summary> Create a CommandPropertyAttribute instance. </summary>
         public CommandPropertyAttribute(string name)
         {
             this.name = name;
@@ -23,7 +19,6 @@ namespace RedSaw.CommandLineInterface
             this.tag = null;
         }
 
-        /// <summary> Create a CommandPropertyAttribute instance. </summary>
         public CommandPropertyAttribute()
         {
             this.name = null;
