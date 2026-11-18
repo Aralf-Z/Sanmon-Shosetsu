@@ -111,13 +111,18 @@ namespace GameConsole.UI
                     var title = group.text;
                     var label = group.Q<TextElement>(className: "unity-toggle__text");
                     var key = ToolkitLocalizedBindings.TextKey(label);
+
+                    _listText.Track(label);
                     Action refresh = () =>
                     {
-                        var text = ToolkitLocalization.Get(group.value ? "icon.open" : "icon.collapsed") + " " + (key == null
+                        var groupTitle = key == null
                             ? title
-                            : ToolkitLocalization.Get(key));
+                            : ToolkitLocalization.Get(key);
+                        var text = ToolkitLocalization.Get(group.value ? "icon.open" : "icon.collapsed") + " " + groupTitle;
 
                         ToolkitMixedText.SetFoldoutText(group, text);
+                        _listText.SetText(label, text);
+                        label.tooltip = ToolkitIcons.PlainText(groupTitle);
                     };
 
                     _groupRefresh.Add(refresh);

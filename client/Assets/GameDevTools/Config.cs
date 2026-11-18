@@ -95,6 +95,12 @@ namespace GameConsole
             get => Data.panelOpacity; set => Data.panelOpacity = NormalizePanelOpacity(value);
         }
 
+        /// <summary> 滚轮灵敏度, 由所有滚动面板共用, 按平方曲线映射到原生步长. </summary>
+        public static float WheelScrollSensitivity
+        {
+            get => Data.wheelScrollSensitivity; set => Data.wheelScrollSensitivity = NormalizeWheelScrollSensitivity(value);
+        }
+
         public static string UIStyle
         {
             get => Data.uiStyle; set => Data.uiStyle = NormalizeResourcePath(value);
@@ -313,6 +319,7 @@ namespace GameConsole
             data.keyCode = ToolShortcut.NormalizeKey(data.keyCode);
             data.keyModifier = ToolShortcut.NormalizeModifier(data.keyModifier);
             data.panelOpacity = NormalizePanelOpacity(data.panelOpacity);
+            data.wheelScrollSensitivity = NormalizeWheelScrollSensitivity(data.wheelScrollSensitivity);
             data.uiStyle = NormalizeResourcePath(data.uiStyle);
             data.uiFont = NormalizeResourcePath(data.uiFont);
             data.uiLanguage = string.IsNullOrWhiteSpace(data.uiLanguage)
@@ -375,6 +382,10 @@ namespace GameConsole
         private static float NormalizePanelOpacity(float value) => float.IsNaN(value) || float.IsInfinity(value)
             ? DEFAULT_PANEL_OPACITY
             : Mathf.Clamp(value, MIN_PANEL_OPACITY, MAX_OPACITY);
+
+        private static float NormalizeWheelScrollSensitivity(float value) => float.IsNaN(value) || float.IsInfinity(value)
+            ? DEFAULT_WHEEL_SCROLL_SENSITIVITY
+            : Mathf.Clamp(value, MIN_WHEEL_SCROLL_SENSITIVITY, MAX_WHEEL_SCROLL_SENSITIVITY);
 
         // 未知主页签回退到默认页, 不读取旧的独立存档.
         private static string NormalizeMainTagger(string value) => value == "console" || value == "cheat" || value == "macro" || value == "option"

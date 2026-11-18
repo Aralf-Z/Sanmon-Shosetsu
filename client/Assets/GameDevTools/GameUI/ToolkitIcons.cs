@@ -59,6 +59,22 @@ namespace GameConsole.UI
             return sprite;
         }
 
+        internal static void RefreshWindowResize(VisualElement root)
+        {
+            var image = root.Q<Image>("windowResizeImage");
+
+            if (image == null) return;
+
+            var sprite = Load("windowResize");
+            var fallback = root.Q<Label>("windowResizeFallback");
+
+            image.sprite = sprite;
+            image.scaleMode = ScaleMode.StretchToFill;
+            image.EnableInClassList("is-hidden", sprite == null);
+            fallback.text = sprite == null ? "windowResize" : string.Empty;
+            fallback.EnableInClassList("is-hidden", sprite != null);
+        }
+
         internal static int[] TextBoundaries(string text)
         {
             var starts = StringInfo.ParseCombiningCharacters(text);

@@ -10,6 +10,10 @@ namespace GameConsole.UI
 
         private readonly Button _history;
 
+        private readonly Label _txtPlaceholder;
+
+        private readonly IVisualElementScheduledItem _placeholderUpdate;
+
         private ToolkitSearchHistoryPopup _popup;
 
         private bool _disposed;
@@ -21,10 +25,19 @@ namespace GameConsole.UI
             _field = field;
             _history = history;
             _field.AddToClassList("toolkit-search-field");
+            _txtPlaceholder = new Label { pickingMode = PickingMode.Ignore, focusable = false, enableRichText = false };
+            _txtPlaceholder.AddToClassList("toolkit-search-placeholder");
+            var input = _field.Q(className: "unity-text-input") ?? _field;
+
+            input.Add(_txtPlaceholder);
+            _placeholderUpdate = _field.schedule.Execute(UpdatePlaceholder).Every(16);
+            ToolkitLocalization.e_onChanged += RefreshLanguage;
+            _field.RegisterCallback<FocusInEvent>(OnFocusIn);
             _field.RegisterCallback<FocusOutEvent>(OnFocusOut);
             _field.RegisterValueChangedCallback(OnChanged);
             _field.RegisterCallback<KeyDownEvent>(OnKeyDown, TrickleDown.TrickleDown);
             _history.clicked += OpenHistory;
+            RefreshLanguage();
         }
 
         internal void Hide()
@@ -40,6 +53,10 @@ namespace GameConsole.UI
             _popup?.Dispose();
             _popup = null;
             _history.clicked -= OpenHistory;
+            _placeholderUpdate.Pause();
+            ToolkitLocalization.e_onChanged -= RefreshLanguage;
+            _txtPlaceholder.RemoveFromHierarchy();
+            _field.UnregisterCallback<FocusInEvent>(OnFocusIn);
             _field.UnregisterCallback<FocusOutEvent>(OnFocusOut);
             _field.UnregisterValueChangedCallback(OnChanged);
             _field.UnregisterCallback<KeyDownEvent>(OnKeyDown, TrickleDown.TrickleDown);
@@ -54,13 +71,38 @@ namespace GameConsole.UI
         }
 
         // 标记用户实际修改, 程序静默清空预设搜索不会产生历史.
-        private void OnChanged(ChangeEvent<string> evt) => _pending = true;
+        private void OnChanged(ChangeEvent<string> evt)
+        {
+            _pending = true;
+            UpdatePlaceholder();
+        }
+
+        private void RefreshLanguage()
+        {
+            // Label 的文本变更事件会冒泡到 TextField, 静默更新避免触发搜索和历史.
+            ((INotifyValueChanged<string>)_txtPlaceholder).SetValueWithoutNotify(ToolkitLocalization.Get("ui.Search.placeholder"));
+            UpdatePlaceholder();
+        }
+
+        // 静默清空和焦点转移也刷新覆盖层, 不修改输入值或历史.
+        private void UpdatePlaceholder()
+        {
+            if (_disposed) return;
+
+            var focused = _field.focusController?.focusedElement as VisualElement;
+            var show = string.IsNullOrEmpty(_field.value) && focused != _field && (focused == null || !_field.Contains(focused));
+
+            _txtPlaceholder.style.display = show ? DisplayStyle.Flex : DisplayStyle.None;
+        }
+
+        private void OnFocusIn(FocusInEvent evt) => _txtPlaceholder.style.display = DisplayStyle.None;
 
         private void OnFocusOut(FocusOutEvent evt)
         {
             if (evt.relatedTarget is VisualElement next && _field.Contains(next)) return;
 
             Commit();
+            _field.schedule.Execute(UpdatePlaceholder);
         }
 
         // 输入法组合期间让原生文本框处理确认, 避免将半成品存入历史.

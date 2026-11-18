@@ -24,13 +24,9 @@ namespace GameConsole.UI
 
         private readonly SliderInt _size;
 
-        private readonly Label _pageInfo;
+        private readonly ToolkitPager _pager;
 
         private readonly Label _status;
-
-        private readonly Button _previous;
-
-        private readonly Button _next;
 
         private readonly Button _stop;
 
@@ -85,10 +81,8 @@ namespace GameConsole.UI
             _size.lowValue = Config.MIN_PRESET_BUTTON_SIZE;
             _size.highValue = Config.MAX_PRESET_BUTTON_SIZE;
             _size.SetValueWithoutNotify(Config.DEFAULT_MACRO_BUTTON_SIZE);
-            _pageInfo = ToolkitView.Require<Label>(root, "macroPageInfo");
+            _pager = new ToolkitPager(ToolkitView.Require<VisualElement>(root, "macroPager"), ChangePage);
             _status = ToolkitView.Require<Label>(root, "macroGridStatus");
-            _previous = ToolkitView.Require<Button>(root, "previousMacros");
-            _next = ToolkitView.Require<Button>(root, "nextMacros");
             _stop = ToolkitView.Require<Button>(root, "stopMacroGrid");
             _details = details;
             _contextMenu = contextMenu;
@@ -97,8 +91,6 @@ namespace GameConsole.UI
             _search.RegisterValueChangedCallback(OnSearch);
             _size.RegisterValueChangedCallback(OnSize);
             _scroll.contentViewport.RegisterCallback<GeometryChangedEvent>(OnGeometry);
-            _previous.clicked += Previous;
-            _next.clicked += Next;
             _stop.clicked += Stop;
             var pins = Config.GetPins(true);
 
@@ -176,9 +168,7 @@ namespace GameConsole.UI
                 var pages = Math.Max(1, (_matches.Count + _capacity - 1) / _capacity);
 
                 _page = Math.Max(0, Math.Min(_page, pages - 1));
-                _pageInfo.text = ToolkitLocalization.Format("ui.MacroGrid.Tick", ("p0", (object)(_page + 1)), ("p1", (object)(pages)), ("p2", (object)(_matches.Count)));
-                _previous.SetEnabled(_page > 0);
-                _next.SetEnabled(_page + 1 < pages);
+                _pager.SetPage(_page, pages, ToolkitLocalization.Format("ui.MacroGrid.Tick", ("p0", (object)(_page + 1)), ("p1", (object)(pages)), ("p2", (object)(_matches.Count))));
                 _dirty = false;
             }
 
@@ -236,7 +226,7 @@ namespace GameConsole.UI
         {
             var pages = Math.Max(1, (_matches.Count + _capacity - 1) / Math.Max(1, _capacity));
 
-            _pageInfo.text = ToolkitLocalization.Format("ui.MacroGrid.Tick", ("p0", (object)(_page + 1)), ("p1", (object)pages), ("p2", (object)_matches.Count));
+            _pager.SetPage(_page, pages, ToolkitLocalization.Format("ui.MacroGrid.Tick", ("p0", (object)(_page + 1)), ("p1", (object)pages), ("p2", (object)_matches.Count)));
             if (_system != null)
             {
                 _status.text = _system.Status;
@@ -265,8 +255,7 @@ namespace GameConsole.UI
             _searchField.Dispose();
             _size.UnregisterValueChangedCallback(OnSize);
             _scroll.contentViewport.UnregisterCallback<GeometryChangedEvent>(OnGeometry);
-            _previous.clicked -= Previous;
-            _next.clicked -= Next;
+            _pager.Dispose();
             _stop.clicked -= Stop;
         }
 
@@ -347,16 +336,9 @@ namespace GameConsole.UI
             }
         }
 
-        private void Previous()
+        private void ChangePage(int page)
         {
-            _page--;
-            _resetScroll = true;
-            Changed();
-        } // 翻页保留搜索并回到顶部.
-
-        private void Next()
-        {
-            _page++;
+            _page = page;
             _resetScroll = true;
             Changed();
         }

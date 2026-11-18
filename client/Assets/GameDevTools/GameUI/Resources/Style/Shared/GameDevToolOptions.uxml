@@ -33,6 +33,7 @@
                             </ui:Button>
                         </ui:VisualElement>
                         <ui:Slider name="panelOpacity" label="@loc:ui.Options.panelOpacity.label" tooltip="@loc:ui.Options.panelOpacity.tooltip" class="setting-row floating-setting-slider dev-horizontal-slider" />
+                        <ui:Slider name="wheelScrollSensitivity" label="@loc:ui.Options.wheelScrollSensitivity.label" tooltip="@loc:ui.Options.wheelScrollSensitivity.tooltip" class="setting-row floating-setting-slider dev-horizontal-slider" />
                     </ui:VisualElement>
                 </ui:VisualElement>
                 <ui:VisualElement name="toolSettingsSection" class="settings-section">

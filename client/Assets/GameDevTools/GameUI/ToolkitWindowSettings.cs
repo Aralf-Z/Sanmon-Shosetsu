@@ -23,6 +23,21 @@ namespace GameConsole.UI
             }
         }
 
+        public float WheelScrollSensitivity
+        {
+            get => Config.WheelScrollSensitivity;
+            set
+            {
+                var previous = Config.WheelScrollSensitivity;
+
+                Config.WheelScrollSensitivity = value;
+                if (previous != Config.WheelScrollSensitivity)
+                {
+                    MarkChanged();
+                }
+            }
+        }
+
         /// <summary> Cheat 页最新日志行数, 零隐藏预览, 两个设置入口即时同步. </summary>
         public int CheatLogLineCount
         {

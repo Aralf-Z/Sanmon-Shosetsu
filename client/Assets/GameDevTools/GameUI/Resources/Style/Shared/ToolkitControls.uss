@@ -203,3 +203,125 @@
 .dev-desktop .console-details-overlay {
     right: 34px;
 }
+
+.dev-desktop .tag-filter-toolbar {
+    align-items: flex-end;
+    min-width: 0;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    margin-bottom: 8px;
+    border-top-width: 1px;
+    --dev-opacity-border-top: var(--dev-border);
+    --dev-opacity-border-top-set: 1;
+    border-top-color: var(--dev-opacity-border-top);
+    border-bottom-width: 1px;
+    --dev-opacity-border-bottom: var(--dev-border);
+    --dev-opacity-border-bottom-set: 1;
+    border-bottom-color: var(--dev-opacity-border-bottom);
+}
+
+.dev-desktop .unified-pager {
+    position: relative;
+    flex-shrink: 0;
+    min-width: 0;
+    height: 30px;
+    margin: 6px 0 0;
+    padding: 0;
+    border-width: 0;
+}
+
+.dev-desktop .unified-page-group {
+    position: absolute;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+}
+
+.dev-desktop Button.unified-page-button {
+    position: absolute;
+    width: 32px;
+    min-width: 32px;
+    max-width: 32px;
+    height: 30px;
+    min-height: 30px;
+    max-height: 30px;
+    padding: 2px;
+    margin: 0;
+    border-width: 1px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    overflow: hidden;
+    -unity-text-align: middle-center;
+}
+
+.dev-desktop .unified-page-info {
+    position: absolute;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    min-width: 0;
+    font-size: 12px;
+    color: var(--dev-muted);
+    white-space: nowrap;
+    text-overflow: clip;
+    -unity-text-align: middle-center;
+}
+
+.dev-desktop TextField.unified-page-input {
+    position: absolute;
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+    border-width: 0;
+    font-size: 16px;
+    align-items: stretch;
+}
+
+.dev-desktop TextField.unified-page-input > .unity-base-field__input {
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    align-items: stretch;
+    margin: 0;
+    padding: 0 4px;
+    border-width: 1px;
+    -unity-text-align: middle-center;
+}
+
+.dev-desktop .unified-page-input .unity-text-element {
+    flex-grow: 1;
+    align-self: stretch;
+    height: 100%;
+    min-height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    font-size: 16px;
+    -unity-text-align: middle-center;
+}
+
+.dev-desktop .tag-overflow-pager.unified-pager {
+    margin: 0;
+    padding: 4px;
+    border-top-width: 1px;
+    --dev-opacity-border-top: var(--dev-border);
+    --dev-opacity-border-top-set: 1;
+    border-top-color: var(--dev-opacity-border-top);
+}
+
+.context-menu-root .unity-base-dropdown__container-inner,
+.context-menu-root .unity-scroll-view__content-and-vertical-scroll-container,
+.context-menu-root .unity-scroll-view__content-viewport {
+    flex-grow: 0;
+    flex-shrink: 0;
+    max-height: none;
+}
+
+.context-menu-root .unity-scroller {
+    display: none;
+}
+
+.context-menu-root .unity-base-dropdown__item {
+    flex-shrink: 0;
+}

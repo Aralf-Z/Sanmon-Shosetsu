@@ -9,7 +9,7 @@ using RedSaw.CommandLineInterface;
 namespace GameConsole.UI
 {
     /// <summary> 复用命令缓存和分帧加载, 管理 P2 双栏中的命令选择与参数表单. </summary>
-    public sealed class ToolkitCheatPanel : IDisposable
+    public sealed partial class ToolkitCheatPanel : IDisposable
     {
         internal ToolkitHelpTopic HelpTopic => _showingMacros
             ? ToolkitHelpTopic.CheatMacros
@@ -19,13 +19,11 @@ namespace GameConsole.UI
 
         private readonly ToolkitConsoleRenderer _renderer;
 
-        private readonly VisualTreeAsset _categoryTemplate;
+        private readonly ToolkitTagFilterBar _tagFilter;
 
         private readonly VisualTreeAsset _parameterTemplate;
 
         private readonly VisualTreeAsset _commandTemplate;
-
-        private readonly VisualElement _tags;
 
         private readonly TextField _search;
 
@@ -79,11 +77,9 @@ namespace GameConsole.UI
 
         private readonly List<CommandWrapper> _displayCommands = new();
 
-        private readonly SortedSet<string> _commandTags = new();
+        private readonly SortedSet<string> _commandTags = new(StringComparer.Ordinal);
 
         private readonly List<TextField> _fields = new();
-
-        private readonly List<Action> _unbind = new();
 
         private readonly Dictionary<VisualElement, Action> _rowUnbind = new();
 
@@ -93,13 +89,9 @@ namespace GameConsole.UI
 
         private Command[] _commandSource;
 
-        private string[] _categorySource;
-
         private string _tag;
 
         private int _commandIndex; // 共享命令快照中下一条待归类的命令, 不重新构造包装.
-
-        private int _categoryIndex;
 
         private int _displayIndex;
 
@@ -120,10 +112,10 @@ namespace GameConsole.UI
         public ToolkitCheatPanel(VisualElement root, ToolkitConsoleRenderer renderer)
         {
             _renderer = renderer;
-            _categoryTemplate = ToolkitFactory.RequireTemplate("ToolkitCommandCategory");
+            _tagFilter = new ToolkitTagFilterBar(ToolkitView.Require<VisualElement>(root, "commandTags"), ToolkitView.Require<VisualElement>(root, "commandTagToolbar"), ToolkitView.Require<VisualElement>(root, "commandSearchGroup"));
+            _tagFilter.e_onChanged += OnTag;
             _parameterTemplate = ToolkitFactory.RequireTemplate("ToolkitCommandParameter");
             _commandTemplate = ToolkitFactory.RequireTemplate("ToolkitCommandButton");
-            _tags = ToolkitView.Require<VisualElement>(root, "commandTags");
             _search = ToolkitView.Require<TextField>(root, "commandSearch");
             _searchField = new ToolkitSearchField(_search, ToolkitView.Require<Button>(root, "commandSearchHistory"));
             _commandsView = ToolkitView.Require<ListView>(root, "commandList");
@@ -186,7 +178,6 @@ namespace GameConsole.UI
 
             _commandSource = _macroSystem.Commands.Select(wrapper => wrapper.Command)
                 .ToArray();
-            AddTag(ToolkitLocalization.Get("ui.CheatPanel.EnsureCommands"), null);
             while (_commandIndex < _commandSource.Length)
             {
                 LoadCommand();
@@ -207,6 +198,7 @@ namespace GameConsole.UI
             if (!visible)
             {
                 _searchField.Hide();
+                _tagFilter.Close();
                 _presets.HideSearch();
                 _contextMenu.Close();
                 _pinnedDrag.Cancel();
@@ -223,6 +215,7 @@ namespace GameConsole.UI
 
         public void Tick()
         {
+            RefreshCommandAppearance();
             if (!_visible || Time.frameCount <= _visibleFrame || _lastLoadFrame == Time.frameCount) return;
 
             _lastLoadFrame = Time.frameCount;
@@ -274,15 +267,7 @@ namespace GameConsole.UI
 
         internal void RefreshLanguage()
         {
-            if (_tags.childCount > 0)
-            {
-                var all = _tags[0].Q<Button>();
-
-                if (all != null)
-                {
-                    all.text = ToolkitLocalization.Get("ui.CheatPanel.EnsureCommands");
-                }
-            }
+            _tagFilter.RefreshLanguage();
 
             _description.text = _showingMacros
                 ? ToolkitLocalization.Get("ui.CheatPanel.ShowMacros")
@@ -304,6 +289,8 @@ namespace GameConsole.UI
             SetVisible(false);
             _search.UnregisterValueChangedCallback(OnSearch);
             _searchField.Dispose();
+            _tagFilter.e_onChanged -= OnTag;
+            _tagFilter.Dispose();
             _execute.clicked -= Execute;
             _splitter.Dispose();
             _presets.Dispose();
@@ -319,17 +306,10 @@ namespace GameConsole.UI
             }
 
             _rowUnbind.Clear();
-            foreach (var unbind in _unbind)
-            {
-                unbind();
-            }
-
-            _unbind.Clear();
             _details.Clear();
             _text.Dispose();
             _console = null;
             _commandSource = null;
-            _categorySource = null;
         }
 
         private void LoadCommand()
@@ -342,7 +322,7 @@ namespace GameConsole.UI
                 if (wrapper.IsCheatIgnore) return;
 
                 _commands.Add(wrapper);
-                if (!string.IsNullOrEmpty(command.tag))
+                if (!string.IsNullOrWhiteSpace(command.tag))
                 {
                     _commandTags.Add(command.tag);
                 }
@@ -356,21 +336,11 @@ namespace GameConsole.UI
 
         private void LoadCategories()
         {
-            _categorySource ??= _commandTags.ToArray();
-            for (var added = 0; added < 2 && _categoryIndex < _categorySource.Length; added++)
-            {
-                var tag = _categorySource[_categoryIndex++];
-
-                AddTag(tag, tag);
-            }
-
-            _loaded = _categoryIndex == _categorySource.Length;
-            if (_loaded)
-            {
-                _status.text = _failed == 0
-                    ? ToolkitLocalization.Get("ui.CheatPanel.LoadCategories")
-                    : ToolkitLocalization.Format("ui.CheatPanel.LoadCategories.2", ("p0", (object)(_failed)));
-            }
+            _tagFilter.SetTags(_commandTags);
+            _loaded = true;
+            _status.text = _failed == 0
+                ? ToolkitLocalization.Get("ui.CheatPanel.LoadCategories")
+                : ToolkitLocalization.Format("ui.CheatPanel.LoadCategories.2", ("p0", (object)(_failed)));
         }
 
         // 虚拟化行读取当前 userData, 避免闭包保存过期索引.
@@ -446,28 +416,10 @@ namespace GameConsole.UI
 
         private void OnSearch(ChangeEvent<string> evt) => Filter();
 
-        private void AddTag(string title, string tag)
+        private void OnTag(string tag)
         {
-            var item = ToolkitFactory.InstantiateTemplate(_categoryTemplate);
-            var button = ToolkitView.Require<Button>(item, "categoryButton");
-
-            button.text = title;
-            button.EnableInClassList("selected", tag == _tag);
-            Action click = () =>
-            {
-                _tag = tag;
-                foreach (var child in _tags.Children())
-                {
-                    ToolkitView.Require<Button>(child, "categoryButton")
-                        .EnableInClassList("selected", child == item);
-                }
-
-                Filter();
-            };
-
-            button.clicked += click;
-            _unbind.Add(() => button.clicked -= click);
-            _tags.Add(item);
+            _tag = tag;
+            Filter();
         }
 
         private void Filter(bool preserveSelection = false)
@@ -498,6 +450,7 @@ namespace GameConsole.UI
         {
             if (!_showingMacros && wrapper != null && ReferenceEquals(_selected, wrapper)) return;
 
+            _tagFilter.Close();
             _contextMenu.Close();
             _showingMacros = false;
             _macroEntry.RemoveFromClassList("selected");
@@ -524,6 +477,7 @@ namespace GameConsole.UI
         // 固定入口不属于可排序命令数据, 搜索和分类不会将其移除.
         private void ShowMacros()
         {
+            _tagFilter.Close();
             _contextMenu.Close();
             _showingMacros = true;
             _selected = null;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UIElements;
 using GameConsole.Extension;
@@ -10,8 +11,6 @@ namespace GameConsole.UI
     /// <summary> 按可视区域自适应分页, 分帧复用预设按钮并保持原始参数引用. </summary>
     internal sealed class ToolkitPresetPanel : IDisposable
     {
-        private const float PAGER_INLINE_WIDTH = 660f;
-
         private readonly VisualElement _root;
 
         private readonly VisualElement _grid;
@@ -22,23 +21,15 @@ namespace GameConsole.UI
 
         private readonly ToolkitSearchField _searchField;
 
+        private readonly ToolkitTagFilterBar _tagFilter;
+
         private readonly ToolkitSearchIndex<ParamDefine> _searchIndex = new(define => new[] { define.name, define.param, define.tag });
 
         private readonly SliderInt _size; // 零为纯文字模式.
 
         private readonly Label _empty;
 
-        private readonly Label _pageInfo;
-
-        private readonly Button _previous;
-
-        private readonly Button _next;
-
-        private readonly VisualElement _pager;
-
-        private readonly IntegerField _jumpPage;
-
-        private readonly Button _jump;
+        private readonly ToolkitPager _pager;
 
         private readonly VisualTreeAsset _template;
 
@@ -81,31 +72,22 @@ namespace GameConsole.UI
             _scroll = ToolkitView.Require<ScrollView>(root, "presetScroll");
             _search = ToolkitView.Require<TextField>(root, "presetSearch");
             _searchField = new ToolkitSearchField(_search, ToolkitView.Require<Button>(root, "presetSearchHistory"));
+            _tagFilter = new ToolkitTagFilterBar(ToolkitView.Require<VisualElement>(root, "presetTags"), ToolkitView.Require<VisualElement>(root, "presetToolbar"), ToolkitView.Require<VisualElement>(root, "presetSearchGroup"));
+            _tagFilter.e_onChanged += OnTag;
             _size = ToolkitView.Require<SliderInt>(root, "presetButtonSize");
             _size.lowValue = Config.MIN_PRESET_BUTTON_SIZE;
             _size.highValue = Config.MAX_PRESET_BUTTON_SIZE;
             _size.SetValueWithoutNotify(Config.DEFAULT_PRESET_BUTTON_SIZE);
             _empty = ToolkitView.Require<Label>(root, "presetEmpty");
-            _pageInfo = ToolkitView.Require<Label>(root, "presetPageInfo");
-            _previous = ToolkitView.Require<Button>(root, "previousPresets");
-            _next = ToolkitView.Require<Button>(root, "nextPresets");
-            _pager = ToolkitView.Require<VisualElement>(root, "presetPager");
-            _jumpPage = ToolkitView.Require<IntegerField>(root, "presetJumpPage");
-            _jump = ToolkitView.Require<Button>(root, "jumpPresets");
+            _pager = new ToolkitPager(ToolkitView.Require<VisualElement>(root, "presetPager"), ChangePage);
             _template = ToolkitFactory.RequireTemplate("ToolkitPresetButton");
             _details = details;
             _submit = submit;
             _contextMenu = contextMenu;
-            _text.Track(_pageInfo);
             _search.RegisterValueChangedCallback(OnSearch);
             _size.RegisterValueChangedCallback(OnSize);
             _scroll.contentViewport.RegisterCallback<GeometryChangedEvent>(OnViewportGeometry);
             _scroll.contentViewport.RegisterCallback<PointerLeaveEvent>(OnViewportLeave);
-            _previous.clicked += PreviousPage;
-            _next.clicked += NextPage;
-            _jump.clicked += JumpPage;
-            _jumpPage.RegisterValueChangedCallback(OnJumpPageChanged);
-            _pager.RegisterCallback<GeometryChangedEvent>(OnPagerGeometry);
         }
 
         internal void SetCommand(CommandWrapper command)
@@ -115,8 +97,9 @@ namespace GameConsole.UI
             _hoveredPreset = null;
             _command = command;
             _search.SetValueWithoutNotify(string.Empty);
+            _tagFilter.SetTags(command?.ParameterDefines?.Select(define => define?.tag));
             _searchIndex.Rebuild(command?.ParameterDefines);
-            _searchIndex.Search(string.Empty, _matches);
+            _searchIndex.Search(string.Empty, _matches, IncludeTag);
             _root.EnableInClassList("is-hidden", command?.ParameterDefines == null || command.ParameterDefines.Count == 0);
             RequestPage(command != null && _anchors.TryGetValue(command.Command, out var anchor) ? anchor : 0);
         }
@@ -157,15 +140,9 @@ namespace GameConsole.UI
                     }
                 }
 
-                _pageInfo.text = ToolkitLocalization.Format("ui.PresetPanel.Tick", ("p0", (object)(page + 1)), ("p1", (object)(total)), ("p2", (object)(_capacity)), ("p3", (object)(_matches.Count)));
-                _pageInfo.tooltip = _pageInfo.text;
-                _previous.SetEnabled(total > 1);
-                _next.SetEnabled(total > 1);
-                _jumpPage.SetValueWithoutNotify(page + 1 < total ? page + 2 : 1);
-                _jumpPage.SetEnabled(total > 1);
-                _jump.SetEnabled(total > 1);
+                _pager.SetPage(page, (int)total, ToolkitLocalization.Format("ui.PresetPanel.Tick", ("p0", (object)(page + 1)), ("p1", (object)(total)), ("p2", (object)(_capacity)), ("p3", (object)(_matches.Count))));
                 _empty.EnableInClassList("is-hidden", _matches.Count > 0);
-                if (_command != null && string.IsNullOrWhiteSpace(_search.value))
+                if (_command != null && _tagFilter.SelectedTag == null && string.IsNullOrWhiteSpace(_search.value))
                 {
                     _anchors[_command.Command] = Math.Min(_anchor, Math.Max(0, _matches.Count - 1));
                 }
@@ -220,15 +197,19 @@ namespace GameConsole.UI
             return (int)Math.Min(int.MaxValue, (long)columns * rows);
         }
 
-        internal void HideSearch() => _searchField.Hide();
+        internal void HideSearch()
+        {
+            _searchField.Hide();
+            _tagFilter.Close();
+        }
 
         internal void RefreshLanguage()
         {
+            _tagFilter.RefreshLanguage();
             var page = _start / Math.Max(1, _capacity);
             var total = Math.Max(1, (_matches.Count + _capacity - 1) / Math.Max(1, _capacity));
 
-            _text.SetText(_pageInfo, ToolkitLocalization.Format("ui.PresetPanel.Tick", ("p0", (object)(page + 1)), ("p1", (object)total), ("p2", (object)_capacity), ("p3", (object)_matches.Count)));
-            _pageInfo.tooltip = ToolkitLocalization.Format("ui.PresetPanel.Tick", ("p0", (object)(page + 1)), ("p1", (object)total), ("p2", (object)_capacity), ("p3", (object)_matches.Count));
+            _pager.SetPage(page, total, ToolkitLocalization.Format("ui.PresetPanel.Tick", ("p0", (object)(page + 1)), ("p1", (object)total), ("p2", (object)_capacity), ("p3", (object)_matches.Count)));
         }
 
         public void Dispose()
@@ -245,14 +226,12 @@ namespace GameConsole.UI
             _text.Dispose();
             _search.UnregisterValueChangedCallback(OnSearch);
             _searchField.Dispose();
+            _tagFilter.e_onChanged -= OnTag;
+            _tagFilter.Dispose();
             _size.UnregisterValueChangedCallback(OnSize);
             _scroll.contentViewport.UnregisterCallback<GeometryChangedEvent>(OnViewportGeometry);
             _scroll.contentViewport.UnregisterCallback<PointerLeaveEvent>(OnViewportLeave);
-            _previous.clicked -= PreviousPage;
-            _next.clicked -= NextPage;
-            _jump.clicked -= JumpPage;
-            _jumpPage.UnregisterValueChangedCallback(OnJumpPageChanged);
-            _pager.UnregisterCallback<GeometryChangedEvent>(OnPagerGeometry);
+            _pager.Dispose();
             _matches.Clear();
             _anchors.Clear();
             _command = null;
@@ -349,7 +328,16 @@ namespace GameConsole.UI
         // 搜索变化重回第一页, 保留按钮大小.
         private void OnSearch(ChangeEvent<string> evt)
         {
-            _searchIndex.Search(evt.newValue, _matches);
+            Filter();
+        }
+
+        private void OnTag(string tag) => Filter();
+
+        private bool IncludeTag(ParamDefine define) => _tagFilter.SelectedTag == null || string.Equals(define.tag, _tagFilter.SelectedTag, StringComparison.Ordinal);
+
+        private void Filter()
+        {
+            _searchIndex.Search(_search.value, _matches, IncludeTag);
             RequestPage(0);
         }
 
@@ -378,45 +366,7 @@ namespace GameConsole.UI
             _pageDirty = true;
         }
 
-        private void PreviousPage()
-        {
-            if (_matches.Count <= _capacity) return;
-
-            RequestPage(_start <= 0 ? (_matches.Count - 1) / _capacity * _capacity : _start - _capacity);
-        }
-
-        // 末页向后循环回第一页, 避免超出当前匹配结果.
-        private void NextPage()
-        {
-            if (_matches.Count <= _capacity) return;
-
-            RequestPage(_matches.Count - _start > _capacity ? _start + _capacity : 0);
-        }
-
-        // 显示的页码从一开始, 越界目标约束到有效范围内.
-        private void JumpPage()
-        {
-            var total = (int)Math.Max(1, (_matches.Count + (long)_capacity - 1) / _capacity);
-            var page = Mathf.Clamp(_jumpPage.value, 1, total);
-
-            _jumpPage.SetValueWithoutNotify(page);
-            RequestPage((page - 1) * _capacity);
-        }
-
-        private void OnJumpPageChanged(ChangeEvent<int> evt)
-        {
-            var total = (int)Math.Max(1, (_matches.Count + (long)_capacity - 1) / _capacity);
-
-            _jumpPage.SetValueWithoutNotify(Mathf.Clamp(evt.newValue, 1, total));
-        }
-
-        private void OnPagerGeometry(GeometryChangedEvent evt)
-        {
-            if (evt.oldRect.width != evt.newRect.width)
-            {
-                _pager.EnableInClassList("preset-pager-stacked", evt.newRect.width < PAGER_INLINE_WIDTH);
-            }
-        }
+        private void ChangePage(int page) => RequestPage(page * _capacity);
 
         private sealed class Item
         {

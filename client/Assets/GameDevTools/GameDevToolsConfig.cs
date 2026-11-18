@@ -18,6 +18,8 @@ namespace GameConsole
         /// <summary> 开发工具整体不透明度, 不包含浮窗日志. </summary>
         public float panelOpacity;
 
+        public float wheelScrollSensitivity;
+
         public string uiStyle;
 
         public string uiFont;
@@ -72,6 +74,7 @@ namespace GameConsole
             keyModifier = ShortcutModifier.None;
             minimizeOnShortcut = false;
             panelOpacity = Config.DEFAULT_PANEL_OPACITY;
+            wheelScrollSensitivity = Config.DEFAULT_WHEEL_SCROLL_SENSITIVITY;
             uiStyle = string.Empty;
             uiFont = string.Empty;
             uiLanguage = string.Empty;

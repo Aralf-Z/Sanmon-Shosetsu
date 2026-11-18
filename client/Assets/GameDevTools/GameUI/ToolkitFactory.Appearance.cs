@@ -290,6 +290,7 @@ namespace GameConsole.UI
             _font = prepared.font;
             _appearanceCache[prepared.style] = prepared;
             AppearanceVersion++;
+            ToolkitIcons.RefreshWindowResize(root);
             ToolkitLocalization.RefreshPresentation();
         }
 

@@ -23,13 +23,9 @@ MonoBehaviour:
     path: Style/RetroVintage
   - name: "\u8D5B\u7490\u7490"
     path: Style/CelShaded
-  - name: "\u4E03\u9F99\u73E0"
-    path: Style/DragonBall
   fonts:
-  - name: "\u6587\u6CC9\u9A7F\u5FAE\u7C73\u9ED1"
-    path: Font/MicroHeiMono
-  - name: FusionPixel
-    path: Font/FusionPixel
+  - name: MapleMono
+    path: Font/MapleMono-Light
   languages:
   - code: zh
     name: "\u7B80\u4F53\u4E2D\u6587"
@@ -37,9 +33,3 @@ MonoBehaviour:
   - code: en
     name: English
     path: Localization/en
-  - code: ja
-    name: "\u65E5\u672C\u8A9E"
-    path: Localization/ja
-  - code: ko
-    name: "\uD55C\uAD6D\uC5B4"
-    path: Localization/ko

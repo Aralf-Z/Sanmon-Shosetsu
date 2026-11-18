@@ -37,7 +37,6 @@ namespace Sanmon.Module
         {
             var path = Path.Combine(RootPath, module + ".lua");
             var content = File.Exists(path) ? File.ReadAllText(path, Encoding.UTF8) : null;
-            SanmonLogger.LogInfo($"load at {path}.\ncontent:\n{content}");
             return content;
         }
 

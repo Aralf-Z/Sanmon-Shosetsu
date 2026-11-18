@@ -30,13 +30,9 @@ namespace GameConsole.UI
 
         private readonly Label _body;
 
-        private readonly Label _pageInfo;
+        private readonly ToolkitPager _pager;
 
         private readonly Button _close;
-
-        private readonly Button _previous;
-
-        private readonly Button _next;
 
         private readonly ToolkitHelpNavigation _navigation;
 
@@ -80,18 +76,14 @@ namespace GameConsole.UI
             _areaTitle = ToolkitView.Require<Label>(_host, "helpAreaTitle");
             _featureTitle = ToolkitView.Require<Label>(_host, "helpFeatureTitle");
             _body = ToolkitView.Require<Label>(_host, "helpBody");
-            _pageInfo = ToolkitView.Require<Label>(_host, "helpPageInfo");
+            _pager = new ToolkitPager(ToolkitView.Require<VisualElement>(_host, "helpPager"), ChangePage);
             _close = ToolkitView.Require<Button>(_host, "closeHelp");
-            _previous = ToolkitView.Require<Button>(_host, "previousHelp");
-            _next = ToolkitView.Require<Button>(_host, "nextHelp");
             _navigation = new ToolkitHelpNavigation(ToolkitView.Require<ScrollView>(_host, "helpNavigation"), SelectTopic);
             _placement = new ToolkitHelpPlacement(_backdrop, _dialog, ToolkitView.Require<VisualElement>(_host, "helpHeader"));
             _body.enableRichText = false;
             _body.parseEscapeSequences = false;
             _body.selection.isSelectable = true;
             _close.clicked += CloseFromButton;
-            _previous.clicked += Previous;
-            _next.clicked += Next;
             _viewport.RegisterCallback<GeometryChangedEvent>(Geometry);
             _backdrop.RegisterCallback<PointerDownEvent>(Outside, TrickleDown.TrickleDown);
             _root.RegisterCallback<KeyDownEvent>(KeyDown, TrickleDown.TrickleDown);
@@ -136,8 +128,7 @@ namespace GameConsole.UI
             if (size.y < fontSize.y + 2f)
             {
                 ToolkitMixedText.SetText(_body, ToolkitLocalization.Get("ui.HelpWindow.Tick.2"));
-                _previous.SetEnabled(false);
-                _next.SetEnabled(false);
+                _pager.SetPage(0, 1);
                 return;
             }
 
@@ -230,8 +221,7 @@ namespace GameConsole.UI
 
             _unbind.Clear();
             _close.clicked -= CloseFromButton;
-            _previous.clicked -= Previous;
-            _next.clicked -= Next;
+            _pager.Dispose();
             _navigation.Dispose();
             _placement.Dispose();
             _viewport.UnregisterCallback<GeometryChangedEvent>(Geometry);
@@ -325,9 +315,7 @@ namespace GameConsole.UI
                     ? _features[featureIndex].Title
                     : section.Title;
                 ToolkitMixedText.SetText(_body, string.Empty);
-                _pageInfo.text = "1 / 1";
-                _previous.SetEnabled(false);
-                _next.SetEnabled(false);
+                _pager.SetPage(0, 1);
             }
 
             _requestedFeature = featureIndex;
@@ -352,9 +340,7 @@ namespace GameConsole.UI
             ToolkitMixedText.SetText(_body, page.Text);
             _body.selection.cursorIndex = 0;
             _body.selection.selectIndex = 0;
-            _pageInfo.text = $"{_pageIndex + 1} / {_pages.Count}";
-            _previous.SetEnabled(_pageIndex > 0);
-            _next.SetEnabled(_pageIndex + 1 < _pages.Count);
+            _pager.SetPage(_pageIndex, _pages.Count);
             _navigation.Select(_topic, page.FeatureIndex);
             if (!(_root.panel?.focusController.focusedElement is VisualElement focus) || !focus.enabledInHierarchy)
             {
@@ -362,23 +348,17 @@ namespace GameConsole.UI
             }
         }
 
-        private void Previous()
+        private void ChangePage(int page)
         {
-            if (IsOpen && _pageIndex > 0)
-            {
-                _pageIndex--;
-                ShowPage();
-            }
+            if (!IsOpen || page < 0 || page >= _pages.Count) return;
+
+            _pageIndex = page;
+            ShowPage();
         }
 
-        private void Next()
-        {
-            if (IsOpen && _pageIndex + 1 < _pages.Count)
-            {
-                _pageIndex++;
-                ShowPage();
-            }
-        }
+        private void Previous() => _pager.Move(-1);
+
+        private void Next() => _pager.Move(1);
 
         private void CloseFromButton() => Close(true);
 
@@ -436,6 +416,8 @@ namespace GameConsole.UI
             if (evt.keyCode != KeyCode.LeftArrow && evt.keyCode != KeyCode.RightArrow) return;
 
             if (evt.target is VisualElement target && _navigation.Contains(target)) return;
+
+            if (evt.target is VisualElement input && _pager.ContainsInput(input)) return;
 
             var selecting = _root.panel?.focusController.focusedElement == _body && (_body.selection.cursorIndex != _body.selection.selectIndex || evt.shiftKey || evt.ctrlKey || evt.commandKey);
 

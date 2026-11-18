@@ -16,11 +16,7 @@
                         <ui:VisualElement name="helpBodyViewport" class="help-body-viewport">
                             <ui:Label name="helpBody" enable-rich-text="false" focusable="true" class="help-body" />
                         </ui:VisualElement>
-                        <ui:VisualElement class="help-pager">
-                            <ui:Button name="previousHelp" text="@loc:ui.HelpWindow.previousHelp.text" />
-                            <ui:Label name="helpPageInfo" text="" class="help-page-info" />
-                            <ui:Button name="nextHelp" text="@loc:ui.HelpWindow.nextHelp.text" />
-                        </ui:VisualElement>
+                        <ui:VisualElement name="helpPager" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>

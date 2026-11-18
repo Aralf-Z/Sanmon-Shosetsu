@@ -94,16 +94,19 @@ var userCount = 10;
 | 接口 (Interface) | `PascalCase` | 使用 `I` 前缀, 如 `IUserService` |
 | 枚举 (Enum) | `PascalCase` | 无; 枚举值同样使用 `PascalCase` |
 
-泛型类型参数建议使用 `T`, `TKey`, `TValue` 等, 遵循 `PascalCase`.
+- 泛型类型参数建议使用 `T`, `TKey`, `TValue` 等, 遵循 `PascalCase`.
+- 枚举的枚举值定义需要显性声明值或者等于其他枚举, 不能单独定义名称.  
 
 ### 命名空间 (Namespace)
 
 统一使用 `PascalCase`, 按层级用点分隔.
 
 ```csharp
+
 namespace GameScript.ModuleName.SubModule
 {
 }
+
 ```
 
 ## 代码布局与格式
@@ -256,43 +259,54 @@ var dmg = isCritical
 
 ## 注释
 
-新增或修改的成员按以下规则添加注释, 重点说明用途, 单位, 边界和特殊行为. 局部变量及直观语句无需逐行注释.
+新增或修改的成员按以下规则添加注释, 重点说明用途, 单位, 边界和特殊行为. 
 
-注释内容使用中文汉字或者英文. 标点统一使用英文字符和英文标点习惯, 不使用 emoji, 颜文字等可读性差的符号.
+- 局部变量及直观语句无需逐行注释.
+- 注释内容使用中文汉字或者英文. 标点统一使用英文字符和英文标点习惯, 不使用 emoji, 颜文字等可读性差的符号.
+- 当命名已充分表达用途时, 省略命名已经表达意思的注释
+- 注释仅用于补充说明, 是命名无法表达含义时的说明性文字; 
 
 ### 字段, 属性
 
 - `private`, `protected`, `protected internal`, `private protected` 成员的注释放在其后, 如:
 
 ```csharp
+
 private int _configId; // 配置表 ID.
+
 ```
 
 - 其他访问等级使用单行 XML 注释, 如:
 
 ```csharp
+
 /// <summary> 配置表 ID. </summary>
 public int ConfigId { get; private set; }
+
 ```
 
 ### 方法
 
-- `private`, `protected`, `protected internal`, `private protected` 方法的注释放在其上, 通常不逐项解释参数. 参数存在特殊单位或约束时, 在注释中说明. 当命名已充分表达用途时, 可以省略重复说明用途的注释; 特殊单位、约束、边界和非直观行为仍需说明.
+- `private`, `protected`, `protected internal`, `private protected` 方法的注释放在其上, 通常不逐项解释参数. 参数存在特殊单位或约束时, 在注释中说明. 
 
 ```csharp
+
 // 生成新的敌人.
 private void SpawnNewEnemy(int id)
 {
 }
+
 ```
 
 - 其他访问等级使用单行 XML 注释, 非必要不做参数解释, 如:
 
 ```csharp
+
 /// <summary> 生成新的敌人. </summary>
 public void SpawnNewEnemy(int id)
 {
 }
+
 ```
 
 ### 其他注释

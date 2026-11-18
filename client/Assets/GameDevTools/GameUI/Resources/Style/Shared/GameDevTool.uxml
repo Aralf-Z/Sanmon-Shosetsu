@@ -48,8 +48,9 @@
                         <ui:Label name="shortcutHint" class="shortcut-hint" picking-mode="Ignore" />
                         <ui:Label name="toolkitVersion" class="toolkit-version" picking-mode="Ignore" />
                     </ui:VisualElement>
-                    <ui:VisualElement name="windowResizeHandle" class="resize-handle">
-                        <ui:Label text="@loc:ui.Window.label8.text" picking-mode="Ignore" />
+                    <ui:VisualElement name="windowResizeHandle" class="resize-handle" tooltip="@loc:ui.Window.resize.tooltip">
+                        <ui:Image name="windowResizeImage" picking-mode="Ignore" />
+                        <ui:Label name="windowResizeFallback" class="is-hidden" picking-mode="Ignore" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>

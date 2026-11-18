@@ -260,44 +260,6 @@ namespace GameConsole.UI
             return ToolkitRuntimeFonts.Revision;
         }
 
-        internal static VisualElement PrepareMenu(GenericDropdownMenu menu)
-        {
-            menu.contentContainer.AddToClassList("context-menu");
-            var root = menu.contentContainer;
-
-            while (root != null && !root.ClassListContains(GenericDropdownMenu.ussClassName))
-            {
-                root = root.hierarchy.parent;
-            }
-
-            if (root == null) return null;
-
-            root.AddToClassList("context-menu-root");
-            if (_layoutSheet != null)
-            {
-                root.styleSheets.Add(_layoutSheet);
-            }
-
-            var sheet = _styleSheet;
-
-            if (sheet != null)
-            {
-                root.styleSheets.Add(sheet);
-            }
-
-            if (_controlsSheet != null)
-            {
-                root.styleSheets.Add(_controlsSheet);
-            }
-
-            NormalizeThemeSheets(root);
-            ApplyFont(root);
-            ToolkitIcons.EnableMenuIcons(root);
-            ApplyMenuOpacity(root);
-            TrackMenu(root);
-            return root;
-        }
-
         // 先尝试保存选择, 失败后仅从 Schema 首项依次查找可用风格.
         private static bool TryLoadInitialStyle(string preferred, out string selected, out StyleSheet sheet)
         {

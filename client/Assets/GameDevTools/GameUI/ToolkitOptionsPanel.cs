@@ -67,6 +67,7 @@ namespace GameConsole.UI
             BindInteger(root, "alternativeCommandCount", () => Config.AlternativeCommandCount, value => Config.AlternativeCommandCount = value);
             BindInteger(root, "cheatSearchHistoryCapacity", () => Config.CheatSearchHistoryCapacity, value => Config.CheatSearchHistoryCapacity = value, Config.MIN_CHEAT_SEARCH_HISTORY_CAPACITY, Config.MAX_CHEAT_SEARCH_HISTORY_CAPACITY, true);
             BindPanelOpacity(root, windowSettings);
+            BindWheelScrollSensitivity(root, windowSettings);
             BindStyle(root);
             BindFont(root);
             BindLanguage(root);

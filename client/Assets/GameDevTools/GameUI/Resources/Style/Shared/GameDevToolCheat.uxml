@@ -3,12 +3,12 @@
     <ui:Style src="ToolkitControls.uss" />
     <ui:Template name="macroGridTemplate" src="ToolkitMacroGrid.uxml" />
     <ui:VisualElement name="cheatContent" class="page cheat-page">
-        <ui:VisualElement class="cheat-toolbar">
-            <ui:ScrollView class="command-tags-scroll" mode="Horizontal" vertical-scroller-visibility="Hidden">
-                <ui:VisualElement name="commandTags" class="command-tags" />
-            </ui:ScrollView>
-            <ui:TextField name="commandSearch" tooltip="@loc:ui.Cheat.commandSearch.tooltip" placeholder-text="搜索命令 / 别名 / 标签 / 描述" class="command-search" />
-            <ui:Button name="commandSearchHistory" text="@loc:icon.log" tooltip="@loc:ui.Cheat.commandSearchHistory.tooltip" class="search-history-button" />
+        <ui:VisualElement name="commandTagToolbar" class="cheat-toolbar">
+            <ui:VisualElement name="commandTags" class="command-tags" />
+            <ui:VisualElement name="commandSearchGroup">
+                <ui:TextField name="commandSearch" tooltip="@loc:ui.Cheat.commandSearch.tooltip" class="command-search tag-search-input" />
+                <ui:Button name="commandSearchHistory" text="@loc:icon.log" tooltip="@loc:ui.Cheat.commandSearchHistory.tooltip" class="search-history-button" />
+            </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="cheatColumns" class="cheat-columns">
             <ui:VisualElement name="commandsColumn" class="commands-column">
@@ -29,28 +29,19 @@
                 </ui:VisualElement>
                 <ui:Instance template="macroGridTemplate" name="macroGridHost" class="macro-grid-host" />
                 <ui:VisualElement name="presetsBox" class="presets-box is-hidden">
-                    <ui:VisualElement class="preset-toolbar">
-                        <ui:TextField name="presetSearch" placeholder-text="搜索预设名称 / 参数 / 标签" tooltip="@loc:ui.Cheat.presetSearch.tooltip" class="preset-search" />
-                        <ui:Button name="presetSearchHistory" text="@loc:icon.log" tooltip="@loc:ui.Cheat.presetSearchHistory.tooltip" class="search-history-button" />
-                        <ui:SliderInt name="presetButtonSize" tooltip="@loc:ui.Cheat.presetButtonSize.tooltip" class="preset-size-slider dev-horizontal-slider" />
+                    <ui:VisualElement name="presetToolbar" class="preset-toolbar">
+                        <ui:VisualElement name="presetTags" />
+                        <ui:VisualElement name="presetSearchGroup">
+                            <ui:TextField name="presetSearch" tooltip="@loc:ui.Cheat.presetSearch.tooltip" class="preset-search tag-search-input" />
+                            <ui:Button name="presetSearchHistory" text="@loc:icon.log" tooltip="@loc:ui.Cheat.presetSearchHistory.tooltip" class="search-history-button" />
+                            <ui:SliderInt name="presetButtonSize" tooltip="@loc:ui.Cheat.presetButtonSize.tooltip" class="preset-size-slider dev-horizontal-slider" />
+                        </ui:VisualElement>
                     </ui:VisualElement>
                     <ui:ScrollView name="presetScroll" class="preset-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Hidden">
                         <ui:VisualElement name="presetGrid" class="preset-grid" />
                         <ui:Label name="presetEmpty" text="@loc:ui.Cheat.presetEmpty.text" class="muted wrap is-hidden" />
                     </ui:ScrollView>
-                    <ui:VisualElement name="presetPager" class="preset-pager preset-pager-stacked">
-                        <ui:VisualElement class="preset-page-navigation">
-                            <ui:Button name="previousPresets" text="@loc:ui.Cheat.previousPresets.text" />
-                            <ui:Label name="presetPageInfo" text="" class="muted preset-page-info" />
-                            <ui:Button name="nextPresets" text="@loc:ui.Cheat.nextPresets.text" />
-                        </ui:VisualElement>
-                        <ui:VisualElement class="preset-page-jump">
-                            <ui:Label text="@loc:ui.Cheat.label18.text" />
-                            <ui:IntegerField name="presetJumpPage" value="1" is-delayed="true" tooltip="@loc:ui.Cheat.presetJumpPage.tooltip" class="preset-jump-page" />
-                            <ui:Label text="@loc:ui.Cheat.label20.text" />
-                            <ui:Button name="jumpPresets" text="@loc:ui.Cheat.jumpPresets.text" />
-                        </ui:VisualElement>
-                    </ui:VisualElement>
+                    <ui:VisualElement name="presetPager" />
                 </ui:VisualElement>
                 <ui:VisualElement name="parameterForm" class="parameter-form">
                     <ui:ScrollView class="details-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden">

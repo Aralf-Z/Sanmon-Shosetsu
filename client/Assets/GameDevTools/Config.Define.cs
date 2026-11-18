@@ -54,6 +54,12 @@ namespace GameConsole
         /// <summary> 透明度上限. </summary>
         public const float MAX_OPACITY = 1f;
 
+        public const float MIN_WHEEL_SCROLL_SENSITIVITY = .1f;
+
+        public const float MAX_WHEEL_SCROLL_SENSITIVITY = 1f;
+
+        public const float DEFAULT_WHEEL_SCROLL_SENSITIVITY = .5f;
+
         /// <summary> 主界面可设置的透明度下限. </summary>
         public const float MIN_PANEL_OPACITY = .2f;
 

@@ -50,6 +50,8 @@ namespace GameConsole.UI
 
         private readonly ToolkitNavigationBlocker _navigationBlocker; // 屏蔽独占面板的输入导航, 不影响游戏 UI.
 
+        private readonly ToolkitWheelScrollController _wheelScroll;
+
         private readonly VisualElement _window;
 
         private readonly VisualElement _desktop;
@@ -107,6 +109,7 @@ namespace GameConsole.UI
                 var root = document.rootVisualElement;
 
                 _navigationBlocker = new ToolkitNavigationBlocker(root);
+                _wheelScroll = new ToolkitWheelScrollController(root);
                 root.AddToClassList("dev-document");
                 root.pickingMode = PickingMode.Ignore;
                 _desktop = Require<VisualElement>(root, "toolkitDesktop");
@@ -121,6 +124,7 @@ namespace GameConsole.UI
                 _options = new ToolkitOptionsPanel(Require<VisualElement>(root, "settingsContent"), _windowSettings, _appearance);
                 _cheatLogs = new ToolkitCheatLogPreview(root, _renderer, _windowSettings);
                 _windowController = new ToolkitWindowController(root, _renderer, _windowSettings);
+                ToolkitIcons.RefreshWindowResize(root);
                 _windowSettings.e_onChanged += ApplyPanelOpacity;
                 ApplyPanelOpacity();
                 _help = new ToolkitHelpWindow(root, () => _cheats.HelpTopic);
@@ -274,6 +278,7 @@ namespace GameConsole.UI
 
             _unbind.Clear();
             ReleaseViewResource(() => _navigationBlocker?.Dispose(), failures);
+            ReleaseViewResource(() => _wheelScroll?.Dispose(), failures);
             _input?.Reset();
             ReleaseViewResource(() =>
             {
