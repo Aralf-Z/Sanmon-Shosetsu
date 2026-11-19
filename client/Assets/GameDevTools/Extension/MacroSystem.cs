@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
@@ -51,7 +50,7 @@ namespace GameConsole.Extension
 
         private int _statusVersion = -1;
 
-        public string FilePath => Path.Combine(Application.persistentDataPath, "development_macros.json");
+        public string FilePath => Config.FilePath;
 
         private readonly Action _releaseRunner; // 销毁旧服务不会清除后来建立的新执行入口.
 
@@ -81,7 +80,7 @@ namespace GameConsole.Extension
             _owner = owner;
             _output = output;
             _compiler = new MacroCompiler(commands);
-            Load();
+            _macros.AddRange(Config.LoadMacros());
             _releaseRunner = Macro.BindRunner(macro => Run(macro));
         }
 
@@ -152,7 +151,7 @@ namespace GameConsole.Extension
                 .Append(saved)
                 .ToList();
 
-            if (!Write(items, out error)) return false;
+            if (!Config.TrySaveMacros(items, null, out _, out error)) return false;
 
             _macros.RemoveAll(macro => !macro.IsBuiltIn && macro.Id == saved.Id);
             _macros.Add(saved);
@@ -167,10 +166,15 @@ namespace GameConsole.Extension
             error = string.Empty;
             if (value.IsBuiltIn) return false;
 
-            if (!Write(_macros.Where(macro => !macro.IsBuiltIn && macro.Id != value.Id), out error)) return false;
+            var items = _macros.Where(macro => !macro.IsBuiltIn && macro.Id != value.Id);
 
+            if (!Config.TrySaveMacros(items, value.Id, out var pinsChanged, out error)) return false;
             _macros.RemoveAll(macro => macro.Id == value.Id);
-            Config.SetPinned(value.Id, true, false);
+            if (pinsChanged)
+            {
+                Config.NotifySettingsChanged();
+            }
+
             e_onChanged?.Invoke();
             return true;
         }
@@ -219,68 +223,6 @@ namespace GameConsole.Extension
             }
 
             _macros.Add(macro);
-        }
-
-        // 读取失败保留原文件, 不用空库覆盖用户数据.
-        private void Load()
-        {
-            try
-            {
-                if (!File.Exists(FilePath)) return;
-
-                var data = JsonUtility.FromJson<Store>(File.ReadAllText(FilePath));
-
-                foreach (var entry in data?.macros ?? new List<Entry>())
-                {
-                    var macro = new Macro(entry.source)
-                    { Id = entry.id };
-
-                    if (string.IsNullOrEmpty(macro.Id) || _macros.Any(item => item.Id == macro.Id))
-                    {
-                        continue;
-                    }
-
-                    _macros.Add(macro);
-                }
-            }
-            catch (Exception exception)
-            {
-                _output(ToolkitLocalization.Format("ui.MacroSystem.Load", ("p0", (object)(exception.Message))));
-            }
-        }
-
-        // 先生成完整文件再替换, 保存失败时不修改内存库.
-        private bool Write(IEnumerable<Macro> macros, out string error)
-        {
-            try
-            {
-                var data = new Store
-                {
-                    macros = macros.Select(macro => new Entry { id = macro.Id, source = macro.ToSource() })
-                    .ToList()
-                };
-
-                Directory.CreateDirectory(Application.persistentDataPath);
-                var temporary = FilePath + ".tmp";
-
-                File.WriteAllText(temporary, JsonUtility.ToJson(data, true));
-                if (File.Exists(FilePath))
-                {
-                    File.Replace(temporary, FilePath, null);
-                }
-                else
-                {
-                    File.Move(temporary, FilePath);
-                }
-
-                error = string.Empty;
-                return true;
-            }
-            catch (Exception exception)
-            {
-                error = exception.Message;
-                return false;
-            }
         }
 
         private async UniTask ExecuteAsync(string name, List<MacroCompiler.Step> steps, CancellationTokenSource execution)
@@ -379,20 +321,6 @@ namespace GameConsole.Extension
             {
                 e_onStatusChanged?.Invoke();
             }
-        }
-
-        [Serializable]
-        private sealed class Store
-        {
-            public List<Entry> macros = new();
-        }
-
-        [Serializable]
-        private sealed class Entry
-        {
-            public string id;
-
-            public string source;
         }
     }
 }

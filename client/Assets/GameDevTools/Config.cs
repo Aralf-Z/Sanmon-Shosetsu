@@ -1,19 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 using UnityEngine;
 using GameConsole.Extension;
 
 namespace GameConsole
 {
-    /// <summary> 开发工具唯一的配置读取和持久化入口. </summary>
+    /// <summary> 开发工具设置及持久化数据的统一入口. </summary>
     public static partial class Config
     {
         public static event Action e_onChanged;
-
-        public static string FilePath => Path.Combine(Application.persistentDataPath, "development_config.json");
 
         public static string MacroWaitForColor => Data.macroWaitForColor;
 
@@ -199,21 +195,6 @@ namespace GameConsole
             get => Data.floatingLogTextOpacity; set => Data.floatingLogTextOpacity = NormalizeOpacity(value, DEFAULT_FLOATING_TEXT_OPACITY);
         }
 
-        private static GameDevToolsConfig _data;
-
-        private static GameDevToolsConfig Data
-        {
-            get
-            {
-                if (_data == null)
-                {
-                    Reload();
-                }
-
-                return _data;
-            }
-        }
-
         public static void RecordCheatSearch(string query)
         {
             if (RecordSearchHistory(Data, query))
@@ -241,75 +222,10 @@ namespace GameConsole
             }
         }
 
-        /// <summary> 每次启动显式重读, 兼容关闭 Domain Reload 的 Play 模式. </summary>
-        public static void Reload()
-        {
-            var rewrite = !File.Exists(FilePath);
-
-            _data = new GameDevToolsConfig();
-            try
-            {
-                if (!rewrite)
-                {
-                    _data = JsonConvert.DeserializeObject<GameDevToolsConfig>(File.ReadAllText(FilePath)) ?? throw new JsonSerializationException("配置根节点不能为空.");
-                }
-
-                Normalize(_data);
-            }
-            catch (Exception exception)
-            {
-                _data = new GameDevToolsConfig();
-                rewrite = true;
-                Debug.LogWarning($"[GameDevTools] 读取配置失败, 重建默认配置. {exception.Message}");
-            }
-
-            if (rewrite)
-            {
-                Write();
-            }
-
-            e_onChanged?.Invoke();
-        }
-
-        /// <summary> 返回独立副本, 防止 Inspector 保留过期的可变引用. </summary>
-        public static GameDevToolsConfig Snapshot() => JsonConvert.DeserializeObject<GameDevToolsConfig>(JsonConvert.SerializeObject(Data));
-
         public static void Edit(Action<GameDevToolsConfig> edit)
         {
             edit(Data);
             Save();
-        }
-
-        public static void Reset()
-        {
-            _data = new GameDevToolsConfig();
-            Save();
-        }
-
-        /// <summary> 保存设置, 失败时返回 false 并保留内存设置. </summary>
-        public static bool Save()
-        {
-            Normalize(Data);
-            if (!Write()) return false;
-
-            e_onChanged?.Invoke();
-            return true;
-        }
-
-        // 仅写入当前数据, 由调用者统一发出变更通知.
-        private static bool Write()
-        {
-            try
-            {
-                Directory.CreateDirectory(Application.persistentDataPath);
-                File.WriteAllText(FilePath, JsonConvert.SerializeObject(_data, Formatting.Indented));
-                return true;
-            }
-            catch (Exception exception)
-            {
-                Debug.LogWarning($"[GameDevTools] 保存配置失败. {exception.Message}");
-                return false;
-            }
         }
 
         // 统一磁盘数据, Inspector 和运行时的边界.

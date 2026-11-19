@@ -246,9 +246,11 @@ namespace GameConsole.UI
 
             _resizePreviewFrame = Time.frameCount;
             _resizePreviewDirty = false;
-            _resizePreview.style.width = _resizeBounds.width;
-            _resizePreview.style.height = _resizeBounds.height;
-            _resizePreview.style.translate = new Translate(_resizeBounds.x, _resizeBounds.y, 0);
+            var bounds = PixelBounds(_resizeBounds);
+
+            _resizePreview.style.width = bounds.width;
+            _resizePreview.style.height = bounds.height;
+            _resizePreview.style.translate = new Translate(bounds.x, bounds.y, 0);
             _resizePreview.RemoveFromClassList("is-hidden");
         }
 
@@ -274,12 +276,33 @@ namespace GameConsole.UI
 
         private void ApplyWindow()
         {
-            _window.style.width = _bounds.width;
-            _window.style.height = _bounds.height;
-            _window.style.translate = new Translate(_bounds.x, _bounds.y, 0);
+            var bounds = PixelBounds(_bounds);
+
+            _window.style.width = bounds.width;
+            _window.style.height = bounds.height;
+            _window.style.translate = new Translate(bounds.x, bounds.y, 0);
             _window.EnableInClassList("compact-window", _bounds.width < 760f);
             _window.EnableInClassList("narrow-window", _bounds.width < 540f);
-            _rail.Apply(_bounds, _viewport);
+            _rail.Apply(bounds, _viewport);
+        }
+
+        // 逻辑拖动保留小数, 主窗口与预览共用物理像素边界, 避免缩放后各自舍入.
+        private Rect PixelBounds(Rect bounds)
+        {
+            if (_root.panel == null) return bounds;
+
+            var origin = _root.WorldToLocal(RuntimePanelUtils.ScreenToPanel(_root.panel, Vector2.zero));
+            var next = _root.WorldToLocal(RuntimePanelUtils.ScreenToPanel(_root.panel, Vector2.one));
+            var step = new Vector2(Mathf.Abs(next.x - origin.x), Mathf.Abs(next.y - origin.y));
+
+            if (step.x <= 0 || step.y <= 0 || float.IsNaN(step.sqrMagnitude) || float.IsInfinity(step.sqrMagnitude)) return bounds;
+
+            var min = bounds.min - origin;
+            var max = bounds.max - origin;
+
+            min = new Vector2(Mathf.Round(min.x / step.x) * step.x, Mathf.Round(min.y / step.y) * step.y);
+            max = new Vector2(Mathf.Round(max.x / step.x) * step.x, Mathf.Round(max.y / step.y) * step.y);
+            return Rect.MinMaxRect(origin.x + min.x, origin.y + min.y, origin.x + max.x, origin.y + max.y);
         }
 
         private void MoveFloating(Vector2 position)

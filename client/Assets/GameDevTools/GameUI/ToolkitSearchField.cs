@@ -27,7 +27,7 @@ namespace GameConsole.UI
             _field.AddToClassList("toolkit-search-field");
             _txtPlaceholder = new Label { pickingMode = PickingMode.Ignore, focusable = false, enableRichText = false };
             _txtPlaceholder.AddToClassList("toolkit-search-placeholder");
-            var input = _field.Q(className: "unity-text-input") ?? _field;
+            var input = _field.Q(className: TextField.inputUssClassName) ?? _field;
 
             input.Add(_txtPlaceholder);
             _placeholderUpdate = _field.schedule.Execute(UpdatePlaceholder).Every(16);

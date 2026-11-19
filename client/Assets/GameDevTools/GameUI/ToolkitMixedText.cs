@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.CompilerServices;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -23,12 +25,13 @@ namespace GameConsole.UI
         private const string CONTROL_CLASS = "toolkit-icon-control";
 
         private const string INDICATOR_CLASS = "toolkit-icon-indicator";
+        private const int GLYPH_BATCH_SIZE = 4;
 
         private static readonly ConditionalWeakTable<TextElement, Binding> _bindings = new(); // 控件回收后不延长其生命周期.
 
         private static readonly List<WeakReference<Binding>> _live = new();
 
-        internal static void SetText(TextElement element, string source, ToolkitMixedTextMode mode = ToolkitMixedTextMode.Auto)
+        internal static void SetText(TextElement element, string source, ToolkitMixedTextMode mode = ToolkitMixedTextMode.Auto, ToolkitInlineLayout.Result preparedLayout = null)
         {
             source ??= string.Empty;
             if (!ToolkitIcons.tokens.IsMatch(source))
@@ -45,7 +48,7 @@ namespace GameConsole.UI
                 _live.Add(new WeakReference<Binding>(binding));
             }
 
-            binding.SetText(source, mode);
+            binding.SetText(source, mode, preparedLayout);
         }
 
         internal static string GetText(TextElement element)
@@ -101,15 +104,88 @@ namespace GameConsole.UI
             _live.Clear();
         }
 
-        private static ToolkitInlineLayout BuildLayout(TextElement element, string text, float width, bool wrap)
+        internal static IEnumerable<int> MeasureHeightSteps(TextElement element, string text, float width, float availableHeight, IDictionary<string, float> widths, HashSet<string> warmedGlyphs, Action<float, ToolkitInlineLayout.Result> complete)
+        {
+            text = ToolkitIcons.Resolve(text);
+            if (!ToolkitIcons.tokens.IsMatch(text))
+            {
+                foreach (var step in WarmGlyphs(element, text, warmedGlyphs))
+                {
+                    yield return step;
+                }
+
+                var size = element.MeasureTextSize(text, width, VisualElement.MeasureMode.Exactly, 0, VisualElement.MeasureMode.Undefined);
+
+                complete(size.y, null);
+                yield return 0;
+                yield break;
+            }
+
+            var fontSize = LayoutFontSize(element);
+            var line = NativeMeasure(element, "Mg", fontSize);
+            var layout = new ToolkitInlineLayout(width, fontSize, line.y, value => CachedWidth(element, value, fontSize, widths), true);
+
+            yield return 0;
+            foreach (var step in layout.Append(text))
+            {
+                yield return step;
+                if (layout.Size.y > availableHeight)
+                {
+                    complete(layout.Size.y, null);
+                    yield break;
+                }
+            }
+
+            layout.AlignRows(element.resolvedStyle.unityTextAlign);
+            complete(layout.Size.y, new ToolkitInlineLayout.Result(layout.Size, layout.parts));
+        }
+
+        // 通过正文自身的字体及后备链，每步只生成少量冷字形，再做整段原生换行测量。
+        private static IEnumerable<int> WarmGlyphs(TextElement element, string text, HashSet<string> warmedGlyphs)
+        {
+            var characters = element.resolvedStyle.unityFontDefinition.fontAsset?.characterLookupTable;
+            var elements = StringInfo.GetTextElementEnumerator(text);
+            var batch = new StringBuilder();
+            var count = 0;
+
+            while (elements.MoveNext())
+            {
+                var glyph = elements.GetTextElement();
+                if (string.IsNullOrWhiteSpace(glyph) || (glyph.Length == 1 && characters?.ContainsKey(glyph[0]) == true) || !warmedGlyphs.Add(glyph)) continue;
+                batch.Append(glyph);
+                count++;
+                if (count < GLYPH_BATCH_SIZE) continue;
+
+                element.MeasureTextSize(batch.ToString(), 0, VisualElement.MeasureMode.Undefined, 0, VisualElement.MeasureMode.Undefined);
+                batch.Clear();
+                count = 0;
+                yield return 0;
+            }
+
+            if (count == 0) yield break;
+            element.MeasureTextSize(batch.ToString(), 0, VisualElement.MeasureMode.Undefined, 0, VisualElement.MeasureMode.Undefined);
+            yield return 0;
+        }
+
+        private static float CachedWidth(TextElement element, string text, float fontSize, IDictionary<string, float> widths)
+        {
+            if (widths.TryGetValue(text, out var width)) return width;
+
+            width = NativeMeasure(element, text, fontSize).x;
+            widths[text] = width;
+            return width;
+        }
+
+        private static float LayoutFontSize(TextElement element)
         {
             var fontSize = element.resolvedStyle.fontSize;
 
-            if (!Finite(fontSize) || fontSize <= 0)
-            {
-                fontSize = 14f;
-            }
+            return Finite(fontSize) && fontSize > 0 ? fontSize : 14f;
+        }
 
+        private static ToolkitInlineLayout BuildLayout(TextElement element, string text, float width, bool wrap)
+        {
+            var fontSize = LayoutFontSize(element);
             var line = NativeMeasure(element, "Mg", fontSize);
 
             return ToolkitInlineLayout.Build(text, width, fontSize, line.y, value => NativeMeasure(element, value, fontSize).x, wrap);

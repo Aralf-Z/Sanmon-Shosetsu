@@ -86,7 +86,7 @@
   "help.ConsoleSettings.feature1.title": "日志预载与显示",
   "help.ConsoleSettings.feature1.body": "进入 {ui.console} 或切换筛选时固定预载最近最多 {Config_CONSOLE_RECENT_LOG_COUNT} 条日志, 不提供条数配置. 更早日志仍完整保留, 向上滚动时按需加载.\n\n显示日志类型图标, 显示日志时间戳和折叠相同日志与 {ui.console} 工具栏共用同一配置, 即时生效. 离开设置页或关闭工具时保存到现有配置文件.",
   "help.ConsoleSettings.feature2.title": "其他{ui.console}设置",
-  "help.ConsoleSettings.feature2.body": "输入历史容量, 命令查询缓存容量, 查询上限, 记录失败命令和异常堆栈等基础设置, 在下一次 Play 时生效.\n\nUnity 引擎日志默认持续接收.\n\n离开设置页或关闭工具时提交尚未保存的设置.",
+  "help.ConsoleSettings.feature2.body": "输入历史容量, 命令查询缓存容量, 查询上限, 记录失败命令和异常堆栈等基础设置, 在下一次 Play 时生效.\n\nUnity 引擎日志默认持续接收.\n\n离开设置页或关闭工具时提交尚未保存的设置.\n\n已提交的命令输入历史会保存到本地, 下次启动后可用上下键找回.",
   "help.CheatSettings.title": "{ui.cheat}",
   "help.CheatSettings.feature1.title": "最新日志预览",
   "help.CheatSettings.feature1.body": "最新日志行数范围为 {Config_MIN_CHEAT_LOG_COUNT} 到 {Config_MAX_CHEAT_LOG_COUNT}. 设为 0 时隐藏 {ui.cheat} 底部的日志预览, 其他值表示最多显示对应行数.\n\n此处与 {ui.cheat} 页的日志行数滑动条即时同步并自动保存. {ui.floating}日志条数保持独立, {ui.console} 的日志缓存与显示不受影响.",

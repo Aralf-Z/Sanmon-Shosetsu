@@ -13,14 +13,12 @@ MonoBehaviour:
   m_Name: Schema
   m_EditorClassIdentifier: 
   styles:
+  - name: "\u9752\u94DC\u7070\u70EC"
+    path: Style/BronzeAshes
   - name: "\u7EC8\u7AEF"
     path: Style/Terminal
-  - name: "\u5DE5\u7A0B\u84DD\u56FE"
-    path: Style/Blueprint
-  - name: "\u88C5\u9970\u827A\u672F"
-    path: Style/ArtDeco
-  - name: "\u590D\u53E4\u6000\u65E7"
-    path: Style/RetroVintage
+  - name: "\u8D5B\u535A\u670B\u514B2077"
+    path: Style/Cyberpunk2077
   - name: "\u8D5B\u7490\u7490"
     path: Style/CelShaded
   fonts:

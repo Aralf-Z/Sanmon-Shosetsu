@@ -76,10 +76,42 @@
     background-image: none;
 }
 
-#helpHeader > .section-title {
+.dev-desktop .toolkit-dialog-header {
+    background-image: none;
+}
+
+.dev-desktop .toolkit-dialog-title {
     flex-grow: 0;
     flex-basis: auto;
-    margin-right: 12px;
+    flex-shrink: 1;
+    min-width: 0;
+    margin: 0 12px 0 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.toolkit-dialog-header > .window-header-pattern {
+    flex-shrink: 1;
+}
+
+.help-pagination-status {
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    color: var(--dev-muted);
+    -unity-text-align: middle-center;
+}
+
+.help-pager-loading > .unified-page-group {
+    visibility: hidden;
+}
+
+.help-pager-loading > .help-pagination-status {
+    display: flex;
 }
 
 .help-navigation .help-tree-branch > .unity-foldout__toggle, .help-navigation Button.help-tree-entry {
@@ -218,6 +250,10 @@
     --dev-opacity-border-bottom: var(--dev-border);
     --dev-opacity-border-bottom-set: 1;
     border-bottom-color: var(--dev-opacity-border-bottom);
+}
+
+.dev-desktop .toolkit-search-field > .unity-base-text-field__input {
+    padding-left: 8px;
 }
 
 .dev-desktop .unified-pager {

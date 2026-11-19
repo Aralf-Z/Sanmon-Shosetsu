@@ -1,4 +1,5 @@
 {
+  "ui.HelpWindow.loading": "正在计算帮助页码…",
   "icon.windowResize": "windowResize",
   "ui.Window.resize.tooltip": "拖动调整窗口大小",
   "ui.Options.wheelScrollSensitivity.label": "滚轮灵敏度:",

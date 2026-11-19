@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 namespace GameConsole.UI
 {
     /// <summary> 带树形导航的共用分页帮助窗口, 隔离底层交互并保留原区域焦点. </summary>
-    internal sealed class ToolkitHelpWindow : IDisposable
+    internal sealed partial class ToolkitHelpWindow : IDisposable
     {
         internal event Action<bool> e_onVisibilityChanged;
 
@@ -32,6 +32,8 @@ namespace GameConsole.UI
 
         private readonly ToolkitPager _pager;
 
+        private readonly VisualElement _pagerRoot;
+
         private readonly Button _close;
 
         private readonly ToolkitHelpNavigation _navigation;
@@ -54,17 +56,13 @@ namespace GameConsole.UI
 
         private int _focusVersion; // 避免排队的旧焦点恢复覆盖新弹窗.
 
-        private bool _dirty;
-
         private bool _disposed; // 防止销毁后执行延迟回调.
-
-        private Vector2 _fontSize;
-
-        private int _fontKey; // 字体样式变化时重新分页, 即使样本文字尺寸相同.
 
         private ToolkitHelpTopic _topic;
 
         private int _requestedFeature = -1;
+
+        private int SelectedFeature => _pages.Count > 0 ? _pages[_pageIndex].FeatureIndex : 0;
 
         internal ToolkitHelpWindow(VisualElement root, Func<ToolkitHelpTopic> cheatTopic)
         {
@@ -76,7 +74,8 @@ namespace GameConsole.UI
             _areaTitle = ToolkitView.Require<Label>(_host, "helpAreaTitle");
             _featureTitle = ToolkitView.Require<Label>(_host, "helpFeatureTitle");
             _body = ToolkitView.Require<Label>(_host, "helpBody");
-            _pager = new ToolkitPager(ToolkitView.Require<VisualElement>(_host, "helpPager"), ChangePage);
+            _pagerRoot = ToolkitView.Require<VisualElement>(_host, "helpPager");
+            _pager = new ToolkitPager(_pagerRoot, ChangePage);
             _close = ToolkitView.Require<Button>(_host, "closeHelp");
             _navigation = new ToolkitHelpNavigation(ToolkitView.Require<ScrollView>(_host, "helpNavigation"), SelectTopic);
             _placement = new ToolkitHelpPlacement(_backdrop, _dialog, ToolkitView.Require<VisualElement>(_host, "helpHeader"));
@@ -104,66 +103,6 @@ namespace GameConsole.UI
             Bind("helpFloatingSettings", () => ToolkitHelpTopic.FloatingSettings);
         }
 
-        /// <summary> 仅显示时测量, 文本和几何不变时不重新分页. </summary>
-        internal void Tick()
-        {
-            if (!IsOpen || _disposed) return;
-
-            var fontSize = _body.MeasureTextSize(ToolkitLocalization.Get("ui.HelpWindow.Tick"), 0, VisualElement.MeasureMode.Undefined, 0, VisualElement.MeasureMode.Undefined);
-            var fontKey = ToolkitFontMetrics.GetKey(_body);
-
-            if (_fontSize != fontSize || _fontKey != fontKey)
-            {
-                _fontSize = fontSize;
-                _fontKey = fontKey;
-                _dirty = true;
-            }
-
-            if (!_dirty) return;
-
-            var size = _viewport.contentRect.size;
-
-            if (!Finite(size.x) || !Finite(size.y) || size.x <= 0 || size.y <= 0 || !Finite(fontSize.y) || fontSize.y <= 0) return;
-
-            if (size.y < fontSize.y + 2f)
-            {
-                ToolkitMixedText.SetText(_body, ToolkitLocalization.Get("ui.HelpWindow.Tick.2"));
-                _pager.SetPage(0, 1);
-                return;
-            }
-
-            var anchor = _pages.Count == 0
-                ? null
-                : _pages[_pageIndex];
-
-            _pages = ToolkitHelpPagination.Build(_features, size.y - 2f, text => ToolkitMixedText.Measure(_body, text, size.x, true).y);
-            _pageIndex = 0;
-            if (_requestedFeature >= 0)
-            {
-                var index = _pages.FindIndex(page => page.FeatureIndex == _requestedFeature);
-
-                if (index >= 0)
-                {
-                    _pageIndex = index;
-                }
-
-                _requestedFeature = -1;
-            }
-            else if (anchor != null)
-            {
-                for (var i = 0; i < _pages.Count; i++)
-                {
-                    if (_pages[i].FeatureIndex == anchor.FeatureIndex && _pages[i].Offset <= anchor.Offset)
-                    {
-                        _pageIndex = i;
-                    }
-                }
-            }
-
-            _dirty = false;
-            ShowPage();
-        }
-
         /// <summary> 生命周期关闭时不恢复已隐藏页面的焦点. </summary>
         internal void Close(bool restoreFocus = false)
         {
@@ -177,6 +116,7 @@ namespace GameConsole.UI
             _returnFocus = null;
             _host.AddToClassList("is-hidden");
             _placement.Cancel();
+            CancelPagination();
             foreach (var pair in _background)
             {
                 pair.Key.SetEnabled(pair.Value);
@@ -202,11 +142,9 @@ namespace GameConsole.UI
             _navigation.RefreshLanguage();
             if (!IsOpen) return;
 
-            var feature = _pages.Count > 0
-                ? _pages[_pageIndex].FeatureIndex
-                : Math.Max(0, _requestedFeature);
+            var feature = _requestedFeature >= 0 ? _requestedFeature : SelectedFeature;
 
-            _pages.Clear();
+            CancelPagination();
             SelectTopic(_topic, feature);
         }
 
@@ -290,37 +228,33 @@ namespace GameConsole.UI
             _host.RemoveFromClassList("is-hidden");
             _host.BringToFront();
             _placement.Reset();
-            _pages.Clear();
+            CancelPagination();
+            _pages = new List<ToolkitHelpPage>();
             SelectTopic(topic, 0);
             _close.Focus();
         }
 
         private void SelectTopic(ToolkitHelpTopic topic, int featureIndex)
         {
-            var section = ToolkitHelpContents.Get(topic);
-
-            if (_topic != topic || _pages.Count == 0)
+            if (_topic != topic || _pagination != null)
             {
-                _topic = topic;
-                _features.Clear();
-                foreach (var feature in section.Features)
-                {
-                    _features.Add(new ToolkitHelpFeature(feature.Title, (feature.Body ?? string.Empty).Replace("{ToolKey}", ToolShortcut.DisplayName)));
-                }
-
-                _pages.Clear();
-                _pageIndex = 0;
-                _areaTitle.text = section.Title;
-                _featureTitle.text = _features.Count > 0
-                    ? _features[featureIndex].Title
-                    : section.Title;
-                ToolkitMixedText.SetText(_body, string.Empty);
-                _pager.SetPage(0, 1);
+                CancelPagination();
             }
 
+            _topic = topic;
             _requestedFeature = featureIndex;
             _navigation.Select(topic, featureIndex);
-            _dirty = true;
+            if (!_pageKey.HasValue || _pages.Count == 0)
+            {
+                var section = ToolkitHelpContents.Get(topic);
+
+                _pages = new List<ToolkitHelpPage>();
+                _pageIndex = 0;
+                _areaTitle.text = section.Title;
+                _featureTitle.text = section.Features.Count > 0 ? section.Features[featureIndex].Title : section.Title;
+                ToolkitMixedText.SetText(_body, string.Empty);
+                SetLoading(true);
+            }
         }
 
         private void ShowPage()
@@ -337,7 +271,7 @@ namespace GameConsole.UI
             _featureTitle.text = page.PartCount > 1
                 ? $"{title} {page.PartIndex}"
                 : title;
-            ToolkitMixedText.SetText(_body, page.Text);
+            ShowBody(page);
             _body.selection.cursorIndex = 0;
             _body.selection.selectIndex = 0;
             _pager.SetPage(_pageIndex, _pages.Count);
@@ -350,7 +284,7 @@ namespace GameConsole.UI
 
         private void ChangePage(int page)
         {
-            if (!IsOpen || page < 0 || page >= _pages.Count) return;
+            if (!IsOpen || _pagerRoot.ClassListContains("help-pager-loading") || page < 0 || page >= _pages.Count) return;
 
             _pageIndex = page;
             ShowPage();
@@ -366,11 +300,9 @@ namespace GameConsole.UI
         {
             if (evt.oldRect.size != evt.newRect.size)
             {
-                _dirty = true;
+                _layoutFrame = Time.frameCount + 1;
             }
         }
-
-        private static bool Finite(float value) => !float.IsNaN(value) && !float.IsInfinity(value);
 
         private void Outside(PointerDownEvent evt)
         {

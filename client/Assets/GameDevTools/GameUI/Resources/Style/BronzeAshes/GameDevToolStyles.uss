@@ -2247,7 +2247,7 @@ Button:disabled .preset-name {
     border-radius: 2px;
 }
 
-.help-header, .search-history-window-header {
+.toolkit-dialog-header {
     --dev-opacity-background: #193236;
     --dev-opacity-background-set: 1;
     background-color: var(--dev-opacity-background);
@@ -2255,12 +2255,6 @@ Button:disabled .preset-name {
     --dev-opacity-border-bottom: #887744;
     --dev-opacity-border-bottom-set: 1;
     border-bottom-color: var(--dev-opacity-border-bottom);
-}
-
-.search-history-window-header {
-    background-image: url("HeaderPattern.png");
-    background-repeat: repeat repeat;
-    background-size: 160px 64px;
 }
 
 .help-navigation {

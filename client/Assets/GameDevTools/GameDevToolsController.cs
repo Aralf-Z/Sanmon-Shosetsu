@@ -24,6 +24,7 @@ namespace GameConsole
 
         private ToolkitView _view;
 
+
         private bool _creatingView; // 防止创建重入, 失败后下次按键可以重试.
 
         /// <summary> 工具输出归入 Dev, type 仅控制原有颜色, 不触发 UI 加载. </summary>
@@ -50,6 +51,7 @@ namespace GameConsole
 
         public void Close()
         {
+            Config.FlushInputHistory();
             if (_view != null)
             {
                 _view.IsOpen = false;
@@ -76,6 +78,7 @@ namespace GameConsole
                 _bridge = new ConsoleViewBridge();
                 stage = "命令系统初始化";
                 Console = new ConsoleController<LogType>(_bridge, _bridge, inputHistoryCapacity: Config.InputHistoryCapacity, commandQueryCacheCapacity: Config.CommandQueryCacheCapacity, alternativeCommandCount: Config.AlternativeCommandCount, shouldRecordFailedCommand: Config.RecordFailedCommand, outputWithTime: false, outputStackTraceOfCommandExecution: Config.OutputVmExceptionStack);
+                Config.BindInputHistory(Console.History);
                 stage = "宏服务初始化";
                 Macros = new MacroSystem(Console.commandSystem, this, message => Print(message));
             }
@@ -92,6 +95,8 @@ namespace GameConsole
                 }
 
                 Macros = null;
+                Config.FlushInputHistory();
+                Config.UnbindInputHistory();
                 Console = null;
                 _bridge?.Detach();
             }
@@ -126,6 +131,7 @@ namespace GameConsole
             _view?.Tick();
             Macros?.Tick();
             Console?.Update();
+            Config.TickInputHistory();
         }
 
         // 首次打开时直接创建唯一 UI, 失败时保留命令系统和已接收的日志.
@@ -186,6 +192,14 @@ namespace GameConsole
             }
         }
 
+        private void OnApplicationQuit()
+        {
+            if (Instance == this)
+            {
+                Config.FlushInputHistory();
+            }
+        }
+
         private void OnDestroy()
         {
             if (Instance != this) return;
@@ -212,8 +226,15 @@ namespace GameConsole
             {
                 _bridge?.Detach();
                 _view = null;
-                Config.Save();
-                Instance = null;
+                try
+                {
+                    Config.Save();
+                }
+                finally
+                {
+                    Config.UnbindInputHistory();
+                    Instance = null;
+                }
             }
         }
     }

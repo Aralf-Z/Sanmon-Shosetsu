@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -31,6 +32,7 @@ namespace GameConsole.UI
             private int _languageVersion;
 
             private ToolkitMixedTextMode _mode;
+            private ToolkitInlineLayout.Result _preparedLayout;
 
             private VisualElement _controlOwner;
 
@@ -54,12 +56,13 @@ namespace GameConsole.UI
             }
 
             /// <summary> 同一原文不重复创建节点, 原生 text 保持为空以免显示标记. </summary>
-            internal void SetText(string source, ToolkitMixedTextMode mode)
+            internal void SetText(string source, ToolkitMixedTextMode mode, ToolkitInlineLayout.Result preparedLayout)
             {
-                if (Source != source || _mode != mode)
+                if (Source != source || _mode != mode || _preparedLayout != preparedLayout)
                 {
                     Source = source;
                     _mode = mode;
+                    _preparedLayout = preparedLayout;
                     _dirty = true;
                 }
 
@@ -142,14 +145,25 @@ namespace GameConsole.UI
 
             private void BuildInline(string source)
             {
+                if (_preparedLayout != null)
+                {
+                    ShowLayout(_preparedLayout.size, _preparedLayout.parts);
+                    return;
+                }
+
                 var wrap = Element.resolvedStyle.whiteSpace == WhiteSpace.Normal;
                 var layout = BuildLayout(Element, source, Element.contentRect.width, wrap);
 
                 layout.AlignRows(Element.resolvedStyle.unityTextAlign);
-                _content.style.width = layout.Size.x;
-                _content.style.height = layout.Size.y;
+                ShowLayout(layout.Size, layout.parts);
+            }
+
+            private void ShowLayout(Vector2 size, IReadOnlyList<ToolkitInlineLayout.Part> parts)
+            {
+                _content.style.width = size.x;
+                _content.style.height = size.y;
                 AlignContent(Element.resolvedStyle.unityTextAlign);
-                foreach (var part in layout.parts)
+                foreach (var part in parts)
                 {
                     AddPart(part);
                 }

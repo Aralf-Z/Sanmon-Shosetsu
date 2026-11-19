@@ -22,7 +22,7 @@ namespace GameConsole.Editor
             var root = new VisualElement();
 
             root.Add(new HelpBox("修改完成后立即写入 JSON. 命令控制器设置在下次启动生效; 开关键, 窗口开关行为与浮标设置即时生效.", HelpBoxMessageType.Info));
-            var path = new TextField("配置文件")
+            var path = new TextField("数据文件")
             { value = Config.FilePath, isReadOnly = true };
             var pathRow = new VisualElement
             {
@@ -39,7 +39,7 @@ namespace GameConsole.Editor
             path.style.overflow = Overflow.Hidden;
             pathRow.Add(path);
             var open = new Button(OpenConfigFile)
-            { text = "打开", tooltip = "使用系统默认 JSON 编辑器打开配置文件" };
+            { text = "打开", tooltip = "使用系统默认 JSON 编辑器打开数据文件" };
 
             open.style.width = 48;
             open.style.minWidth = 48;
@@ -78,7 +78,7 @@ namespace GameConsole.Editor
                 { flexDirection = FlexDirection.Row }
             };
 
-            buttons.Add(new Button(Config.Reload) { text = "重新读取" });
+            buttons.Add(new Button(Config.Reload) { text = "重新读取设置" });
             buttons.Add(new Button(Config.Reset) { text = "恢复默认" });
             root.Add(buttons);
             root.schedule.Execute(RefreshStatus)
@@ -98,7 +98,7 @@ namespace GameConsole.Editor
             }
             catch (Exception exception)
             {
-                Debug.LogWarning($"[GameDevTools] 打开配置文件失败. {exception.Message}");
+                Debug.LogWarning($"[GameDevTools] 打开数据文件失败. {exception.Message}");
             }
         }
 

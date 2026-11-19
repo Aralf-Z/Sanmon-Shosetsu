@@ -14,6 +14,8 @@ namespace RedSaw.CommandLineInterface
 
         public event Action e_onFocus;
 
+        internal InputHistory History => _inputHistory;
+
         private readonly IConsoleRenderer _renderer;
 
         private readonly IConsoleInput _userInput;

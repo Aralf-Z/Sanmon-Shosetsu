@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace RedSaw.CommandLineInterface
@@ -41,6 +42,10 @@ namespace RedSaw.CommandLineInterface
 
         private int _lastIndex;
 
+        internal event Action e_onRecorded;
+
+        internal IReadOnlyList<string> Entries => _history;
+
         public InputHistory(int capacity)
         {
             this._lastIndex = 0;
@@ -49,6 +54,25 @@ namespace RedSaw.CommandLineInterface
         }
 
         public void Record(string input)
+        {
+            Append(input);
+            e_onRecorded?.Invoke();
+        }
+
+        internal void Restore(IEnumerable<string> entries)
+        {
+            _history.Clear();
+            _lastIndex = 0;
+            foreach (var input in entries)
+            {
+                if (!string.IsNullOrEmpty(input))
+                {
+                    Append(input);
+                }
+            }
+        }
+
+        private void Append(string input)
         {
             if (_history.Count == _capacity)
             {

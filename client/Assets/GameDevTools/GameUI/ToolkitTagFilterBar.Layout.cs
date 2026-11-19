@@ -13,14 +13,31 @@ namespace GameConsole.UI
 
         private const float TOOLBAR_GAP = 8f;
 
+        private const float SEARCH_REGION_INSET = TOOLBAR_GAP + 1f;
+
         private void Layout()
+        {
+            var allWidth = Measure(_btnAll.text);
+            var moreWidth = Measure(_btnMore.text);
+            var totalWidth = TotalTagWidth(allWidth);
+            var minimumTagWidth = Mathf.Min(totalWidth, allWidth + GAP + moreWidth);
+
+            LayoutRegions(minimumTagWidth, out var tagWidth);
+            SetWidth(_btnAll, allWidth);
+            SetWidth(_btnMore, moreWidth);
+            ApplyVisibleTags(tagWidth, allWidth, moreWidth, totalWidth);
+            _dirty = false;
+        }
+
+        private void LayoutRegions(float minimumTagWidth, out float tagWidth)
         {
             var width = _toolbar.contentRect.width;
             var sharedWidth = Mathf.Max(0, width - TOOLBAR_GAP);
-            var tagWidth = sharedWidth * TAG_WIDTH_RATIO;
-            var searchWidth = sharedWidth - tagWidth;
-            var stacked = searchWidth < MINIMUM_SEARCH_REGION_WIDTH;
+            var minimumSearchWidth = Mathf.Max(MINIMUM_SEARCH_REGION_WIDTH, SearchControlsWidth() + MINIMUM_SEARCH_FIELD_WIDTH + SEARCH_REGION_INSET);
+            var searchWidth = Mathf.Max(sharedWidth * (1f - TAG_WIDTH_RATIO), minimumSearchWidth);
+            var stacked = sharedWidth + .01f < minimumTagWidth + minimumSearchWidth;
 
+            tagWidth = sharedWidth - searchWidth;
             if (stacked)
             {
                 tagWidth = width;
@@ -28,13 +45,18 @@ namespace GameConsole.UI
             }
 
             ApplyToolbarLayout(stacked, tagWidth, searchWidth);
-            var allWidth = Measure(_btnAll.text);
-            var moreWidth = Measure(_btnMore.text);
+        }
 
-            SetWidth(_btnAll, allWidth);
-            SetWidth(_btnMore, moreWidth);
-            ApplyVisibleTags(tagWidth, allWidth, moreWidth);
-            _dirty = false;
+        private float TotalTagWidth(float allWidth)
+        {
+            var width = allWidth;
+
+            foreach (var tag in _tags)
+            {
+                width += GAP + Measure(tag);
+            }
+
+            return width;
         }
 
         private void ApplyToolbarLayout(bool stacked, float tagWidth, float searchWidth)
@@ -57,7 +79,7 @@ namespace GameConsole.UI
 
             if (!stacked)
             {
-                inset = TOOLBAR_GAP + 1f;
+                inset = SEARCH_REGION_INSET;
             }
 
             var available = Mathf.Max(1f, width - inset);
@@ -81,15 +103,8 @@ namespace GameConsole.UI
             }
         }
 
-        private void ApplyVisibleTags(float available, float allWidth, float moreWidth)
+        private void ApplyVisibleTags(float available, float allWidth, float moreWidth, float total)
         {
-            var total = allWidth;
-
-            foreach (var tag in _tags)
-            {
-                total += GAP + Measure(tag);
-            }
-
             var count = _tags.Length;
             var overflow = total > available + .01f;
 

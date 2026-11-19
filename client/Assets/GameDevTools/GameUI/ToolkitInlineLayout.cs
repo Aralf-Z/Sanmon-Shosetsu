@@ -12,23 +12,36 @@ namespace GameConsole.UI
         /// <summary> 显式换行总是保留, 自动换行只在 wrap 开启且宽度有效时发生. </summary>
         internal static ToolkitInlineLayout Build(string source, float width, float fontSize, float lineHeight, Func<string, float> measure, bool wrap)
         {
-            if (!wrap || width <= 0 || float.IsNaN(width))
+            var layout = new ToolkitInlineLayout(width, fontSize, lineHeight, measure, wrap);
+
+            using var steps = layout.Append(source).GetEnumerator();
+            while (steps.MoveNext())
             {
-                width = float.PositiveInfinity;
             }
 
-            var layout = new ToolkitInlineLayout(width, fontSize, lineHeight, measure);
+            return layout;
+        }
+
+        internal IEnumerable<int> Append(string source)
+        {
             var offset = 0;
 
             foreach (System.Text.RegularExpressions.Match match in ToolkitIcons.tokens.Matches(source))
             {
-                layout.AppendText(source.Substring(offset, match.Index - offset));
-                layout.AppendIcon(match.Groups[1].Value);
+                foreach (var step in AppendText(source.Substring(offset, match.Index - offset)))
+                {
+                    yield return step;
+                }
+
+                AppendIcon(match.Groups[1].Value);
                 offset = match.Index + match.Length;
+                yield return 0;
             }
 
-            layout.AppendText(source.Substring(offset));
-            return layout;
+            foreach (var step in AppendText(source.Substring(offset)))
+            {
+                yield return step;
+            }
         }
 
         private static bool IsWordCharacter(char character)
@@ -57,9 +70,9 @@ namespace GameConsole.UI
 
         private float _lineTop;
 
-        private ToolkitInlineLayout(float width, float fontSize, float lineHeight, Func<string, float> measure)
+        internal ToolkitInlineLayout(float width, float fontSize, float lineHeight, Func<string, float> measure, bool wrap)
         {
-            _width = width;
+            _width = wrap && width > 0 ? width : float.PositiveInfinity;
             _fontSize = fontSize;
             _lineHeight = Mathf.Max(fontSize, lineHeight);
             _measure = measure;
@@ -89,7 +102,7 @@ namespace GameConsole.UI
             }
         }
 
-        private void AppendText(string text)
+        private IEnumerable<int> AppendText(string text)
         {
             var word = new StringBuilder();
             var normalized = text.Replace("\r\n", "\n")
@@ -107,30 +120,44 @@ namespace GameConsole.UI
                     continue;
                 }
 
-                FlushWord(word);
+                if (word.Length > 0)
+                {
+                    foreach (var step in FlushWord(word))
+                    {
+                        yield return step;
+                    }
+                }
+
                 if (element == "\n")
                 {
                     NewLine();
-                    continue;
+                }
+                else
+                {
+                    AppendUnit(element);
                 }
 
-                AppendUnit(element);
+                yield return 0;
             }
 
-            FlushWord(word);
+            if (word.Length == 0) yield break;
+
+            foreach (var step in FlushWord(word))
+            {
+                yield return step;
+            }
         }
 
-        private void FlushWord(StringBuilder word)
+        private IEnumerable<int> FlushWord(StringBuilder word)
         {
-            if (word.Length == 0) return;
-
             var text = word.ToString();
 
             word.Clear();
             if (_measure(text) <= _width)
             {
                 AppendUnit(text);
-                return;
+                yield return 0;
+                yield break;
             }
 
             var elements = StringInfo.GetTextElementEnumerator(text);
@@ -138,6 +165,7 @@ namespace GameConsole.UI
             while (elements.MoveNext())
             {
                 AppendUnit(elements.GetTextElement());
+                yield return 0;
             }
         }
 
@@ -187,6 +215,18 @@ namespace GameConsole.UI
             _lineTop += _lineHeight;
             _lineWidth = 0;
             _text = null;
+        }
+
+        internal sealed class Result
+        {
+            internal readonly Vector2 size;
+            internal readonly IReadOnlyList<Part> parts;
+
+            internal Result(Vector2 size, IReadOnlyList<Part> parts)
+            {
+                this.size = size;
+                this.parts = parts;
+            }
         }
 
         /// <summary> 一段连续文本或一个图标的显示区域. </summary>

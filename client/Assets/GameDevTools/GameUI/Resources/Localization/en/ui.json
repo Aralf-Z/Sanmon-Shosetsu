@@ -1,4 +1,5 @@
 {
+  "ui.HelpWindow.loading": "Preparing help pages…",
   "icon.windowResize": "windowResize",
   "ui.Window.resize.tooltip": "Drag to resize the window",
   "ui.Options.wheelScrollSensitivity.label": "Wheel sensitivity:",

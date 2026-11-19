@@ -102,7 +102,11 @@ Button.help-button {
     overflow: hidden;
 }
 
-.help-header {
+.toolkit-dialog-header {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 0;
+    min-width: 0;
     min-height: 32px;
     margin-bottom: 12px;
     padding-bottom: 8px;
@@ -110,10 +114,6 @@ Button.help-button {
     --dev-opacity-border-bottom: var(--dev-border);
     --dev-opacity-border-bottom-set: 1;
     border-bottom-color: var(--dev-opacity-border-bottom);
-}
-
-.help-header > .section-title {
-    margin: 0;
 }
 
 .help-columns {
@@ -379,7 +379,7 @@ Button.help-tree-entry.selected {
     margin-left: 4px;
 }
 
-.dev-desktop .help-heading > Button.window-control-button, .dev-desktop .search-history-window-header > Button.window-control-button, .dev-desktop .floating-settings-content .toolbar > Button.window-control-button {
+.dev-desktop .help-heading > Button.window-control-button, .dev-desktop .toolkit-dialog-header > Button.window-control-button, .dev-desktop .floating-settings-content .toolbar > Button.window-control-button {
     margin-left: 8px;
 }
 
@@ -1629,23 +1629,11 @@ Button.search-history-entry:hover, Button.search-history-entry.search-history-ho
     border-radius: 5px;
 }
 
-.search-history-window-header {
-    flex-direction: row;
-    align-items: center;
-    flex-shrink: 0;
-    margin-bottom: 8px;
-}
-
-.search-history-window-title {
+.search-history-window-content {
     flex-grow: 1;
+    flex-basis: 0;
     min-width: 0;
-    font-size: 18px;
-    -unity-font-style: bold;
-}
-
-.search-history-window-header > Button {
-    flex-shrink: 0;
-    margin-left: 8px;
+    min-height: 0;
 }
 
 .search-history-window-scroll {
@@ -3477,10 +3465,14 @@ Button.tag-overflow-button {
 
 .toolkit-search-placeholder {
     position: absolute;
-    left: 4px;
-    right: 4px;
+    left: 8px;
+    right: 8px;
     top: 0;
     bottom: 0;
+    margin: 0;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
     color: var(--dev-muted);
     -unity-text-align: middle-left;
 }
