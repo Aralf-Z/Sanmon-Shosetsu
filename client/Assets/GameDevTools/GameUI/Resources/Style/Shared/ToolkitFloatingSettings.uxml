@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <ui:Style src="GameDevToolLayout.uss" />
     <ui:Style src="ToolkitControls.uss" />
+    <ui:Template name="floatingMonitorSettingsTemplate" src="ToolkitFloatingMonitorSettings.uxml" />
     <ui:VisualElement name="floatingSettingsContent" class="floating-settings-content">
         <ui:VisualElement class="toolbar">
             <ui:Label text="@loc:ui.FloatingSettings.label1.text" class="section-title" />
@@ -14,6 +15,7 @@
             <ui:SliderInt name="floatingPopupLogLines" label="@loc:ui.FloatingSettings.floatingPopupLogLines.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
             <ui:SliderInt name="floatingPopupBackgroundOpacity" label="@loc:ui.FloatingSettings.floatingPopupBackgroundOpacity.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
             <ui:SliderInt name="floatingPopupTextOpacity" label="@loc:ui.FloatingSettings.floatingPopupTextOpacity.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
+            <ui:Instance name="floatingMonitorSettings" template="floatingMonitorSettingsTemplate" />
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

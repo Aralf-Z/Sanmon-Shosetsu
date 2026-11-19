@@ -55,6 +55,7 @@ namespace GameConsole.UI
 
             private Color _cursorColor;
 
+            private float _backgroundOpacity = 1f;
             private float _localOpacity = 1f;
 
             private float _branchOpacity = 1f;
@@ -126,7 +127,7 @@ namespace GameConsole.UI
                 var surface = Mathf.Clamp01(_owner._opacity * _branchOpacity / _textAlpha);
                 var style = element.style;
 
-                style.backgroundColor = Weight(_raw[0], surface);
+                style.backgroundColor = Weight(_raw[0], surface * _backgroundOpacity);
                 style.borderTopColor = Weight(_raw[1], surface);
                 style.borderRightColor = Weight(_raw[2], surface);
                 style.borderBottomColor = Weight(_raw[3], surface);
@@ -147,6 +148,14 @@ namespace GameConsole.UI
                     _selection.selectionColor = Weight(_selectionColor, surface);
                     _selection.cursorColor = Weight(_cursorColor, surface);
                 }
+            }
+
+            internal void SetBackgroundOpacity(float opacity)
+            {
+                if (_backgroundOpacity == opacity) return;
+
+                _backgroundOpacity = opacity;
+                Apply();
             }
 
             /// <summary> 脱离时恢复原样式, 日志池项不重复分配状态. </summary>

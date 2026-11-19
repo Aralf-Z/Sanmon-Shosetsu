@@ -9,10 +9,22 @@ namespace GameConsole.UI
 
         private ToolkitHistoryWindow _inputHistoryWindow;
 
-        private void BindHistoryActions(string clearName, string viewName, bool showInputHistory)
+        private void BindHistoryActions(string clearName, string viewName, string heightReference, bool showInputHistory)
         {
             var clear = ToolkitView.Require<Button>(_root, clearName);
             var view = ToolkitView.Require<Button>(_root, viewName);
+            var field = ToolkitView.Require<IntegerField>(_root, heightReference);
+            var input = field.Q(className: BaseField<int>.inputUssClassName);
+            EventCallback<GeometryChangedEvent> syncHeight = evt =>
+            {
+                var height = evt.newRect.height;
+
+                if (height <= 0 || float.IsNaN(height) || float.IsInfinity(height)) return;
+                clear.style.height = view.style.height = height;
+            };
+
+            input.RegisterCallback(syncHeight);
+            _unbind.Add(() => input.UnregisterCallback(syncHeight));
             Action refresh = () =>
             {
                 var history = showInputHistory ? Config.InputHistoryEntries : Config.CheatSearchHistory;

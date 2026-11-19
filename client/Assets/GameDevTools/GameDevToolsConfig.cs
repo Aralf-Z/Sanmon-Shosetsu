@@ -52,6 +52,16 @@ namespace GameConsole
 
         public bool floatingShowLatestLogs;
 
+        public bool floatingShowRealtimeFps;
+
+        public bool floatingShowAverageFps;
+
+        public bool floatingShowLowFps;
+
+        public bool floatingShowFrameTimeGraph;
+
+        public float floatingMonitorBackgroundOpacity;
+
         public int floatingLogLineCount;
 
         public float floatingLogBackgroundOpacity;
@@ -90,6 +100,11 @@ namespace GameConsole
             cheatSearchHistoryCapacity = Config.DEFAULT_CHEAT_SEARCH_HISTORY_CAPACITY;
             cheatSearchHistory = new List<string>();
             floatingShowLatestLogs = true;
+            floatingShowRealtimeFps = true;
+            floatingShowAverageFps = true;
+            floatingShowLowFps = true;
+            floatingShowFrameTimeGraph = false;
+            floatingMonitorBackgroundOpacity = Config.DEFAULT_FLOATING_MONITOR_BACKGROUND_OPACITY;
             floatingLogLineCount = Config.DEFAULT_FLOATING_LOG_COUNT;
             floatingLogBackgroundOpacity = Config.DEFAULT_FLOATING_BACKGROUND_OPACITY;
             floatingLogTextOpacity = Config.DEFAULT_FLOATING_TEXT_OPACITY;

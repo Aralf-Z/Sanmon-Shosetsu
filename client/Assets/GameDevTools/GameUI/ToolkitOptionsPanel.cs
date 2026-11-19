@@ -44,8 +44,8 @@ namespace GameConsole.UI
             _root = root;
             _appearance = appearance;
             _layout = new ToolkitOptionsLayout(root);
-            BindHistoryActions("clearCheatSearchHistory", "viewCheatSearchHistory", showInputHistory: false);
-            BindHistoryActions("clearInputHistory", "viewInputHistory", showInputHistory: true);
+            BindHistoryActions("clearCheatSearchHistory", "viewCheatSearchHistory", "cheatSearchHistoryCapacity", showInputHistory: false);
+            BindHistoryActions("clearInputHistory", "viewInputHistory", "commandQueryCacheCapacity", showInputHistory: true);
             _rows.AddRange(root.Query<VisualElement>(className: "setting-row").ToList());
             _text.Track(ToolkitView.Require<Label>(root, "consoleSettingsTitle"));
             _text.Track(ToolkitView.Require<Label>(root, "interfaceSettingsTitle"));

@@ -1,6 +1,7 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <ui:Style src="GameDevToolLayout.uss" />
     <ui:Style src="ToolkitControls.uss" />
+    <ui:Template name="floatingMonitorSettingsTemplate" src="ToolkitFloatingMonitorSettings.uxml" />
     <ui:VisualElement name="optionContent" class="page options-page">
         <ui:ScrollView name="optionsScroll" class="settings-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden">
             <ui:VisualElement name="settingsContent" class="settings-content">
@@ -69,7 +70,7 @@
                         <ui:IntegerField name="inputHistoryCapacity" label="@loc:ui.Options.inputHistoryCapacity.label" is-delayed="true" class="setting-row" />
                         <ui:VisualElement class="setting-row unity-base-field">
                             <ui:Label name="inputHistoryActionsLabel" text="@loc:ui.inputHistory" class="unity-base-field__label" />
-                            <ui:VisualElement class="history-actions unity-base-field__input">
+                            <ui:VisualElement class="history-actions" picking-mode="Ignore">
                                 <ui:Button name="clearInputHistory" text="@loc:ui.Options.clearCheatSearchHistory.text" tooltip="@loc:ui.Options.clearInputHistory.tooltip" />
                                 <ui:Button name="viewInputHistory" text="@loc:ui.Options.viewCheatSearchHistory.text" tooltip="@loc:ui.Options.viewInputHistory.tooltip" />
                             </ui:VisualElement>
@@ -94,7 +95,7 @@
                         <ui:IntegerField name="cheatSearchHistoryCapacity" label="@loc:ui.Options.cheatSearchHistoryCapacity.label" is-delayed="true" tooltip="@loc:ui.Options.cheatSearchHistoryCapacity.tooltip" class="setting-row" />
                         <ui:VisualElement class="setting-row unity-base-field">
                             <ui:Label name="searchHistoryActionsLabel" text="@loc:ui.searchHistory" class="unity-base-field__label" />
-                            <ui:VisualElement class="history-actions unity-base-field__input">
+                            <ui:VisualElement class="history-actions" picking-mode="Ignore">
                                 <ui:Button name="clearCheatSearchHistory" text="@loc:ui.Options.clearCheatSearchHistory.text" tooltip="@loc:ui.Options.clearCheatSearchHistory.tooltip" />
                                 <ui:Button name="viewCheatSearchHistory" text="@loc:ui.Options.viewCheatSearchHistory.text" tooltip="@loc:ui.Options.viewCheatSearchHistory.tooltip" />
                             </ui:VisualElement>
@@ -112,6 +113,7 @@
                         <ui:SliderInt name="floatingLogLines" label="@loc:ui.Options.floatingLogLines.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
                         <ui:SliderInt name="floatingBackgroundOpacity" label="@loc:ui.Options.floatingBackgroundOpacity.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
                         <ui:SliderInt name="floatingTextOpacity" label="@loc:ui.Options.floatingTextOpacity.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
+                        <ui:Instance name="floatingMonitorSettings" template="floatingMonitorSettingsTemplate" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>

@@ -97,6 +97,8 @@
   "help.FloatingSettings.title": "{ui.floating}",
   "help.FloatingSettings.feature1.title": "Log preview",
   "help.FloatingSettings.feature1.body": "Choose whether the badge shows latest logs and set the entry count from {Config_MIN_FLOATING_LOG_COUNT} to {Config_MAX_FLOATING_LOG_COUNT}.\n\nThis preview ignores {ui.console} filters and collapsing. The main window, badge, settings and help do not actively disable game input.",
+  "help.FloatingSettings.feature3.title": "Frame rate monitor",
+  "help.FloatingSettings.feature3.body": "Toggle real-time FPS, average FPS, 1% Low and the frame time graph in badge settings. The three FPS readings are enabled by default. The graph starts disabled.\n\nReal-time FPS uses the latest frame. Average FPS, 1% Low and the graph use the last 10 seconds of frame intervals. 1% Low converts the mean frame time of the slowest 1% of frames to FPS. The graph shows milliseconds, with higher peaks for slower frames.\n\nSampling pauses when the application loses focus and starts fresh when focus returns. Restoring the main window or disabling all metrics clears the samples.",
   "help.FloatingSettings.feature2.title": "Opacity and saving",
   "help.FloatingSettings.feature2.body": "Background and text opacity are independent. {Config_MAX_PERCENTAGE}% is fully visible; {Config_MIN_PERCENTAGE}% is transparent.\n\nChanges apply and save automatically and synchronize with the floating settings in {ui.options}.\n\nClosing help returns to the current settings panel. Esc closes only the topmost help window; press it again to close floating settings.",
   "help.group.overview": "Overview",

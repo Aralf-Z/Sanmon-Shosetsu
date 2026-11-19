@@ -48,7 +48,7 @@ namespace GameConsole.UI
                         {
                             name = child;
                         }
-                        else if (child.ClassListContains("unity-base-field__input") || child.ClassListContains("unity-base-slider__input") || child.ClassListContains("ui-style-picker"))
+                        else if (child.ClassListContains("unity-base-field__input") || child.ClassListContains("unity-base-slider__input") || child.ClassListContains("ui-style-picker") || child.ClassListContains("history-actions"))
                         {
                             value = child;
                         }

@@ -180,6 +180,36 @@ namespace GameConsole
             get => Data.floatingShowLatestLogs; set => Data.floatingShowLatestLogs = value;
         }
 
+        internal static FloatingFrameMetrics FloatingMetrics
+        {
+            get
+            {
+                var data = Data;
+                var metrics = FloatingFrameMetrics.None;
+
+                if (data.floatingShowRealtimeFps) metrics |= FloatingFrameMetrics.RealtimeFps;
+                if (data.floatingShowAverageFps) metrics |= FloatingFrameMetrics.AverageFps;
+                if (data.floatingShowLowFps) metrics |= FloatingFrameMetrics.LowFps;
+                if (data.floatingShowFrameTimeGraph) metrics |= FloatingFrameMetrics.FrameTimeGraph;
+                return metrics;
+            }
+            set
+            {
+                var data = Data;
+
+                data.floatingShowRealtimeFps = (value & FloatingFrameMetrics.RealtimeFps) != 0;
+                data.floatingShowAverageFps = (value & FloatingFrameMetrics.AverageFps) != 0;
+                data.floatingShowLowFps = (value & FloatingFrameMetrics.LowFps) != 0;
+                data.floatingShowFrameTimeGraph = (value & FloatingFrameMetrics.FrameTimeGraph) != 0;
+            }
+        }
+
+        internal static float FloatingMonitorBackgroundOpacity
+        {
+            get => Data.floatingMonitorBackgroundOpacity;
+            set => Data.floatingMonitorBackgroundOpacity = NormalizeOpacity(value, DEFAULT_FLOATING_MONITOR_BACKGROUND_OPACITY);
+        }
+
         public static int FloatingLogLineCount
         {
             get => Data.floatingLogLineCount; set => Data.floatingLogLineCount = Mathf.Clamp(value, MIN_FLOATING_LOG_COUNT, MAX_FLOATING_LOG_COUNT);
@@ -255,6 +285,7 @@ namespace GameConsole
             data.cheatLogLineCount = Mathf.Clamp(data.cheatLogLineCount, MIN_CHEAT_LOG_COUNT, MAX_CHEAT_LOG_COUNT);
             data.cheatSearchHistoryCapacity = Mathf.Clamp(data.cheatSearchHistoryCapacity, MIN_CHEAT_SEARCH_HISTORY_CAPACITY, MAX_CHEAT_SEARCH_HISTORY_CAPACITY);
             NormalizeSearchHistory(data);
+            data.floatingMonitorBackgroundOpacity = NormalizeOpacity(data.floatingMonitorBackgroundOpacity, DEFAULT_FLOATING_MONITOR_BACKGROUND_OPACITY);
             data.floatingLogLineCount = Mathf.Clamp(data.floatingLogLineCount, MIN_FLOATING_LOG_COUNT, MAX_FLOATING_LOG_COUNT);
             data.floatingLogBackgroundOpacity = NormalizeOpacity(data.floatingLogBackgroundOpacity, DEFAULT_FLOATING_BACKGROUND_OPACITY);
             data.floatingLogTextOpacity = NormalizeOpacity(data.floatingLogTextOpacity, DEFAULT_FLOATING_TEXT_OPACITY);

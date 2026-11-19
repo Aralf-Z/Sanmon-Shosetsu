@@ -75,6 +75,25 @@
                 <ui:Label text="@loc:ui.Window.label13.text" class="floating-icon" picking-mode="Ignore" />
                 <ui:Button name="floatingSettingsButton" text="@loc:ui.Window.floatingSettingsButton.text" tooltip="@loc:ui.Window.floatingSettingsButton.tooltip" class="floating-settings-button" />
             </ui:VisualElement>
+            <ui:VisualElement name="floatingPerformance" class="floating-performance is-hidden" picking-mode="Ignore">
+                <ui:VisualElement name="floatingFpsValues" class="floating-fps-values floating-performance-surface" picking-mode="Ignore">
+                    <ui:VisualElement class="floating-fps-row" picking-mode="Ignore">
+                        <ui:Label text="FPS" class="floating-fps-title" picking-mode="Ignore" />
+                        <ui:Label name="floatingRealtimeValue" class="floating-fps-value" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="floating-fps-row" picking-mode="Ignore">
+                        <ui:Label text="AVG" class="floating-fps-title" picking-mode="Ignore" />
+                        <ui:Label name="floatingAverageValue" class="floating-fps-value" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="floating-fps-row" picking-mode="Ignore">
+                        <ui:Label text="LOW" class="floating-fps-title" picking-mode="Ignore" />
+                        <ui:Label name="floatingLowValue" class="floating-fps-value" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+                <ui:VisualElement name="floatingFrameTimeGraph" class="floating-frame-time-graph floating-performance-surface" picking-mode="Ignore">
+                    <ui:Label name="floatingFrameTimeScale" class="floating-frame-time-scale" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
             <ui:VisualElement name="floatingSettings" class="floating-settings is-hidden">
                 <ui:Instance template="floatingSettingsTemplate" />
             </ui:VisualElement>

@@ -97,6 +97,8 @@
   "help.FloatingSettings.title": "{ui.floating}",
   "help.FloatingSettings.feature1.title": "日志预览",
   "help.FloatingSettings.feature1.body": "控制{ui.floating}是否显示最新日志, 并设置显示条数, 范围为 {Config_MIN_FLOATING_LOG_COUNT} 到 {Config_MAX_FLOATING_LOG_COUNT}.\n\n{ui.floating}预览不受 {ui.console} 筛选与折叠影响. 主工具窗口, {ui.floating}, 设置和帮助均不会主动禁用游戏输入.",
+  "help.FloatingSettings.feature3.title": "帧率监控",
+  "help.FloatingSettings.feature3.body": "在浮标设置中分别勾选实时 FPS、平均 FPS、1% Low 和帧耗时曲线。前三项默认开启，曲线默认关闭。\n\n实时 FPS 取最近一帧。平均 FPS、1% Low 和曲线使用最近 10 秒的有效帧间隔。1% Low 将最慢的 1% 帧求平均耗时后换算为 FPS。曲线使用毫秒，峰值越高表示该帧越慢。\n\n失焦时停止采样，重新获得焦点后开始一段新的采样。恢复主窗口或关闭全部指标会清空这段数据。",
   "help.FloatingSettings.feature2.title": "透明度与保存",
   "help.FloatingSettings.feature2.body": "背景与文字透明度分别调整. {Config_MAX_PERCENTAGE}% 表示全显示, {Config_MIN_PERCENTAGE}% 表示全透明.\n\n设置即时生效并自动保存, 与 {ui.options} 中的{ui.floating}设置同步.\n\n关闭帮助会回到当前设置面板; 按 Esc 只关闭最上层帮助, 再次按下才关闭{ui.floating}设置.",
   "help.group.overview": "总览",

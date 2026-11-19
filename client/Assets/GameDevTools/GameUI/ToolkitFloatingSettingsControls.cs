@@ -19,6 +19,8 @@ namespace GameConsole.UI
 
         private readonly SliderInt _text;
 
+        private readonly SliderInt _monitorBackground;
+
         private readonly string _countTitle; // 保留 UXML 中可编辑的滑动条标题.
 
         private readonly string _backgroundTitle;
@@ -32,6 +34,8 @@ namespace GameConsole.UI
         private readonly string _textKey;
 
         private readonly List<Action> _unbind = new();
+
+        private readonly List<(Toggle toggle, FloatingFrameMetrics metric)> _frameToggles = new();
 
         private readonly ToolkitTextDisplay _labels = new(); // 只省略字段标题, 保留设置值与标题原文.
 
@@ -61,6 +65,21 @@ namespace GameConsole.UI
 
             _show.RegisterValueChangedCallback(changed);
             _unbind.Add(() => _show.UnregisterValueChangedCallback(changed));
+            var monitor = root.Q("floatingMonitorSettings");
+
+            if (monitor != null)
+            {
+                BindFrameMetric(monitor, "floatingRealtimeFps", FloatingFrameMetrics.RealtimeFps);
+                BindFrameMetric(monitor, "floatingAverageFps", FloatingFrameMetrics.AverageFps);
+                BindFrameMetric(monitor, "floatingLowFps", FloatingFrameMetrics.LowFps);
+                BindFrameMetric(monitor, "floatingFrameTimeGraphToggle", FloatingFrameMetrics.FrameTimeGraph);
+                _monitorBackground = ToolkitView.Require<SliderInt>(monitor, "floatingMonitorBackgroundOpacity");
+                _monitorBackground.lowValue = Config.MIN_PERCENTAGE;
+                _monitorBackground.highValue = Config.MAX_PERCENTAGE;
+                _labels.Track(_monitorBackground.labelElement);
+                BindInteger(_monitorBackground, value => _settings.MonitorBackgroundOpacity = value / (float)Config.MAX_PERCENTAGE);
+            }
+
             BindInteger(_count, value => _settings.LogLineCount = value);
             BindInteger(_background, value => _settings.BackgroundOpacity = Mathf.Clamp(value, Config.MIN_PERCENTAGE, Config.MAX_PERCENTAGE) / (float)Config.MAX_PERCENTAGE);
             BindInteger(_text, value => _settings.TextOpacity = Mathf.Clamp(value, Config.MIN_PERCENTAGE, Config.MAX_PERCENTAGE) / (float)Config.MAX_PERCENTAGE);
@@ -88,6 +107,13 @@ namespace GameConsole.UI
         private void Refresh()
         {
             _show.SetValueWithoutNotify(_settings.ShowLatestLogs);
+            var metrics = _settings.FrameMetrics;
+
+            foreach (var (toggle, metric) in _frameToggles)
+            {
+                toggle.SetValueWithoutNotify((metrics & metric) != 0);
+            }
+
             _count.SetValueWithoutNotify(_settings.LogLineCount);
             _background.SetValueWithoutNotify(Mathf.RoundToInt(_settings.BackgroundOpacity * Config.MAX_PERCENTAGE));
             _text.SetValueWithoutNotify(Mathf.RoundToInt(_settings.TextOpacity * Config.MAX_PERCENTAGE));
@@ -97,6 +123,14 @@ namespace GameConsole.UI
             _count.SetEnabled(_settings.ShowLatestLogs);
             _background.SetEnabled(_settings.ShowLatestLogs);
             _text.SetEnabled(_settings.ShowLatestLogs);
+            if (_monitorBackground != null)
+            {
+                var opacity = Mathf.RoundToInt(_settings.MonitorBackgroundOpacity * Config.MAX_PERCENTAGE);
+                var title = ToolkitLocalization.Get("floating.frameMonitor.backgroundOpacity");
+
+                _monitorBackground.SetValueWithoutNotify(opacity);
+                _labels.SetText(_monitorBackground.labelElement, ToolkitLocalization.Format("setting.percentValue", ("name", (object)title), ("value", (object)opacity)));
+            }
         }
 
         // 仅保留标题, 兼容旧范围文字与 UXML 中的初始显示值.
@@ -111,6 +145,22 @@ namespace GameConsole.UI
         private static string Title(string key, string fallback) => key == null
             ? fallback
             : SettingTitle(ToolkitLocalization.Get(key));
+
+        private void BindFrameMetric(VisualElement root, string name, FloatingFrameMetrics metric)
+        {
+            var toggle = ToolkitView.Require<Toggle>(root, name);
+            EventCallback<ChangeEvent<bool>> changed = evt =>
+            {
+                var metrics = _settings.FrameMetrics;
+
+                _settings.FrameMetrics = evt.newValue ? metrics | metric : metrics & ~metric;
+            };
+
+            _frameToggles.Add((toggle, metric));
+            _labels.Track(toggle.labelElement);
+            toggle.RegisterValueChangedCallback(changed);
+            _unbind.Add(() => toggle.UnregisterValueChangedCallback(changed));
+        }
 
         private void BindInteger(SliderInt field, Action<int> setter)
         {

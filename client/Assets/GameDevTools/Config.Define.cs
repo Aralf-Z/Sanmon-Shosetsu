@@ -12,7 +12,7 @@ namespace GameConsole
         public const int MAX_FLOATING_LOG_COUNT = 10;
 
         /// <summary> 浮标日志显示下限. </summary>
-        public const int MIN_FLOATING_LOG_COUNT = 1;
+        public const int MIN_FLOATING_LOG_COUNT = 0;
 
         public const int DEFAULT_FLOATING_LOG_COUNT = 5;
 
@@ -71,6 +71,8 @@ namespace GameConsole
         public const float DEFAULT_FLOATING_BACKGROUND_OPACITY = .4f;
 
         public const float DEFAULT_FLOATING_TEXT_OPACITY = 1f;
+
+        internal const float DEFAULT_FLOATING_MONITOR_BACKGROUND_OPACITY = .5f;
 
         /// <summary> 百分比控件下限. </summary>
         public const int MIN_PERCENTAGE = 0;

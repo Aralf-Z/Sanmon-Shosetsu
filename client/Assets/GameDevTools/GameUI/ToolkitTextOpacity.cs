@@ -69,6 +69,18 @@ namespace GameConsole.UI
             }
         }
 
+        internal static void SetBackgroundOpacity(VisualElement element, float opacity)
+        {
+            for (var ancestor = element; ancestor != null; ancestor = ancestor.hierarchy.parent)
+            {
+                if (_roots.TryGetValue(ancestor, out var owner) && owner._nodes.TryGetValue(element, out var node))
+                {
+                    node.SetBackgroundOpacity(opacity);
+                    return;
+                }
+            }
+        }
+
         public void Dispose()
         {
             if (_disposed) return;

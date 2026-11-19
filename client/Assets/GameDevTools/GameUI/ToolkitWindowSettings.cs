@@ -64,11 +64,41 @@ namespace GameConsole.UI
             }
         }
 
+        internal bool HasLogPreview => ShowLatestLogs && LogLineCount > 0;
+
+        internal FloatingFrameMetrics FrameMetrics
+        {
+            get => Config.FloatingMetrics;
+            set
+            {
+                if (FrameMetrics == value) return;
+
+                Config.FloatingMetrics = value;
+                MarkChanged();
+            }
+        }
+
+        internal float MonitorBackgroundOpacity
+        {
+            get => Config.FloatingMonitorBackgroundOpacity;
+            set
+            {
+                var previous = MonitorBackgroundOpacity;
+
+                Config.FloatingMonitorBackgroundOpacity = value;
+                if (previous != MonitorBackgroundOpacity)
+                {
+                    MarkChanged();
+                }
+            }
+        }
+
         public int LogLineCount
         {
             get => Config.FloatingLogLineCount;
             set
             {
+                value = Mathf.Clamp(value, Config.MIN_FLOATING_LOG_COUNT, Config.MAX_FLOATING_LOG_COUNT);
                 if (value == LogLineCount) return;
 
                 Config.FloatingLogLineCount = value;

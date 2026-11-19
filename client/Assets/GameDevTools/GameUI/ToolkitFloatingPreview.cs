@@ -33,6 +33,8 @@ namespace GameConsole.UI
 
         private readonly ToolkitFloatingSettingsControls _controls;
 
+        private readonly ToolkitFloatingPerformance _performance;
+
         private readonly ToolkitWindowSettings _settings;
 
         private readonly ToolkitConsoleRenderer _renderer;
@@ -46,8 +48,6 @@ namespace GameConsole.UI
         private int _dockEdge;
 
         private int _logVersion = -1;
-
-        private int _rowCount = 1;
 
         private bool _visible; // 仅最小化且工具打开时显示.
 
@@ -79,6 +79,7 @@ namespace GameConsole.UI
             }
 
             _controls = new ToolkitFloatingSettingsControls(_popup, settings, "floatingPopup");
+            _performance = new ToolkitFloatingPerformance(root, settings);
             _settingsButton.clicked += ToggleSettings;
             _closeButton.clicked += CloseSettings;
             _icon.RegisterCallback<PointerUpEvent>(OnIconPointerUp);
@@ -95,14 +96,18 @@ namespace GameConsole.UI
             if (_visible == visible) return;
 
             _visible = visible;
+            _performance.SetVisible(visible);
             if (!visible)
             {
                 SetSettingsOpen(false);
             }
 
             _logVersion = -1;
-            RefreshLogs();
             UpdateVisibility();
+            if (!visible) return;
+
+            RefreshLogs();
+            ApplyLayout();
         }
 
         public void UpdateGeometry(Rect iconBounds, Vector2 viewport, int dockEdge)
@@ -133,7 +138,8 @@ namespace GameConsole.UI
 
             if (!_visible) return;
 
-            RefreshLogs();
+            _performance.Tick(Time.realtimeSinceStartupAsDouble, Time.frameCount, Time.unscaledDeltaTime, Application.isFocused);
+            if (RefreshLogs()) ApplyLayout();
             _text.Tick();
             if (IsSettingsOpen)
             {
@@ -158,6 +164,7 @@ namespace GameConsole.UI
             _icon.UnregisterCallback<PointerUpEvent>(OnIconPointerUp);
             _popup.UnregisterCallback<GeometryChangedEvent>(OnPopupGeometryChanged);
             _controls.Dispose();
+            _performance.Dispose();
             _text.Dispose();
             e_onSettingsVisibilityChanged = null;
         }
@@ -260,8 +267,13 @@ namespace GameConsole.UI
         private void OnSettingsChanged()
         {
             var snapshot = (_settings.ShowLatestLogs, _settings.LogLineCount, _settings.BackgroundOpacity, _settings.TextOpacity);
+            var metricsChanged = _performance.SetMetrics(_settings.FrameMetrics);
 
-            if (_shownSettings.HasValue && _shownSettings.Value == snapshot) return;
+            if (_shownSettings.HasValue && _shownSettings.Value == snapshot)
+            {
+                if (metricsChanged) ApplyLayout();
+                return;
+            }
 
             _shownSettings = snapshot;
             ApplyBackground();
@@ -271,8 +283,9 @@ namespace GameConsole.UI
             }
 
             _logVersion = -1;
-            RefreshLogs();
             UpdateVisibility();
+            RefreshLogs();
+            ApplyLayout();
         }
 
         private void OnPaletteResolved(CustomStyleResolvedEvent evt) => ReadThemePalette();
@@ -296,29 +309,32 @@ namespace GameConsole.UI
             _preview.style.backgroundColor = color;
         }
 
-        private void RefreshLogs()
+        private bool RefreshLogs()
         {
-            if (_logVersion == _renderer.LogVersion) return;
+            if (!_visible || !_settings.HasLogPreview || _logVersion == _renderer.LogVersion) return false;
 
             _logVersion = _renderer.LogVersion;
             var logs = _renderer.LatestLines;
 
-            _rowCount = Mathf.Max(1, Mathf.Min(logs.Count, _settings.LogLineCount));
-            var start = Mathf.Max(0, logs.Count - _settings.LogLineCount);
+            var logCount = Mathf.Min(logs.Count, _settings.LogLineCount);
+            var start = logs.Count - logCount;
+            var rowCount = Mathf.Max(1, logCount);
 
             for (var i = 0; i < _labels.Length; i++)
             {
-                _rows[i].EnableInClassList("is-hidden", i >= _rowCount);
-                _text.SetText(_labels[i], i < _rowCount && logs.Count > 0 ? logs[start + i] : i == 0 ? ToolkitLocalization.Get("ui.FloatingPreview.RefreshLogs") : string.Empty);
+                _rows[i].EnableInClassList("is-hidden", i >= rowCount);
+                var text = i < logCount ? logs[start + i] : i == 0 ? ToolkitLocalization.Get("ui.FloatingPreview.RefreshLogs") : string.Empty;
+
+                _text.SetText(_labels[i], text);
             }
 
-            ApplyLayout();
+            return true;
         }
 
         // 设置期间保留日志预览, 让滑动条修改即时反映到背景和文字.
         private void UpdateVisibility()
         {
-            _preview.EnableInClassList("is-hidden", !_visible || !_settings.ShowLatestLogs);
+            _preview.EnableInClassList("is-hidden", !_visible || !_settings.HasLogPreview);
             _popup.EnableInClassList("is-hidden", !_visible || !IsSettingsOpen);
         }
 
@@ -327,8 +343,14 @@ namespace GameConsole.UI
         {
             if (_viewport.x <= 0 || _viewport.y <= 0) return;
 
-            var width = CalculatePreviewWidth(_viewport, IsSettingsOpen && _settings.ShowLatestLogs);
+            var anchor = _performance.Layout(_iconBounds, _viewport, _dockEdge);
+            if (!_settings.HasLogPreview)
+            {
+                ApplyPopupLayout(_iconBounds);
+                return;
+            }
 
+            var width = CalculatePreviewWidth(_viewport, IsSettingsOpen);
             _preview.style.width = width;
             _preview.style.maxHeight = _viewport.y;
             var height = _preview.layout.height;
@@ -338,10 +360,10 @@ namespace GameConsole.UI
                 height = 0;
             }
 
-            var logs = CalculateBounds(_iconBounds, _viewport, new Vector2(width, height), _dockEdge);
+            var logs = CalculateBounds(anchor, _viewport, new Vector2(width, height), _dockEdge);
 
             _preview.style.translate = new Translate(logs.x, logs.y, 0);
-            ApplyPopupLayout(_settings.ShowLatestLogs ? logs : _iconBounds);
+            ApplyPopupLayout(logs);
         }
 
         private void OnPreviewGeometryChanged(GeometryChangedEvent evt)
