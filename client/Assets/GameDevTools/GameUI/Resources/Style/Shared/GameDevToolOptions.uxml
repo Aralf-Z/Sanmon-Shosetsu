@@ -1,7 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
     <ui:Style src="GameDevToolLayout.uss" />
     <ui:Style src="ToolkitControls.uss" />
-    <ui:Template name="floatingMonitorSettingsTemplate" src="ToolkitFloatingMonitorSettings.uxml" />
     <ui:VisualElement name="optionContent" class="page options-page">
         <ui:ScrollView name="optionsScroll" class="settings-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden">
             <ui:VisualElement name="settingsContent" class="settings-content">
@@ -113,7 +112,11 @@
                         <ui:SliderInt name="floatingLogLines" label="@loc:ui.Options.floatingLogLines.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
                         <ui:SliderInt name="floatingBackgroundOpacity" label="@loc:ui.Options.floatingBackgroundOpacity.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
                         <ui:SliderInt name="floatingTextOpacity" label="@loc:ui.Options.floatingTextOpacity.label" class="setting-row floating-setting-slider dev-horizontal-slider" />
-                        <ui:Instance name="floatingMonitorSettings" template="floatingMonitorSettingsTemplate" />
+                        <ui:Toggle name="floatingRealtimeFps" label="@loc:floating.frameMonitor.realtime" class="setting-row" />
+                        <ui:Toggle name="floatingAverageFps" label="@loc:floating.frameMonitor.average" class="setting-row" />
+                        <ui:Toggle name="floatingLowFps" label="@loc:floating.frameMonitor.low" class="setting-row" />
+                        <ui:Toggle name="floatingFrameTimeGraphToggle" label="@loc:floating.frameMonitor.graph" class="setting-row" />
+                        <ui:SliderInt name="floatingMonitorBackgroundOpacity" label="@loc:floating.frameMonitor.backgroundOpacity" class="setting-row floating-setting-slider dev-horizontal-slider" />
                     </ui:VisualElement>
                 </ui:VisualElement>
             </ui:VisualElement>

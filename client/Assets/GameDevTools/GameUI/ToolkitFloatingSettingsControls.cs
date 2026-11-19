@@ -65,15 +65,15 @@ namespace GameConsole.UI
 
             _show.RegisterValueChangedCallback(changed);
             _unbind.Add(() => _show.UnregisterValueChangedCallback(changed));
-            var monitor = root.Q("floatingMonitorSettings");
+            var realtimeFps = root.Q<Toggle>("floatingRealtimeFps");
 
-            if (monitor != null)
+            if (realtimeFps != null)
             {
-                BindFrameMetric(monitor, "floatingRealtimeFps", FloatingFrameMetrics.RealtimeFps);
-                BindFrameMetric(monitor, "floatingAverageFps", FloatingFrameMetrics.AverageFps);
-                BindFrameMetric(monitor, "floatingLowFps", FloatingFrameMetrics.LowFps);
-                BindFrameMetric(monitor, "floatingFrameTimeGraphToggle", FloatingFrameMetrics.FrameTimeGraph);
-                _monitorBackground = ToolkitView.Require<SliderInt>(monitor, "floatingMonitorBackgroundOpacity");
+                BindFrameMetric(realtimeFps, FloatingFrameMetrics.RealtimeFps);
+                BindFrameMetric(ToolkitView.Require<Toggle>(root, "floatingAverageFps"), FloatingFrameMetrics.AverageFps);
+                BindFrameMetric(ToolkitView.Require<Toggle>(root, "floatingLowFps"), FloatingFrameMetrics.LowFps);
+                BindFrameMetric(ToolkitView.Require<Toggle>(root, "floatingFrameTimeGraphToggle"), FloatingFrameMetrics.FrameTimeGraph);
+                _monitorBackground = ToolkitView.Require<SliderInt>(root, "floatingMonitorBackgroundOpacity");
                 _monitorBackground.lowValue = Config.MIN_PERCENTAGE;
                 _monitorBackground.highValue = Config.MAX_PERCENTAGE;
                 _labels.Track(_monitorBackground.labelElement);
@@ -146,9 +146,8 @@ namespace GameConsole.UI
             ? fallback
             : SettingTitle(ToolkitLocalization.Get(key));
 
-        private void BindFrameMetric(VisualElement root, string name, FloatingFrameMetrics metric)
+        private void BindFrameMetric(Toggle toggle, FloatingFrameMetrics metric)
         {
-            var toggle = ToolkitView.Require<Toggle>(root, name);
             EventCallback<ChangeEvent<bool>> changed = evt =>
             {
                 var metrics = _settings.FrameMetrics;
