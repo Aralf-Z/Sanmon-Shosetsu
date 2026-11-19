@@ -34,6 +34,12 @@ namespace GameConsole
 
         private static GameDevToolsConfig Data => Document.settings;
 
+        internal static event Action e_onInputHistoryChanged;
+
+        internal static IReadOnlyList<string> InputHistoryEntries => _inputHistory?.Entries ?? Array.Empty<string>();
+
+        internal static int ActiveInputHistoryCapacity => _inputHistory?.Capacity ?? InputHistoryCapacity;
+
         /// <summary> 启动时载入全部数据, 已绑定控制台时仅重读设置. </summary>
         public static void Reload()
         {
@@ -98,7 +104,7 @@ namespace GameConsole
 
             _inputHistory = history;
             _inputHistory.Restore(entries);
-            _inputHistory.e_onRecorded += QueueInputHistorySave;
+            _inputHistory.e_onChanged += OnInputHistoryChanged;
             if (_inputHistory.Entries.Count != entries.Count)
             {
                 QueueInputHistorySave();
@@ -109,13 +115,29 @@ namespace GameConsole
         {
             if (_inputHistory == null) return;
 
-            _inputHistory.e_onRecorded -= QueueInputHistorySave;
+            _inputHistory.e_onChanged -= OnInputHistoryChanged;
             if (_historySavePending)
             {
                 _document.inputHistory = _inputHistory.Entries.ToList();
             }
 
             _inputHistory = null;
+        }
+
+        internal static void ClearInputHistory()
+        {
+            if (_inputHistory?.Clear() == true)
+            {
+                FlushInputHistory();
+            }
+        }
+
+        internal static void RemoveInputHistory(int index)
+        {
+            if (_inputHistory?.RemoveAt(index) == true)
+            {
+                FlushInputHistory();
+            }
         }
 
         internal static void TickInputHistory()
@@ -182,6 +204,12 @@ namespace GameConsole
             Normalize(loaded.settings);
             loaded.macros.RemoveAll(entry => entry == null || string.IsNullOrEmpty(entry.id) || entry.source == null || !ids.Add(entry.id));
             return loaded;
+        }
+
+        private static void OnInputHistoryChanged()
+        {
+            QueueInputHistorySave();
+            e_onInputHistoryChanged?.Invoke();
         }
 
         private static void QueueInputHistorySave()

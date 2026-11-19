@@ -8,6 +8,7 @@
             <ui:VisualElement name="commandSearchGroup">
                 <ui:TextField name="commandSearch" tooltip="@loc:ui.Cheat.commandSearch.tooltip" class="command-search tag-search-input" />
                 <ui:Button name="commandSearchHistory" text="@loc:icon.log" tooltip="@loc:ui.Cheat.commandSearchHistory.tooltip" class="search-history-button" />
+                <ui:VisualElement class="preset-slider-spacing" picking-mode="Ignore" />
             </ui:VisualElement>
         </ui:VisualElement>
         <ui:VisualElement name="cheatColumns" class="cheat-columns">

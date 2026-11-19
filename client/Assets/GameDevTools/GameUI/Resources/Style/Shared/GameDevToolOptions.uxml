@@ -67,6 +67,13 @@
                     <ui:Label text="@loc:ui.Options.label18.text" class="settings-section-hint" />
                     <ui:VisualElement class="settings-section-rows">
                         <ui:IntegerField name="inputHistoryCapacity" label="@loc:ui.Options.inputHistoryCapacity.label" is-delayed="true" class="setting-row" />
+                        <ui:VisualElement class="setting-row unity-base-field">
+                            <ui:Label name="inputHistoryActionsLabel" text="@loc:ui.inputHistory" class="unity-base-field__label" />
+                            <ui:VisualElement class="history-actions unity-base-field__input">
+                                <ui:Button name="clearInputHistory" text="@loc:ui.Options.clearCheatSearchHistory.text" tooltip="@loc:ui.Options.clearInputHistory.tooltip" />
+                                <ui:Button name="viewInputHistory" text="@loc:ui.Options.viewCheatSearchHistory.text" tooltip="@loc:ui.Options.viewInputHistory.tooltip" />
+                            </ui:VisualElement>
+                        </ui:VisualElement>
                         <ui:IntegerField name="commandQueryCacheCapacity" label="@loc:ui.Options.commandQueryCacheCapacity.label" is-delayed="true" class="setting-row" />
                         <ui:IntegerField name="alternativeCommandCount" label="@loc:ui.Options.alternativeCommandCount.label" is-delayed="true" class="setting-row" />
                         <ui:Toggle name="consoleShowLogIcons" label="@loc:ui.Options.consoleShowLogIcons.label" tooltip="@loc:ui.Options.consoleShowLogIcons.tooltip" class="setting-row" />
@@ -85,9 +92,12 @@
                     <ui:VisualElement class="settings-section-rows">
                         <ui:SliderInt name="cheatPreviewLogLines" label="@loc:ui.Options.cheatPreviewLogLines.label" class="setting-row floating-setting-slider dev-horizontal-slider cheat-log-option" />
                         <ui:IntegerField name="cheatSearchHistoryCapacity" label="@loc:ui.Options.cheatSearchHistoryCapacity.label" is-delayed="true" tooltip="@loc:ui.Options.cheatSearchHistoryCapacity.tooltip" class="setting-row" />
-                        <ui:VisualElement class="setting-row search-history-actions">
-                            <ui:Button name="clearCheatSearchHistory" text="@loc:ui.Options.clearCheatSearchHistory.text" tooltip="@loc:ui.Options.clearCheatSearchHistory.tooltip" />
-                            <ui:Button name="viewCheatSearchHistory" text="@loc:ui.Options.viewCheatSearchHistory.text" tooltip="@loc:ui.Options.viewCheatSearchHistory.tooltip" />
+                        <ui:VisualElement class="setting-row unity-base-field">
+                            <ui:Label name="searchHistoryActionsLabel" text="@loc:ui.searchHistory" class="unity-base-field__label" />
+                            <ui:VisualElement class="history-actions unity-base-field__input">
+                                <ui:Button name="clearCheatSearchHistory" text="@loc:ui.Options.clearCheatSearchHistory.text" tooltip="@loc:ui.Options.clearCheatSearchHistory.tooltip" />
+                                <ui:Button name="viewCheatSearchHistory" text="@loc:ui.Options.viewCheatSearchHistory.text" tooltip="@loc:ui.Options.viewCheatSearchHistory.tooltip" />
+                            </ui:VisualElement>
                         </ui:VisualElement>
                     </ui:VisualElement>
                 </ui:VisualElement>

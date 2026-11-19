@@ -6,14 +6,14 @@
         <ui:VisualElement class="theme-dialog-surface">
             <ui:VisualElement name="searchHistoryHeader" class="toolkit-dialog-header">
                 <ui:VisualElement class="toolkit-dialog-heading" picking-mode="Ignore">
-                    <ui:Label text="@loc:ui.SearchHistoryWindow.label1.text" class="section-title toolkit-dialog-title" picking-mode="Ignore" />
+                    <ui:Label name="historyWindowTitle" class="section-title toolkit-dialog-title" picking-mode="Ignore" />
                 </ui:VisualElement>
                 <dev:ToolkitHeaderPattern class="window-header-pattern" picking-mode="Ignore" />
-                <ui:Button name="closeSearchHistoryWindow" text="@loc:icon.close" tooltip="@loc:ui.SearchHistoryWindow.closeSearchHistoryWindow.tooltip" class="window-control-button" />
+                <ui:Button name="closeSearchHistoryWindow" text="@loc:icon.close" class="window-control-button" />
             </ui:VisualElement>
             <ui:VisualElement class="search-history-window-content">
-                <ui:Label name="searchHistoryWindowCount" text="@loc:ui.SearchHistoryWindow.searchHistoryWindowCount.text" class="muted" />
-                <ui:Label text="@loc:ui.SearchHistoryWindow.label5.text" class="settings-section-hint" />
+                <ui:Label name="searchHistoryWindowCount" class="muted" />
+                <ui:Label name="historyWindowHint" class="settings-section-hint" />
                 <ui:ScrollView name="searchHistoryWindowScroll" class="search-history-window-scroll" mode="Vertical" horizontal-scroller-visibility="Hidden" vertical-scroller-visibility="Auto">
                     <ui:VisualElement name="searchHistoryEntries" class="search-history-records" />
                 </ui:ScrollView>

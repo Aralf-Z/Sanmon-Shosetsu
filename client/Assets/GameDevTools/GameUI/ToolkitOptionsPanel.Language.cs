@@ -16,7 +16,6 @@ namespace GameConsole.UI
             }
 
             _floatingSettings.RefreshLanguage();
-            _historyWindow?.Refresh();
         }
 
         private void BindLanguage(VisualElement root)

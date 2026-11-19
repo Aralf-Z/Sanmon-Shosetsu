@@ -42,9 +42,11 @@ namespace RedSaw.CommandLineInterface
 
         private int _lastIndex;
 
-        internal event Action e_onRecorded;
+        internal event Action e_onChanged;
 
         internal IReadOnlyList<string> Entries => _history;
+
+        internal int Capacity => _capacity;
 
         public InputHistory(int capacity)
         {
@@ -56,7 +58,27 @@ namespace RedSaw.CommandLineInterface
         public void Record(string input)
         {
             Append(input);
-            e_onRecorded?.Invoke();
+            e_onChanged?.Invoke();
+        }
+
+        internal bool Clear()
+        {
+            if (_history.Count == 0) return false;
+
+            _history.Clear();
+            _lastIndex = 0;
+            e_onChanged?.Invoke();
+            return true;
+        }
+
+        internal bool RemoveAt(int index)
+        {
+            if (index < 0 || index >= _history.Count) return false;
+
+            _history.RemoveAt(index);
+            _lastIndex = _history.Count - 1;
+            e_onChanged?.Invoke();
+            return true;
         }
 
         internal void Restore(IEnumerable<string> entries)

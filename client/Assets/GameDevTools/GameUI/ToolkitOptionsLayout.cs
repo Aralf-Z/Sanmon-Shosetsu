@@ -54,7 +54,6 @@ namespace GameConsole.UI
                         }
                     }
 
-                    // 清空和查看历史是独立操作行, 没有名称列, 保留原来的布局.
                     if (name == null || value == null)
                     {
                         continue;

@@ -1578,12 +1578,13 @@ Button.search-history-entry:hover, Button.search-history-entry.search-history-ho
     -unity-text-align: middle-left;
 }
 
-.search-history-actions {
+.history-actions {
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: center;
 }
 
-.search-history-actions > Button {
+.history-actions > Button {
     margin-right: 8px;
 }
 
@@ -2559,7 +2560,7 @@ Button.search-history-entry:hover, Button.search-history-entry.search-history-ho
     min-width: 0;
 }
 
-.preset-size-slider {
+.preset-size-slider, .preset-slider-spacing {
     width: 90px;
     max-width: 90px;
     min-width: 0;
@@ -3386,8 +3387,9 @@ Button.search-history-entry:hover, Button.search-history-entry.search-history-ho
     margin-bottom: 0;
 }
 
-.tag-toolbar-search > .preset-size-slider {
+.tag-toolbar-search > .preset-size-slider, .tag-toolbar-search > .preset-slider-spacing {
     flex-shrink: 0;
+    margin-right: 0;
 }
 
 .dev-desktop TextField.tag-search-input {

@@ -6,8 +6,8 @@ using UnityEngine.UIElements;
 
 namespace GameConsole.UI
 {
-    /// <summary> Options 中的共用搜索历史管理窗口, 查看完整搜索词并逐条删除. </summary>
-    internal sealed class ToolkitSearchHistoryWindow : IDisposable
+    /// <summary> 设置页共用的搜索和输入历史窗口. </summary>
+    internal sealed class ToolkitHistoryWindow : IDisposable
     {
         private readonly VisualElement _owner;
 
@@ -23,7 +23,13 @@ namespace GameConsole.UI
 
         private readonly Label _count;
 
+        private readonly Label _title;
+
+        private readonly Label _hint;
+
         private readonly Button _close;
+
+        private readonly bool _showInputHistory;
 
         private readonly List<string> _shown = new();
 
@@ -31,10 +37,11 @@ namespace GameConsole.UI
 
         private bool _disposed; // 销毁后不再创建窗口.
 
-        internal ToolkitSearchHistoryWindow(VisualElement owner, Button trigger)
+        internal ToolkitHistoryWindow(VisualElement owner, Button trigger, bool showInputHistory = false)
         {
             _owner = owner;
             _trigger = trigger;
+            _showInputHistory = showInputHistory;
             _host = ToolkitFactory.InstantiateTemplate("ToolkitSearchHistoryWindow");
             _host.AddToClassList("search-history-window-layer");
             _host.pickingMode = PickingMode.Position;
@@ -43,12 +50,22 @@ namespace GameConsole.UI
             _scroll = ToolkitView.Require<ScrollView>(_host, "searchHistoryWindowScroll");
             _entries = ToolkitView.Require<VisualElement>(_host, "searchHistoryEntries");
             _count = ToolkitView.Require<Label>(_host, "searchHistoryWindowCount");
+            _title = ToolkitView.Require<Label>(_host, "historyWindowTitle");
+            _hint = ToolkitView.Require<Label>(_host, "historyWindowHint");
             _close = ToolkitView.Require<Button>(_host, "closeSearchHistoryWindow");
             _close.clicked += CloseFromButton;
             _host.RegisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
             _host.RegisterCallback<KeyDownEvent>(OnKeyDown, TrickleDown.TrickleDown);
             _owner.RegisterCallback<DetachFromPanelEvent>(OnDetached);
-            Config.e_onChanged += Refresh;
+            ToolkitLocalization.e_onChanged += Refresh;
+            if (_showInputHistory)
+            {
+                Config.e_onInputHistoryChanged += Refresh;
+            }
+            else
+            {
+                Config.e_onChanged += Refresh;
+            }
         }
 
         internal void Show()
@@ -70,32 +87,40 @@ namespace GameConsole.UI
         {
             if (_root == null) return;
 
-            var history = Config.CheatSearchHistory;
+            var history = _showInputHistory ? Config.InputHistoryEntries : Config.CheatSearchHistory;
+            var capacity = _showInputHistory ? Config.ActiveInputHistoryCapacity : Config.CheatSearchHistoryCapacity;
+            var ordered = _showInputHistory ? history.Reverse() : history;
+            var emptyText = ToolkitLocalization.Get(_showInputHistory ? "ui.InputHistoryWindow.empty" : "ui.SearchHistoryWindow.Refresh");
+            var deleteText = ToolkitLocalization.Get("ui.SearchHistoryWindow.Refresh.2");
+            var deleteTooltip = ToolkitLocalization.Get(_showInputHistory ? "ui.InputHistoryWindow.delete.tooltip" : "ui.SearchHistoryWindow.Refresh.3");
 
-            _count.text = ToolkitLocalization.Format("history.count", ("count", (object)history.Count), ("capacity", (object)Config.CheatSearchHistoryCapacity));
-            if (_shown.SequenceEqual(history) && _entries.childCount > 0)
+            _title.text = ToolkitLocalization.Get(_showInputHistory ? "ui.inputHistory" : "ui.SearchHistoryWindow.label1.text");
+            _hint.text = ToolkitLocalization.Get(_showInputHistory ? "ui.InputHistoryWindow.hint" : "ui.SearchHistoryWindow.label5.text");
+            _close.tooltip = ToolkitLocalization.Get(_showInputHistory ? "ui.InputHistoryWindow.close.tooltip" : "ui.SearchHistoryWindow.closeSearchHistoryWindow.tooltip");
+            _count.text = ToolkitLocalization.Format("history.count", ("count", (object)history.Count), ("capacity", (object)capacity));
+            if (_shown.SequenceEqual(ordered) && _entries.childCount > 0)
             {
                 foreach (var button in _entries.Query<Button>()
                     .ToList())
                 {
-                    button.text = ToolkitLocalization.Get("ui.SearchHistoryWindow.Refresh.2");
-                    button.tooltip = ToolkitLocalization.Get("ui.SearchHistoryWindow.Refresh.3");
+                    button.text = deleteText;
+                    button.tooltip = deleteTooltip;
                 }
 
                 if (history.Count == 0)
                 {
-                    _entries.Q<Label>().text = ToolkitLocalization.Get("ui.SearchHistoryWindow.Refresh");
+                    _entries.Q<Label>().text = emptyText;
                 }
 
                 return;
             }
 
             _shown.Clear();
-            _shown.AddRange(history);
+            _shown.AddRange(ordered);
             _entries.Clear();
             if (history.Count == 0)
             {
-                var empty = new Label(ToolkitLocalization.Get("ui.SearchHistoryWindow.Refresh"));
+                var empty = new Label(emptyText);
 
                 empty.AddToClassList("muted");
                 _entries.Add(empty);
@@ -103,19 +128,19 @@ namespace GameConsole.UI
                 return;
             }
 
-            foreach (var text in history)
+            for (var index = 0; index < _shown.Count; index++)
             {
-                var query = text;
+                var displayedIndex = index;
                 var row = new VisualElement();
 
                 row.AddToClassList("search-history-record");
-                var label = new Label(query)
+                var label = new Label(_shown[index])
                 { enableRichText = false, parseEscapeSequences = false };
 
                 label.AddToClassList("search-history-record-text");
                 label.selection.isSelectable = true;
-                var remove = new Button(() => Remove(query))
-                { text = ToolkitLocalization.Get("ui.SearchHistoryWindow.Refresh.2"), tooltip = ToolkitLocalization.Get("ui.SearchHistoryWindow.Refresh.3") };
+                var remove = new Button(() => Remove(row, displayedIndex))
+                { text = deleteText, tooltip = deleteTooltip };
 
                 remove.AddToClassList("search-history-record-delete");
                 row.Add(label);
@@ -143,6 +168,8 @@ namespace GameConsole.UI
         {
             Close();
             _disposed = true;
+            ToolkitLocalization.e_onChanged -= Refresh;
+            Config.e_onInputHistoryChanged -= Refresh;
             Config.e_onChanged -= Refresh;
             _close.clicked -= CloseFromButton;
             _host.UnregisterCallback<PointerDownEvent>(OnPointerDown, TrickleDown.TrickleDown);
@@ -150,10 +177,19 @@ namespace GameConsole.UI
             _owner.UnregisterCallback<DetachFromPanelEvent>(OnDetached);
         }
 
-        // 只删除对应文本, 其他历史的相对顺序和当前搜索输入均保留.
-        private void Remove(string query)
+        private void Remove(VisualElement row, int displayedIndex)
         {
-            Config.RemoveCheatSearch(query);
+            if (row.parent != _entries) return;
+
+            if (_showInputHistory)
+            {
+                Config.RemoveInputHistory(_shown.Count - 1 - displayedIndex);
+            }
+            else
+            {
+                Config.RemoveCheatSearch(_shown[displayedIndex]);
+            }
+
             Refresh();
         }
 

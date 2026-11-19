@@ -25,12 +25,6 @@ namespace GameConsole.UI
 
         private readonly VisualElement _root;
 
-        private readonly Button _clearHistory;
-
-        private readonly Button _viewHistory;
-
-        private ToolkitSearchHistoryWindow _historyWindow;
-
         private ToolkitDropdownPopup _styleMenu;
 
         private ToolkitDropdownPopup _fontMenu;
@@ -50,18 +44,16 @@ namespace GameConsole.UI
             _root = root;
             _appearance = appearance;
             _layout = new ToolkitOptionsLayout(root);
-            _clearHistory = ToolkitView.Require<Button>(root, "clearCheatSearchHistory");
-            _viewHistory = ToolkitView.Require<Button>(root, "viewCheatSearchHistory");
-            _clearHistory.clicked += ClearHistory;
-            _viewHistory.clicked += ViewHistory;
-            _refresh.Add(RefreshHistoryButtons);
-            RefreshHistoryButtons();
+            BindHistoryActions("clearCheatSearchHistory", "viewCheatSearchHistory", showInputHistory: false);
+            BindHistoryActions("clearInputHistory", "viewInputHistory", showInputHistory: true);
             _rows.AddRange(root.Query<VisualElement>(className: "setting-row").ToList());
             _text.Track(ToolkitView.Require<Label>(root, "consoleSettingsTitle"));
             _text.Track(ToolkitView.Require<Label>(root, "interfaceSettingsTitle"));
             _text.Track(ToolkitView.Require<Label>(root, "toolSettingsTitle"));
             _text.Track(ToolkitView.Require<Label>(root, "cheatSettingsTitle"));
             _text.Track(ToolkitView.Require<Label>(root, "floatingSettingsTitle"));
+            _text.Track(ToolkitView.Require<Label>(root, "searchHistoryActionsLabel"));
+            _text.Track(ToolkitView.Require<Label>(root, "inputHistoryActionsLabel"));
             BindInteger(root, "inputHistoryCapacity", () => Config.InputHistoryCapacity, value => Config.InputHistoryCapacity = value);
             BindInteger(root, "commandQueryCacheCapacity", () => Config.CommandQueryCacheCapacity, value => Config.CommandQueryCacheCapacity = value);
             BindInteger(root, "alternativeCommandCount", () => Config.AlternativeCommandCount, value => Config.AlternativeCommandCount = value);
@@ -104,7 +96,8 @@ namespace GameConsole.UI
             if (!visible)
             {
                 CloseSelectionMenus();
-                _historyWindow?.Close();
+                _searchHistoryWindow?.Close();
+                _inputHistoryWindow?.Close();
                 return;
             }
 
@@ -154,10 +147,10 @@ namespace GameConsole.UI
             _shortcutKeyMenu?.Dispose();
             _languageMenu?.Dispose();
             _fontMenu = null;
-            _historyWindow?.Dispose();
-            _historyWindow = null;
-            _clearHistory.clicked -= ClearHistory;
-            _viewHistory.clicked -= ViewHistory;
+            _searchHistoryWindow?.Dispose();
+            _searchHistoryWindow = null;
+            _inputHistoryWindow?.Dispose();
+            _inputHistoryWindow = null;
             _floatingSettings.Dispose();
             _text.Dispose();
             foreach (var unbind in _unbind)
@@ -176,22 +169,6 @@ namespace GameConsole.UI
             _shortcutModifierMenu?.Close();
             _shortcutKeyMenu?.Close();
         }
-
-        // 清空仅作用于搜索历史, 不改动 Console 的命令输入历史.
-        private void ClearHistory()
-        {
-            Config.ClearCheatSearchHistory();
-            RefreshHistoryButtons();
-            _historyWindow?.Refresh();
-        }
-
-        private void ViewHistory()
-        {
-            _historyWindow ??= new ToolkitSearchHistoryWindow(_root, _viewHistory);
-            _historyWindow.Show();
-        }
-
-        private void RefreshHistoryButtons() => _clearHistory.SetEnabled(Config.CheatSearchHistory.Count > 0);
 
         // 复用窗口设置的即时通知及合并保存, 不触发重新构造页面.
         private void BindPanelOpacity(VisualElement root, ToolkitWindowSettings settings)
