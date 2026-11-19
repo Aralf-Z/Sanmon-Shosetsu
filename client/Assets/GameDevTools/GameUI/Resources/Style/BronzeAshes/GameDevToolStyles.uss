@@ -1151,18 +1151,32 @@ Button.search-history-entry:hover, Button.search-history-entry.search-history-ho
 .theme-shadow {
     display: flex;
     position: absolute;
-    left: -7px;
-    right: -7px;
-    top: -7px;
-    bottom: -7px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
     --dev-opacity-background: transparent;
     --dev-opacity-background-set: 1;
     background-color: var(--dev-opacity-background);
     background-image: url("WindowFrame.png");
+    -unity-background-scale-mode: stretch-to-fill;
     -unity-slice-left: 24;
     -unity-slice-right: 24;
     -unity-slice-top: 24;
     -unity-slice-bottom: 24;
+    -unity-slice-scale: 0.5;
+}
+
+.dev-window > .theme-shadow {
+    left: -7px;
+    right: -7px;
+    top: -7px;
+    bottom: -7px;
+    -unity-slice-scale: 1;
+}
+
+.search-history-popup > .theme-shadow {
+    display: none;
 }
 
 .theme-window-surface {
@@ -1904,7 +1918,7 @@ Button:disabled .preset-name {
     --dev-opacity-border-left-set: 1;
     border-left-color: var(--dev-opacity-border-left);
     border-radius: 1px;
-    padding: 10px;
+    padding: 16px;
 }
 
 .pinned-drag-preview {
@@ -2245,6 +2259,11 @@ Button:disabled .preset-name {
     --dev-opacity-border-left-set: 1;
     border-left-color: var(--dev-opacity-border-left);
     border-radius: 2px;
+}
+
+.help-dialog, .search-history-dialog {
+    padding: 16px;
+    overflow: hidden;
 }
 
 .toolkit-dialog-header {

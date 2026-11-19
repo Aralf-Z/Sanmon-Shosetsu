@@ -1052,6 +1052,7 @@ Button.search-history-entry:hover, Button.search-history-entry.search-history-ho
 
 .theme-dialog-surface {
     padding: 16px;
+    -unity-slice-scale: 0.75;
 }
 
 
@@ -1307,6 +1308,7 @@ Button:active, Button.selected, Button.selected:hover, Button.command-button-sel
     --dev-opacity-background: transparent;
     background-color: var(--dev-opacity-background);
     border-width: 0;
+    padding: 0;
 }
 
 .help-navigation {

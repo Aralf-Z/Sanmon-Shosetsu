@@ -4,7 +4,9 @@
             <ui:VisualElement class="theme-shadow" picking-mode="Ignore" />
             <ui:VisualElement class="theme-dialog-surface">
                 <ui:VisualElement name="helpHeader" class="toolkit-dialog-header">
-                    <ui:Label text="@loc:ui.HelpWindow.label1.text" class="section-title toolkit-dialog-title" picking-mode="Ignore" />
+                    <ui:VisualElement class="toolkit-dialog-heading" picking-mode="Ignore">
+                        <ui:Label text="@loc:ui.HelpWindow.label1.text" class="section-title toolkit-dialog-title" picking-mode="Ignore" />
+                    </ui:VisualElement>
                     <dev:ToolkitHeaderPattern class="window-header-pattern" picking-mode="Ignore" />
                     <ui:Button name="closeHelp" text="@loc:icon.close" tooltip="@loc:ui.HelpWindow.closeHelp.tooltip" class="window-control-button" />
                 </ui:VisualElement>
