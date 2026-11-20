@@ -18,15 +18,15 @@ namespace GameConsole.Implementor
             var presets = GetUntaggedTestPresets();
             var keywords = new[] { "alpha", "beta", "gamma" };
 
-            presets.Add(CreateTagTestPreset("duplicate_alpha", "重复标签 alpha", "重复标签"));
-            presets.Add(CreateTagTestPreset("duplicate_beta", "重复标签 beta", "重复标签"));
-            presets.Add(CreateTagTestPreset("combined_alpha", "完整逗号标签 alpha", "组合,A"));
-            presets.Add(CreateTagTestPreset("single_alpha", "逗号标签对照 alpha", "组合"));
-            presets.Add(CreateTagTestPreset("uppercase_alpha", "大写标签 alpha", "TagCase"));
-            presets.Add(CreateTagTestPreset("lowercase_beta", "小写标签 beta", "tagcase"));
-            presets.Add(CreateTagTestPreset("padded_alpha", "保留首尾空格 alpha", " 标签空格 "));
-            presets.Add(CreateTagTestPreset("unpadded_beta", "首尾空格对照 beta", "标签空格"));
-            presets.Add(CreateTagTestPreset("long_gamma", "超长标签 gamma", TAG_TEST_LONG_NAME));
+            presets.Add(CreateTagTestPreset("duplicate_alpha", "重复标签 alpha", ""));
+            presets.Add(CreateTagTestPreset("duplicate_beta", "重复标签 beta", ""));
+            presets.Add(CreateTagTestPreset("combined_alpha", "完整逗号标签 alpha", ""));
+            presets.Add(CreateTagTestPreset("single_alpha", "逗号标签对照 alpha", ""));
+            presets.Add(CreateTagTestPreset("uppercase_alpha", "大写标签 alpha", ""));
+            presets.Add(CreateTagTestPreset("lowercase_beta", "小写标签 beta", ""));
+            presets.Add(CreateTagTestPreset("padded_alpha", "保留首尾空格 alpha", "  "));
+            presets.Add(CreateTagTestPreset("unpadded_beta", "首尾空格对照 beta", ""));
+            presets.Add(CreateTagTestPreset("long_gamma", "超长标签 gamma", ""));
             for (var tagIndex = 1; tagIndex <= TAG_TEST_TAG_COUNT; tagIndex++)
             {
                 foreach (var keyword in keywords)

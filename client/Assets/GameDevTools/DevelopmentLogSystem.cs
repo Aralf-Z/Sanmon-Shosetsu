@@ -3,7 +3,7 @@ using RedSaw.CommandLineInterface;
 
 namespace GameConsole
 {
-    /// <summary> 独立于总控和界面的主线程日志采集, 缓存保留至本次运行结束. </summary>
+    /// <summary> 独立于总控和界面的主线程日志采集. </summary>
     internal static class DevelopmentLogSystem
     {
         internal static ConsoleLogStore Logs { get; } = new();
@@ -33,10 +33,12 @@ namespace GameConsole
 
         internal static void Shutdown()
         {
+            if (!_initialized) return;
+
+            _initialized = false;
             Application.logMessageReceived -= OnUnityLog;
             Application.quitting -= Shutdown;
-            _initialized = false;
-            Clear();
+            Logs.Release();
         }
 
         internal static string GetHexColor(LogType type) => type switch

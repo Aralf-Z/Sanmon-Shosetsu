@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using UnityEngine;
 using GameConsole.Extension;
@@ -10,6 +11,8 @@ namespace GameConsole
     public static partial class Config
     {
         public static event Action e_onChanged;
+
+        internal static ReadOnlyCollection<int> FloatingFrameTimeBaselineOptions { get; } = Array.AsReadOnly(new[] { DEFAULT_FLOATING_FRAME_TIME_BASELINE_FPS, 60, 120 });
 
         public static string MacroWaitForColor => Data.macroWaitForColor;
 
@@ -104,7 +107,7 @@ namespace GameConsole
 
         public static string UIFont
         {
-            get => Data.uiFont; set => Data.uiFont = NormalizeResourcePath(value);
+            get => Data.uiFont; set => Data.uiFont = NormalizeFontSelection(value);
         }
 
         /// <summary> 仅保存完成提交的语言代码. </summary>
@@ -210,6 +213,12 @@ namespace GameConsole
             set => Data.floatingMonitorBackgroundOpacity = NormalizeOpacity(value, DEFAULT_FLOATING_MONITOR_BACKGROUND_OPACITY);
         }
 
+        internal static int FloatingFrameTimeBaselineFps
+        {
+            get => Data.floatingFrameTimeBaselineFps;
+            set => Data.floatingFrameTimeBaselineFps = NormalizeFrameTimeBaseline(value);
+        }
+
         public static int FloatingLogLineCount
         {
             get => Data.floatingLogLineCount; set => Data.floatingLogLineCount = Mathf.Clamp(value, MIN_FLOATING_LOG_COUNT, MAX_FLOATING_LOG_COUNT);
@@ -267,7 +276,7 @@ namespace GameConsole
             data.panelOpacity = NormalizePanelOpacity(data.panelOpacity);
             data.wheelScrollSensitivity = NormalizeWheelScrollSensitivity(data.wheelScrollSensitivity);
             data.uiStyle = NormalizeResourcePath(data.uiStyle);
-            data.uiFont = NormalizeResourcePath(data.uiFont);
+            data.uiFont = NormalizeFontSelection(data.uiFont);
             data.uiLanguage = string.IsNullOrWhiteSpace(data.uiLanguage)
                 ? string.Empty
                 : data.uiLanguage.Trim();
@@ -286,6 +295,7 @@ namespace GameConsole
             data.cheatSearchHistoryCapacity = Mathf.Clamp(data.cheatSearchHistoryCapacity, MIN_CHEAT_SEARCH_HISTORY_CAPACITY, MAX_CHEAT_SEARCH_HISTORY_CAPACITY);
             NormalizeSearchHistory(data);
             data.floatingMonitorBackgroundOpacity = NormalizeOpacity(data.floatingMonitorBackgroundOpacity, DEFAULT_FLOATING_MONITOR_BACKGROUND_OPACITY);
+            data.floatingFrameTimeBaselineFps = NormalizeFrameTimeBaseline(data.floatingFrameTimeBaselineFps);
             data.floatingLogLineCount = Mathf.Clamp(data.floatingLogLineCount, MIN_FLOATING_LOG_COUNT, MAX_FLOATING_LOG_COUNT);
             data.floatingLogBackgroundOpacity = NormalizeOpacity(data.floatingLogBackgroundOpacity, DEFAULT_FLOATING_BACKGROUND_OPACITY);
             data.floatingLogTextOpacity = NormalizeOpacity(data.floatingLogTextOpacity, DEFAULT_FLOATING_TEXT_OPACITY);
@@ -317,6 +327,10 @@ namespace GameConsole
             return true;
         }
 
+        private static int NormalizeFrameTimeBaseline(int value) => FloatingFrameTimeBaselineOptions.Contains(value)
+            ? value
+            : DEFAULT_FLOATING_FRAME_TIME_BASELINE_FPS;
+
         // 防止非法浮点值传入颜色和布局.
         private static float NormalizeOpacity(float value, float fallback)
         {
@@ -338,6 +352,18 @@ namespace GameConsole
         private static string NormalizeMainTagger(string value) => value == "console" || value == "cheat" || value == "macro" || value == "option"
             ? value
             : defaultMainTagger;
+
+        internal static bool IsExternalFont(string key) => key?.StartsWith(EXTERNAL_FONT_PREFIX, StringComparison.Ordinal) == true;
+
+        private static string NormalizeFontSelection(string value)
+        {
+            var key = value?.Trim();
+            if (!IsExternalFont(key)) return NormalizeResourcePath(key);
+
+            var name = key.Substring(EXTERNAL_FONT_PREFIX.Length).Trim();
+
+            return name.Length == 0 ? string.Empty : EXTERNAL_FONT_PREFIX + name;
+        }
 
         // 资源选择和失效回退由 Schema 处理, 此处仅规范路径格式.
         private static string NormalizeResourcePath(string value) => string.IsNullOrWhiteSpace(value)

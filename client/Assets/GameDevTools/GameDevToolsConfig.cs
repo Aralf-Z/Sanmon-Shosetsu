@@ -62,6 +62,8 @@ namespace GameConsole
 
         public float floatingMonitorBackgroundOpacity;
 
+        public int floatingFrameTimeBaselineFps;
+
         public int floatingLogLineCount;
 
         public float floatingLogBackgroundOpacity;
@@ -105,6 +107,7 @@ namespace GameConsole
             floatingShowLowFps = true;
             floatingShowFrameTimeGraph = false;
             floatingMonitorBackgroundOpacity = Config.DEFAULT_FLOATING_MONITOR_BACKGROUND_OPACITY;
+            floatingFrameTimeBaselineFps = Config.DEFAULT_FLOATING_FRAME_TIME_BASELINE_FPS;
             floatingLogLineCount = Config.DEFAULT_FLOATING_LOG_COUNT;
             floatingLogBackgroundOpacity = Config.DEFAULT_FLOATING_BACKGROUND_OPACITY;
             floatingLogTextOpacity = Config.DEFAULT_FLOATING_TEXT_OPACITY;

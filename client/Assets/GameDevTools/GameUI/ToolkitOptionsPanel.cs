@@ -247,7 +247,7 @@ namespace GameConsole.UI
             _refresh.Add(refresh);
         }
 
-        // 字体按资源键选择, 异步加载期间不改变旧界面的布局.
+        // 字体按登记键选择, 异步加载期间保留当前外观.
         private void BindFont(VisualElement root)
         {
             var field = ToolkitView.Require<Button>(root, "uiFont");
@@ -257,7 +257,7 @@ namespace GameConsole.UI
             title.parseEscapeSequences = false;
             _text.Track(field.parent.Q<Label>(className: "unity-base-field__label"));
             _text.Track(title);
-            Action refresh = () => _text.SetText(title, ToolkitFactory.GetFontName(Config.UIFont));
+            Action refresh = () => _text.SetText(title, ToolkitFactory.GetFontName(ToolkitFactory.ActiveFont));
 
             refresh();
             Action click = () =>

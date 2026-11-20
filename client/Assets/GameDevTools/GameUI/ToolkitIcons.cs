@@ -118,7 +118,7 @@ namespace GameConsole.UI
 
         // 关闭 Domain Reload 时也不保留旧界面和上一次运行的缺失结果.
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        private static void ResetSession()
+        internal static void ReleaseCache()
         {
             ToolkitMixedText.Reset();
             _cache.Clear();

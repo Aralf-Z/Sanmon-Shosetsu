@@ -18,12 +18,21 @@ namespace GameConsole.UI
         /// <summary> 当前已提交的风格资源路径, 准备中的选择不会改变此值. </summary>
         public static string ActiveStyle { get; private set; } = string.Empty;
 
-        /// <summary> 当前已提交的字体路径, 准备中的选择不会改变此值. </summary>
+        /// <summary> 当前已提交的字体键, 准备中的选择不会改变此值. </summary>
         public static string ActiveFont { get; private set; } = string.Empty;
 
         internal static IReadOnlyList<ToolkitStyleEntry> Styles => _styles;
 
-        internal static IReadOnlyList<ToolkitFontEntry> Fonts => _fonts;
+        internal static IReadOnlyList<ToolkitFontEntry> Fonts => _externalFonts.Count == 0
+            ? _fonts
+            : _fonts.Concat(_externalFonts.Where(entry => entry.Value != null)
+                .Select(entry => new ToolkitFontEntry
+                {
+                    name = entry.Key.Substring(Config.EXTERNAL_FONT_PREFIX.Length),
+                    path = entry.Key
+                })).ToArray();
+
+        private static readonly Dictionary<string, Font> _externalFonts = new(StringComparer.Ordinal);
 
         private static ThemeStyleSheet _sharedTheme;
 
@@ -69,12 +78,17 @@ namespace GameConsole.UI
             }
 
             var languageChanged = Config.UILanguage != ToolkitLocalization.ActiveLanguage;
+            var saveFont = !Config.IsExternalFont(Config.UIFont) && Config.UIFont != ActiveFont;
 
             Config.UILanguage = ToolkitLocalization.ActiveLanguage;
-            if (languageChanged || Config.UIStyle != selected || Config.UIFont != ActiveFont)
+            if (languageChanged || Config.UIStyle != selected || saveFont)
             {
                 Config.UIStyle = selected;
-                Config.UIFont = ActiveFont;
+                if (saveFont)
+                {
+                    Config.UIFont = ActiveFont;
+                }
+
                 Config.Save();
             }
 
@@ -212,6 +226,13 @@ namespace GameConsole.UI
 
         internal static string ResolveFontPath(string path)
         {
+            if (Config.IsExternalFont(path))
+            {
+                return _externalFonts.TryGetValue(path, out var font) && font != null
+                    ? path
+                    : _fonts.FirstOrDefault()?.path ?? string.Empty;
+            }
+
             path = NormalizeStylePath(path);
             return _fonts.Any(entry => entry.path == path)
                 ? path
@@ -221,9 +242,46 @@ namespace GameConsole.UI
         internal static string GetFontName(string path)
         {
             var selected = ResolveFontPath(path);
+            if (Config.IsExternalFont(selected)) return selected.Substring(Config.EXTERNAL_FONT_PREFIX.Length);
+
             var entry = _fonts.FirstOrDefault(value => value.path == selected);
 
             return entry?.name ?? string.Empty;
+        }
+
+        internal static bool TryRegisterFont(string key, Font font)
+        {
+            if (_externalFonts.TryGetValue(key, out var existing)) return existing == font;
+
+            _externalFonts.Add(key, font);
+            return true;
+        }
+
+        internal static void ReleaseViewResources(bool keepRegisteredFonts)
+        {
+            if (!keepRegisteredFonts)
+            {
+                _externalFonts.Clear();
+            }
+
+            _sharedTheme = null;
+            _sharedPanel = null;
+            _layoutSheet = null;
+            _controlsSheet = null;
+            _styleSheet = null;
+            _styles = Array.Empty<ToolkitStyleEntry>();
+            _fonts = Array.Empty<ToolkitFontEntry>();
+            _font = null;
+            ActiveStyle = string.Empty;
+            ActiveFont = string.Empty;
+            _templates.Clear();
+            _fontCache.Clear();
+            _appearanceCache.Clear();
+            ReleaseTrackedMenus();
+            ToolkitIcons.ReleaseCache();
+            ToolkitLocalization.ReleaseCache();
+            ToolkitHelpContents.ReleaseCache();
+            ToolkitRuntimeFonts.Release();
         }
 
         internal static void ApplyFont(VisualElement root)
@@ -317,12 +375,12 @@ namespace GameConsole.UI
             }
         }
 
-        // 优先所选字体, 缺失时仅依配置顺序尝试, 不回退到未登记字体.
+        // 优先所选字体, 缺失时按 Schema 顺序尝试内置字体.
         private static bool LoadFont(string selected)
         {
             foreach (var path in CandidatePaths(ResolveFontPath(selected), _fonts.Select(entry => entry.path)))
             {
-                var font = Resources.Load<Font>(path);
+                var font = Config.IsExternalFont(path) ? _externalFonts[path] : Resources.Load<Font>(path);
 
                 if (font == null)
                 {

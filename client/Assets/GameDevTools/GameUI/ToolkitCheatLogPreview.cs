@@ -98,6 +98,20 @@ namespace GameConsole.UI
             }
         }
 
+        internal void ResetLogs()
+        {
+            foreach (var line in _lines)
+            {
+                _text.Clear(line);
+            }
+
+            _logVersion = -1;
+            if (_visible)
+            {
+                RefreshLogs();
+            }
+        }
+
         internal static string PreviewLine(IReadOnlyList<string> logs, int lineCount, int index)
         {
             lineCount = Mathf.Clamp(lineCount, Config.MIN_CHEAT_LOG_COUNT, Config.MAX_CHEAT_LOG_COUNT);

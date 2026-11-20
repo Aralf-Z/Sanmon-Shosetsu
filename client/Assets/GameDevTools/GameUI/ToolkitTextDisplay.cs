@@ -38,6 +38,13 @@ namespace GameConsole.UI
             entry.dirty = true;
         }
 
+        internal void Clear(TextElement element)
+        {
+            SetText(element, string.Empty);
+            _entries[element].rendered = string.Empty;
+            ToolkitMixedText.SetText(element, string.Empty);
+        }
+
         internal void Untrack(TextElement element)
         {
             if (!_entries.TryGetValue(element, out var entry)) return;

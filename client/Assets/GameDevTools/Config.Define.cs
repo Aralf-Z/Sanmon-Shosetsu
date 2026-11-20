@@ -74,6 +74,10 @@ namespace GameConsole
 
         internal const float DEFAULT_FLOATING_MONITOR_BACKGROUND_OPACITY = .5f;
 
+        internal const int DEFAULT_FLOATING_FRAME_TIME_BASELINE_FPS = 30;
+
+        internal const string EXTERNAL_FONT_PREFIX = "external:";
+
         /// <summary> 百分比控件下限. </summary>
         public const int MIN_PERCENTAGE = 0;
 

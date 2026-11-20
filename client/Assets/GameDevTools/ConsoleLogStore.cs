@@ -248,6 +248,22 @@ namespace GameConsole
             _ => 3
         };
 
+        internal void Release()
+        {
+            Clear();
+            foreach (var records in _records)
+            {
+                records.Capacity = 0;
+            }
+
+            foreach (var groups in _groups)
+            {
+                groups.Capacity = 0;
+            }
+
+            _latest.Capacity = 0;
+        }
+
         private static List<T>[] CreateIndexes<T>()
         {
             var indexes = new List<T>[(int)ConsoleLogFilter.All + 1];

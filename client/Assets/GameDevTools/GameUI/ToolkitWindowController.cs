@@ -20,6 +20,8 @@ namespace GameConsole.UI
         /// <summary> 只更新浮标设置和空日志提示, 不改变显示状态. </summary>
         internal void RefreshLanguage() => _floatingPreview.RefreshLanguage();
 
+        internal void ResetPreviewLogs() => _floatingPreview.ResetLogs();
+
         public Rect WindowBounds => _bounds;
 
         public Rect FloatingBounds => new(_floatingPosition, FloatingSize);

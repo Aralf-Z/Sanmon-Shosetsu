@@ -93,6 +93,21 @@ namespace GameConsole.UI
             }
         }
 
+        internal int FrameTimeBaselineFps
+        {
+            get => Config.FloatingFrameTimeBaselineFps;
+            set
+            {
+                var previous = FrameTimeBaselineFps;
+
+                Config.FloatingFrameTimeBaselineFps = value;
+                if (previous != FrameTimeBaselineFps)
+                {
+                    MarkChanged();
+                }
+            }
+        }
+
         public int LogLineCount
         {
             get => Config.FloatingLogLineCount;

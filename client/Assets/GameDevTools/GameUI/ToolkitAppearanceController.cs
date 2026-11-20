@@ -25,6 +25,10 @@ namespace GameConsole.UI
 
         private ToolkitLanguagePack _preparedLanguage;
 
+        private string _fontToSave;
+
+        private string _registeredFontToRestore;
+
         private int _settleFrame = -1;
 
         private bool _disposed;
@@ -37,7 +41,29 @@ namespace GameConsole.UI
 
         internal bool RequestStyle(string path) => Request(path, ToolkitFactory.ActiveFont);
 
-        internal bool RequestFont(string path) => Request(ToolkitFactory.ActiveStyle, path);
+        internal bool RequestFont(string path)
+        {
+            if (_disposed || IsChanging) return false;
+
+            var selected = ToolkitFactory.ResolveFontPath(path);
+            if (Config.IsExternalFont(path) && selected != path) return false;
+
+            if (selected != ToolkitFactory.ActiveFont) return Request(ToolkitFactory.ActiveStyle, selected, selected);
+
+            if (Config.UIFont == selected) return false;
+
+            Config.UIFont = selected;
+            Config.Save();
+            return true;
+        }
+
+        internal void RestoreRegisteredFont(string key)
+        {
+            if (Config.UIFont == key && ToolkitFactory.ActiveFont != key)
+            {
+                _registeredFontToRestore = key;
+            }
+        }
 
         internal bool RequestLanguage(string code)
         {
@@ -55,7 +81,20 @@ namespace GameConsole.UI
 
         internal void Tick()
         {
-            if (_disposed || !IsChanging) return;
+            if (_disposed) return;
+
+            if (!IsChanging && _registeredFontToRestore != null)
+            {
+                var key = _registeredFontToRestore;
+
+                _registeredFontToRestore = null;
+                if (Config.UIFont == key)
+                {
+                    Request(ToolkitFactory.ActiveStyle, key);
+                }
+            }
+
+            if (!IsChanging) return;
 
             if (_settleFrame >= 0)
             {
@@ -101,7 +140,11 @@ namespace GameConsole.UI
                 _prepared = null;
                 _preparedLanguage = null;
                 Config.UIStyle = ToolkitFactory.ActiveStyle;
-                Config.UIFont = ToolkitFactory.ActiveFont;
+                if (_fontToSave == ToolkitFactory.ActiveFont || !Config.IsExternalFont(Config.UIFont))
+                {
+                    Config.UIFont = ToolkitFactory.ActiveFont;
+                }
+
                 Config.Save();
                 _settleFrame = Time.frameCount + 2;
             }
@@ -126,7 +169,7 @@ namespace GameConsole.UI
             e_onChanging = null;
         }
 
-        private bool Request(string style, string font)
+        private bool Request(string style, string font, string fontToSave = null)
         {
             if (_disposed || IsChanging) return false;
 
@@ -137,6 +180,7 @@ namespace GameConsole.UI
             _prepared = null;
             _preparedLanguage = null;
             _waiting = null;
+            _fontToSave = fontToSave;
             _settleFrame = -1;
             _preparation = ToolkitFactory.PrepareAppearance(style, font, resources => _prepared = resources);
             IsChanging = true;
@@ -152,6 +196,7 @@ namespace GameConsole.UI
             _prepared = null;
             _preparedLanguage = null;
             _waiting = null;
+            _fontToSave = null;
             _settleFrame = -1;
             var notify = IsChanging;
 

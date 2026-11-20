@@ -21,7 +21,7 @@
   "help.Window.feature4.body": "拖动右下角调整窗口大小, 松手后提交尺寸. 窗口宽高分别限制为视口对应尺寸的 25% 到 100%.\n\n点击标题栏的 {icon.minimize} 切换为{ui.floating}. {ui.floating}限制在视口内, 靠近边缘松手可以停靠.\n\n位置与尺寸只保留在当前运行期间, 不写入配置文件.",
   "help.Console.title": "{ui.console}",
   "help.Console.feature1.title": "输入与补全",
-  "help.Console.feature1.body": "在底部输入框填写{ui.console}命令. Enter 用于补全候选或执行当前输入, 上下方向键用于历史或候选导航.\n\nCtrl+C 可以聚焦{ui.console}输入框; 选择堆栈文字时保留原生复制行为. Esc 释放输入焦点.\n\n提交的命令回显, 执行结果和工具异常统一归入 Dev, 保留各自颜色与实际堆栈.",
+  "help.Console.feature1.body": "在底部输入框填写{ui.console}命令. Enter 用于补全候选或执行当前输入, 上下方向键用于历史或候选导航.\n\n堆栈文字可以选中并复制.\n\n提交的命令回显, 执行结果和工具异常统一归入 Dev, 保留各自颜色与实际堆栈.",
   "help.Console.feature2.title": "组合筛选",
   "help.Console.feature2.body": "Dev, 日志, 警告, 错误按钮分别控制对应类型是否显示, 可以任意组合.\n\n只有 Unity 接收通路的日志按 Log, Warning, Error 分类, Unity 的 Exception 和 Assert 归入错误. 工具 Print, 命令结果, 工具异常和宏提示归入 Dev; 命令内部调用 Debug.Log 仍属于 Unity 日志.\n\n全部选中显示所有类型, 全部取消则不显示任何类型.\n\n筛选只影响 {ui.console}, 不影响 {ui.cheat} 和{ui.floating}的最新日志预览.",
   "help.Console.feature3.title": "图标与时间戳",

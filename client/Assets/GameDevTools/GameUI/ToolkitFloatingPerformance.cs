@@ -12,7 +12,6 @@ namespace GameConsole.UI
         private const float MIN_GRAPH_WIDTH = 56f;
         private const float PANEL_GAP = 8f;
         private const float GRAPH_LABEL_HEIGHT = 14f;
-        private const float MIN_GRAPH_MAXIMUM = 1000f / 30f;
         private const double TEXT_INTERVAL = .25d;
         private const double GRAPH_INTERVAL = .1d;
 
@@ -34,11 +33,13 @@ namespace GameConsole.UI
         private double _nextGraphUpdate;
         private float[] _peaks = Array.Empty<float>();
         private int _peakCount;
-        private float _graphMaximum = MIN_GRAPH_MAXIMUM;
+        private float _baselineMilliseconds;
+        private float _graphMaximum;
 
         internal ToolkitFloatingPerformance(VisualElement root, ToolkitWindowSettings settings)
         {
             _settings = settings;
+            _baselineMilliseconds = 1000f / settings.FrameTimeBaselineFps;
             _panel = ToolkitView.Require<VisualElement>(root, "floatingPerformance");
             _values = ToolkitView.Require<VisualElement>(_panel, "floatingFpsValues");
             _values.style.width = METRICS_WIDTH;
@@ -50,7 +51,7 @@ namespace GameConsole.UI
             _graph.generateVisualContent += DrawGraph;
             _graph.RegisterCallback<GeometryChangedEvent>(OnGraphGeometry);
             Application.focusChanged += OnFocusChanged;
-            _settings.e_onChanged += RefreshBackgroundOpacity;
+            _settings.e_onChanged += OnSettingsChanged;
             SetMetrics(settings.FrameMetrics);
         }
 
@@ -179,7 +180,7 @@ namespace GameConsole.UI
 
         public void Dispose()
         {
-            _settings.e_onChanged -= RefreshBackgroundOpacity;
+            _settings.e_onChanged -= OnSettingsChanged;
             Application.focusChanged -= OnFocusChanged;
             _graph.UnregisterCallback<GeometryChangedEvent>(OnGraphGeometry);
             _graph.generateVisualContent -= DrawGraph;
@@ -187,6 +188,17 @@ namespace GameConsole.UI
         }
 
         private bool Has(FloatingFrameMetrics metrics) => (_metrics & metrics) != 0;
+
+        private void OnSettingsChanged()
+        {
+            RefreshBackgroundOpacity();
+            var baseline = 1000f / _settings.FrameTimeBaselineFps;
+
+            if (_baselineMilliseconds == baseline) return;
+
+            _baselineMilliseconds = baseline;
+            _nextGraphUpdate = 0d;
+        }
 
         private void RefreshBackgroundOpacity()
         {
@@ -247,7 +259,9 @@ namespace GameConsole.UI
 
             var peak = _samples.FillPeaks(now, _peaks, _peakCount);
 
-            _graphMaximum = Mathf.Max(MIN_GRAPH_MAXIMUM, Mathf.Ceil(peak));
+            _graphMaximum = peak > _baselineMilliseconds && !Mathf.Approximately(peak, _baselineMilliseconds)
+                ? Mathf.Ceil(peak)
+                : _baselineMilliseconds;
             _scale.text = peak > 0f ? _graphMaximum.ToString("0.#") + " ms" : string.Empty;
             _graph.MarkDirtyRepaint();
         }

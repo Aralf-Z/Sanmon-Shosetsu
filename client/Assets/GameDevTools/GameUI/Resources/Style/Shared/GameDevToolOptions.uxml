@@ -116,6 +116,7 @@
                         <ui:Toggle name="floatingAverageFps" label="@loc:floating.frameMonitor.average" class="setting-row" />
                         <ui:Toggle name="floatingLowFps" label="@loc:floating.frameMonitor.low" class="setting-row" />
                         <ui:Toggle name="floatingFrameTimeGraphToggle" label="@loc:floating.frameMonitor.graph" class="setting-row" />
+                        <ui:SliderInt name="floatingFrameTimeBaseline" label="@loc:floating.frameMonitor.baseline" tooltip="@loc:floating.frameMonitor.baseline.tooltip" class="setting-row floating-setting-slider dev-horizontal-slider" />
                         <ui:SliderInt name="floatingMonitorBackgroundOpacity" label="@loc:floating.frameMonitor.backgroundOpacity" class="setting-row floating-setting-slider dev-horizontal-slider" />
                     </ui:VisualElement>
                 </ui:VisualElement>

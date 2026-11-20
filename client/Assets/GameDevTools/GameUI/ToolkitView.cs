@@ -194,6 +194,8 @@ namespace GameConsole.UI
             _windowSettings.Bind();
         }
 
+        internal void RestoreRegisteredFont(string key) => _appearance.RestoreRegisteredFont(key);
+
         public void RestoreWindow()
         {
             if (_disposed || !_isOpen) return;
@@ -220,7 +222,7 @@ namespace GameConsole.UI
             _windowSettings.Tick();
             _help.Tick();
             _windowController.Tick(_help.BlocksInputThisFrame);
-            _input.Capture(_renderer.IsVisible && !_help.BlocksInputThisFrame, _renderer.IsInputFieldFocus, _renderer.IsLogDetailFocused);
+            _input.Capture(_renderer.IsVisible && !_help.BlocksInputThisFrame, _renderer.IsInputFieldFocus);
             _renderer.Tick();
             _cheats.Tick();
             _macros?.Tick();
@@ -230,6 +232,13 @@ namespace GameConsole.UI
                 _cheatLogs.Tick();
                 _text.Tick();
             }
+        }
+
+        internal void ResetLogViews()
+        {
+            _renderer.ResetLogView();
+            _cheatLogs.ResetLogs();
+            _windowController.ResetPreviewLogs();
         }
 
         public void Dispose()

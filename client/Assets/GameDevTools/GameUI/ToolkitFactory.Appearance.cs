@@ -79,7 +79,11 @@ namespace GameConsole.UI
             foreach (var path in CandidatePaths(ResolveFontPath(font), _fonts.Select(entry => entry.path)))
             {
                 _fontCache.TryGetValue(path, out loadedFont);
-                if (loadedFont == null)
+                if (Config.IsExternalFont(path))
+                {
+                    _externalFonts.TryGetValue(path, out loadedFont);
+                }
+                else if (loadedFont == null)
                 {
                     var request = Resources.LoadAsync<Font>(path);
 
@@ -162,13 +166,13 @@ namespace GameConsole.UI
             }
 
             style = NormalizeStylePath(style);
-            font = NormalizeStylePath(font);
+            font = Config.IsExternalFont(font) ? font : NormalizeStylePath(font);
             if (style == null || !_styles.Any(entry => entry.path == style))
             {
                 throw new InvalidOperationException(ToolkitLocalization.Get("ui.Factory_Appearance.PrepareAppearance"));
             }
 
-            if (font == null || !_fonts.Any(entry => entry.path == font))
+            if (font == null || ResolveFontPath(font) != font)
             {
                 throw new InvalidOperationException(ToolkitLocalization.Get("ui.Factory_Appearance.PrepareAppearance.2"));
             }
@@ -186,7 +190,7 @@ namespace GameConsole.UI
                 loadedFont = _font;
             }
 
-            var fontRequest = loadedFont != null
+            var fontRequest = loadedFont != null || Config.IsExternalFont(font)
                 ? null
                 : Resources.LoadAsync<Font>(font);
 
@@ -358,6 +362,26 @@ namespace GameConsole.UI
             root.RegisterCallback<DetachFromPanelEvent>(MenuDetached);
         }
 
+        private static void ReleaseTrackedMenus()
+        {
+            foreach (var reference in _menuRoots)
+            {
+                if (reference.TryGetTarget(out var root))
+                {
+                    UntrackMenu(root);
+                }
+            }
+
+            _menuRoots.Clear();
+        }
+
+        private static void UntrackMenu(VisualElement root)
+        {
+            ReleaseMenuOpacity(root);
+            root.UnregisterCallback<AttachToPanelEvent>(MenuAttached);
+            root.UnregisterCallback<DetachFromPanelEvent>(MenuDetached);
+        }
+
         private static void MenuAttached(AttachToPanelEvent evt)
         {
             var root = evt.target as VisualElement;
@@ -373,9 +397,7 @@ namespace GameConsole.UI
 
             if (root == null) return;
 
-            ReleaseMenuOpacity(root);
-            root.UnregisterCallback<AttachToPanelEvent>(MenuAttached);
-            root.UnregisterCallback<DetachFromPanelEvent>(MenuDetached);
+            UntrackMenu(root);
             _menuRoots.RemoveAll(reference => !reference.TryGetTarget(out var tracked) || ReferenceEquals(tracked, root));
         }
 

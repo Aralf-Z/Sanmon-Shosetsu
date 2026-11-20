@@ -21,6 +21,8 @@ namespace GameConsole.UI
 
         private readonly SliderInt _monitorBackground;
 
+        private readonly SliderInt _frameTimeBaseline;
+
         private readonly string _countTitle; // 保留 UXML 中可编辑的滑动条标题.
 
         private readonly string _backgroundTitle;
@@ -78,6 +80,11 @@ namespace GameConsole.UI
                 _monitorBackground.highValue = Config.MAX_PERCENTAGE;
                 _labels.Track(_monitorBackground.labelElement);
                 BindInteger(_monitorBackground, value => _settings.MonitorBackgroundOpacity = value / (float)Config.MAX_PERCENTAGE);
+                _frameTimeBaseline = ToolkitView.Require<SliderInt>(root, "floatingFrameTimeBaseline");
+                _frameTimeBaseline.lowValue = 0;
+                _frameTimeBaseline.highValue = Config.FloatingFrameTimeBaselineOptions.Count - 1;
+                _labels.Track(_frameTimeBaseline.labelElement);
+                BindInteger(_frameTimeBaseline, index => _settings.FrameTimeBaselineFps = Config.FloatingFrameTimeBaselineOptions[index]);
             }
 
             BindInteger(_count, value => _settings.LogLineCount = value);
@@ -130,6 +137,12 @@ namespace GameConsole.UI
 
                 _monitorBackground.SetValueWithoutNotify(opacity);
                 _labels.SetText(_monitorBackground.labelElement, ToolkitLocalization.Format("setting.percentValue", ("name", (object)title), ("value", (object)opacity)));
+
+                var baseline = _settings.FrameTimeBaselineFps;
+                var baselineTitle = ToolkitLocalization.Get("floating.frameMonitor.baseline");
+
+                _frameTimeBaseline.SetValueWithoutNotify(Config.FloatingFrameTimeBaselineOptions.IndexOf(baseline));
+                _labels.SetText(_frameTimeBaseline.labelElement, ToolkitLocalization.Format("setting.value", ("name", (object)baselineTitle), ("value", (object)$"{baseline} FPS")));
             }
         }
 

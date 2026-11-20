@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -13,37 +14,55 @@ namespace GameConsole.Extension
     internal static class MacroAwaiter
     {
         /// <summary> 返回可重复观察的 Task, 未等待的调用也会报告异步异常. </summary>
-        internal static Task ObserveAsync(object value, MonoBehaviour owner, Action<string> output)
+        internal static Task ObserveAsync(object value, MonoBehaviour owner, CancellationToken lifetime, Action<string> output)
         {
-            var task = CompleteAsync(value, owner);
+            var task = CompleteAsync(value, owner, lifetime);
 
             ReportAsync(task, output)
                 .Forget();
             return task;
         }
 
-        private static async Task CompleteAsync(object value, MonoBehaviour owner)
+        private static async Task CompleteAsync(object value, MonoBehaviour owner, CancellationToken lifetime)
         {
+            lifetime.ThrowIfCancellationRequested();
             if (value == null) return;
 
             if (value is Task task)
             {
-                await task;
+                await task.AsUniTask().AttachExternalCancellation(lifetime);
                 return;
             }
 
             if (value is UniTask uniTask)
             {
-                await uniTask;
+                await uniTask.AttachExternalCancellation(lifetime);
                 return;
             }
 
             if (value is IEnumerator routine)
             {
                 var completion = new TaskCompletionSource<bool>();
+                var guarded = GuardRoutine(routine, completion);
+                var coroutine = owner.StartCoroutine(guarded);
 
-                owner.StartCoroutine(GuardRoutine(routine, completion));
-                await completion.Task;
+                try
+                {
+                    await completion.Task.AsUniTask().AttachExternalCancellation(lifetime);
+                }
+                finally
+                {
+                    if (lifetime.IsCancellationRequested)
+                    {
+                        if (owner != null && coroutine != null)
+                        {
+                            owner.StopCoroutine(coroutine);
+                        }
+
+                        (guarded as IDisposable)?.Dispose();
+                    }
+                }
+
                 return;
             }
 
@@ -64,7 +83,7 @@ namespace GameConsole.Extension
 
             while (!(bool)completed.GetValue(awaiter))
             {
-                await UniTask.Yield(owner.GetCancellationTokenOnDestroy());
+                await UniTask.Yield(lifetime);
             }
 
             getResult.Invoke(awaiter, null);

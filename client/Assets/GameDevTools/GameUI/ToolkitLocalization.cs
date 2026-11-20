@@ -277,9 +277,9 @@ namespace GameConsole
             }
         }
 
-        // 关闭 Domain Reload 时也清理上一次 Play 的语言缓存和显示订阅, 不触及日志.
+        // 关闭 Domain Reload 时也清理上一次 Play 的语言缓存和显示订阅.
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        private static void ResetSession()
+        internal static void ReleaseCache()
         {
             _cache.Clear();
             _reported.Clear();

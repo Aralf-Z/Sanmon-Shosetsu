@@ -16,14 +16,13 @@ namespace GameConsole.UI
 
         static ToolkitRuntimeFonts()
         {
-            // TextCore 的共享生成器会暂存上一份字体, 关闭窗口时不能提前销毁其图集.
-            Application.quitting += DisposeAll;
+            Application.quitting += Release;
 #if UNITY_EDITOR
-            UnityEditor.AssemblyReloadEvents.beforeAssemblyReload += DisposeAll;
+            UnityEditor.AssemblyReloadEvents.beforeAssemblyReload += Release;
 #endif
         }
 
-        /// <summary> 显式绑定 SDF FontAsset, 所有运行时图集页均保留到程序集卸载或应用退出. </summary>
+        /// <summary> 显式绑定 SDF FontAsset, 图集随已绑定的界面一同释放. </summary>
         internal static FontAsset Get(Font source)
         {
             if (source == null)
@@ -57,7 +56,7 @@ namespace GameConsole.UI
             return entry.asset;
         }
 
-        private static void DisposeAll()
+        internal static void Release()
         {
             foreach (var entry in _fonts.Values)
             {

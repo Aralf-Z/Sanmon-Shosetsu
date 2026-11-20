@@ -72,6 +72,8 @@ namespace GameConsole.Extension
 
         private CancellationTokenSource _execution; // 仅取消等待和后续调度.
 
+        private readonly CancellationTokenSource _lifetime = new();
+
         private bool _disposed; // 防止异步完成后再次访问已销毁窗口.
 
         public MacroSystem(CommandSystem commands, MonoBehaviour owner, Action<string> output)
@@ -203,11 +205,27 @@ namespace GameConsole.Extension
 
         public void Dispose()
         {
+            if (_disposed) return;
+
             _disposed = true;
             _releaseRunner();
-            Stop();
             e_onChanged = null;
             e_onStatusChanged = null;
+            try
+            {
+                Stop();
+            }
+            finally
+            {
+                try
+                {
+                    _lifetime.Cancel();
+                }
+                finally
+                {
+                    _lifetime.Dispose();
+                }
+            }
         }
 
         private void AddBuiltIn(string id, string name, string desc, string body)
@@ -229,6 +247,7 @@ namespace GameConsole.Extension
         {
             var line = 0;
             var remaining = 0;
+            var lifetime = _lifetime.Token;
 
             try
             {
@@ -266,7 +285,7 @@ namespace GameConsole.Extension
                     else
                     {
                         var result = _commands.vm.ExecuteRoot(step.tree);
-                        var completion = MacroAwaiter.ObserveAsync(result, _owner, message => _output(ToolkitLocalization.Format("ui.MacroSystem.ExecuteAsync.2", ("p0", (object)(name)), ("p1", (object)(step.line)), ("p2", (object)(message)))));
+                        var completion = MacroAwaiter.ObserveAsync(result, _owner, lifetime, message => _output(ToolkitLocalization.Format("ui.MacroSystem.ExecuteAsync.2", ("p0", (object)(name)), ("p1", (object)(step.line)), ("p2", (object)(message)))));
 
                         if (step.wait)
                         {

@@ -10,9 +10,9 @@ namespace GameConsole.UI
 
         public bool MoveDown { get; private set; }
 
-        public bool Focus { get; private set; }
+        public bool Focus => false;
 
-        public bool QuitFocus { get; private set; }
+        public bool QuitFocus => false;
 
         public bool ShowOrHide => false;
 
@@ -22,18 +22,14 @@ namespace GameConsole.UI
             Reset();
             if (!visible) return;
 
-            Focus = !focused && !detailFocused && UnityEngine.Input.GetKey(KeyCode.LeftControl) && UnityEngine.Input.GetKeyDown(KeyCode.C);
             MoveUp = focused && UnityEngine.Input.GetKeyDown(KeyCode.UpArrow);
             MoveDown = focused && UnityEngine.Input.GetKeyDown(KeyCode.DownArrow);
-            QuitFocus = focused && UnityEngine.Input.GetKeyDown(KeyCode.Escape);
         }
 
         public void Reset()
         {
             MoveUp = false;
             MoveDown = false;
-            Focus = false;
-            QuitFocus = false;
         }
     }
 }

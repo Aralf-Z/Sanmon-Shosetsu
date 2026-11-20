@@ -124,6 +124,14 @@ namespace GameConsole
             _inputHistory = null;
         }
 
+        internal static void ReleaseSnapshot()
+        {
+            if (_historySavePending) return;
+
+            _document = null;
+            _backupUnreadableFile = false;
+        }
+
         internal static void ClearInputHistory()
         {
             if (_inputHistory?.Clear() == true)

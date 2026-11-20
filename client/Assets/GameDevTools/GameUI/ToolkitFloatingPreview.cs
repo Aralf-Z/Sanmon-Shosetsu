@@ -128,6 +128,20 @@ namespace GameConsole.UI
             RefreshLogs();
         }
 
+        internal void ResetLogs()
+        {
+            foreach (var label in _labels)
+            {
+                _text.Clear(label);
+            }
+
+            _logVersion = -1;
+            if (RefreshLogs())
+            {
+                ApplyLayout();
+            }
+        }
+
         public void Tick(bool keyboardBlocked = false)
         {
             if (_paletteVersion != ToolkitFactory.AppearanceVersion)

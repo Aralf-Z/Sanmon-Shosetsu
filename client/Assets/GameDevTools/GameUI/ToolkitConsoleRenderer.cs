@@ -319,8 +319,7 @@ namespace GameConsole.UI
         public void Clear()
         {
             _buffer.Store.Clear();
-            _selectedId = 0;
-            ResetRange();
+            ResetLogView();
         }
 
         public void Output(string msg)
@@ -343,7 +342,13 @@ namespace GameConsole.UI
 
         public void OutputLog(ConsoleLogRecord record)
         {
-            if (!_disposed)
+            if (_disposed) return;
+
+            if (ReferenceEquals(_buffer.Store, DevelopmentLogSystem.Logs))
+            {
+                DevelopmentLogSystem.Append(record);
+            }
+            else
             {
                 _buffer.Store.Append(record);
             }
@@ -364,6 +369,13 @@ namespace GameConsole.UI
             _reportedPending = -1;
             UpdateLoadStatus();
             _details.RefreshLanguage();
+        }
+
+        internal void ResetLogView()
+        {
+            _selectedId = 0;
+            _viewport.ReleaseRows();
+            ResetRange();
         }
 
         public void Dispose()
@@ -598,7 +610,13 @@ namespace GameConsole.UI
                     _submit?.Invoke(InputText);
                 }
             }
-            else if (evt.keyCode == KeyCode.UpArrow || evt.keyCode == KeyCode.DownArrow || evt.keyCode == KeyCode.Escape || ToolShortcut.Matches(evt.keyCode, evt.ctrlKey, evt.altKey, evt.shiftKey, evt.commandKey))
+            else if (evt.keyCode == KeyCode.Escape)
+            {
+                // TextField 的默认取消动作会撤销编辑并释放焦点.
+                evt.PreventDefault();
+                evt.StopImmediatePropagation();
+            }
+            else if (evt.keyCode == KeyCode.UpArrow || evt.keyCode == KeyCode.DownArrow || ToolShortcut.Matches(evt.keyCode, evt.ctrlKey, evt.altKey, evt.shiftKey, evt.commandKey))
             {
                 evt.StopImmediatePropagation();
             }

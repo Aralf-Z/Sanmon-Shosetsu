@@ -238,6 +238,12 @@ namespace GameConsole.UI
             _extent.UnregisterCallback<GeometryChangedEvent>(ExtentGeometry);
             _host.RemoveFromHierarchy();
             _extent.RemoveFromHierarchy();
+            ReleaseRows();
+        }
+
+        internal void ReleaseRows()
+        {
+            _host.Clear();
             _pool.Clear();
             _activeRows.Clear();
             _boundRows.Clear();

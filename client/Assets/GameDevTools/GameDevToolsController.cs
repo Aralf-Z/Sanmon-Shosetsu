@@ -24,19 +24,62 @@ namespace GameConsole
 
         private ToolkitView _view;
 
-
         private bool _creatingView; // 防止创建重入, 失败后下次按键可以重试.
 
+        private bool _changingModule;
+
+        private bool _configSavePending;
+
         /// <summary> 工具输出归入 Dev, type 仅控制原有颜色, 不触发 UI 加载. </summary>
-        public void Print(string msg, LogType type = LogType.Log) => Console?.Output(msg, DevelopmentLogSystem.GetHexColor(type), ConsoleLogType.Dev);
+        public void Print(string msg, LogType type = LogType.Log)
+        {
+            if (Instance != this) return;
+
+            var color = DevelopmentLogSystem.GetHexColor(type);
+
+            DevelopmentLogSystem.Append(new ConsoleLogRecord(msg, msg, color, ConsoleLogType.Dev));
+        }
 
         /// <summary> 同时清空缓存与当前界面, 不触发 UI 加载. </summary>
-        public void ClearOutput() => Console?.ClearOutputPanel();
+        public void ClearOutput()
+        {
+            if (Instance != this) return;
+
+            if (_bridge == null)
+            {
+                DevelopmentLogSystem.Clear();
+            }
+            else
+            {
+                _bridge.Clear();
+            }
+        }
+
+        /// <summary> 独立停止日志采集并释放日志缓存. </summary>
+        public void ShutdownLogSystem()
+        {
+            if (Instance != this) return;
+
+            DevelopmentLogSystem.Shutdown();
+            _view?.ResetLogViews();
+        }
+
+        /// <summary> 注册宿主持有的字体. 名称用于显示和恢复选择, 同名同资源可重复登记. </summary>
+        public bool RegisterFont(string name, Font font)
+        {
+            if (Instance != this || _changingModule || font == null || string.IsNullOrWhiteSpace(name)) return false;
+
+            var key = Config.EXTERNAL_FONT_PREFIX + name.Trim();
+            if (!ToolkitFactory.TryRegisterFont(key, font)) return false;
+
+            _view?.RestoreRegisteredFont(key);
+            return true;
+        }
 
         /// <summary> 首次调用时创建界面, 禁用作弊工具时不能打开. </summary>
         public bool Open()
         {
-            if (!isActiveAndEnabled || Console == null) return false;
+            if (!isActiveAndEnabled || _changingModule || Console == null) return false;
 
             if (_view == null && !_creatingView)
             {
@@ -58,6 +101,52 @@ namespace GameConsole
             }
         }
 
+        /// <summary> 重建命令与宏服务, 保留日志并恢复窗口及日志采集. </summary>
+        public bool Restart()
+        {
+            if (Instance != this || _changingModule || _creatingView) return false;
+
+            var wasOpen = IsOpen;
+            var wasMinimized = _view?.IsMinimized == true;
+
+            _changingModule = true;
+            try
+            {
+                var settingsSaved = ReleaseModule(keepRegisteredFonts: true);
+                if (!InitializeModule(settingsSaved)) return false;
+            }
+            finally
+            {
+                _changingModule = false;
+            }
+
+            if (!wasOpen) return true;
+            if (!Open()) return false;
+
+            if (wasMinimized)
+            {
+                _view.MinimizeWindow();
+            }
+
+            return true;
+        }
+
+        /// <summary> 释放窗口、命令、宏和非日志缓存, 日志服务继续运行. </summary>
+        public void Shutdown()
+        {
+            if (Instance != this || _changingModule || _creatingView) return;
+
+            _changingModule = true;
+            try
+            {
+                ReleaseModule(keepRegisteredFonts: false);
+            }
+            finally
+            {
+                _changingModule = false;
+            }
+        }
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -68,43 +157,103 @@ namespace GameConsole
             }
 
             Instance = this;
+            _changingModule = true;
+            try
+            {
+                InitializeModule(reloadSettings: true);
+            }
+            finally
+            {
+                _changingModule = false;
+            }
+        }
+
+        private bool InitializeModule(bool reloadSettings)
+        {
             var stage = "日志采集初始化";
 
             try
             {
                 DevelopmentLogSystem.Initialize();
                 stage = "配置加载";
-                Config.Reload();
+                if (reloadSettings)
+                {
+                    Config.Reload();
+                }
+
                 _bridge = new ConsoleViewBridge();
                 stage = "命令系统初始化";
                 Console = new ConsoleController<LogType>(_bridge, _bridge, inputHistoryCapacity: Config.InputHistoryCapacity, commandQueryCacheCapacity: Config.CommandQueryCacheCapacity, alternativeCommandCount: Config.AlternativeCommandCount, shouldRecordFailedCommand: Config.RecordFailedCommand, outputWithTime: false, outputStackTraceOfCommandExecution: Config.OutputVmExceptionStack);
                 Config.BindInputHistory(Console.History);
                 stage = "宏服务初始化";
-                Macros = new MacroSystem(Console.commandSystem, this, message => Print(message));
+                var console = Console;
+
+                Macros = new MacroSystem(console.commandSystem, this, message => console.Output(message, DevelopmentLogSystem.GetHexColor(LogType.Log), ConsoleLogType.Dev));
+                return true;
             }
             catch (Exception exception)
             {
                 Debug.Log($"[GameDevTools] 启动失败, 阶段: {stage}.\n{exception}");
-                try
+                ReleaseModule(keepRegisteredFonts: true);
+                return false;
+            }
+        }
+
+        private bool ReleaseModule(bool keepRegisteredFonts)
+        {
+            var view = _view;
+            var macros = Macros;
+
+            _configSavePending |= _bridge != null;
+            _view = null;
+            Console = null;
+            Macros = null;
+            _bridge?.Dispose();
+            _bridge = null;
+
+            ReleaseService(view);
+            ReleaseService(macros);
+            try
+            {
+                if (!_configSavePending) return true;
+
+                _configSavePending = !Config.Save();
+                return !_configSavePending;
+            }
+            catch (Exception exception)
+            {
+                Debug.LogWarning($"[GameDevTools] 保存模块配置失败.\n{exception}");
+                return false;
+            }
+            finally
+            {
+                Config.UnbindInputHistory();
+                if (!_configSavePending)
                 {
-                    Macros?.Dispose();
-                }
-                catch (Exception cleanup)
-                {
-                    Debug.Log($"[GameDevTools] 启动清理失败.\n{cleanup}");
+                    Config.ReleaseSnapshot();
                 }
 
-                Macros = null;
-                Config.FlushInputHistory();
-                Config.UnbindInputHistory();
-                Console = null;
-                _bridge?.Detach();
+                ToolkitFactory.ReleaseViewResources(keepRegisteredFonts);
+            }
+        }
+
+        private static void ReleaseService(IDisposable service)
+        {
+            try
+            {
+                service?.Dispose();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogWarning($"[GameDevTools] 释放模块服务失败.\n{exception}");
             }
         }
 
         // 仅处理本工具的配置按键, 不占用其他窗口的快捷键.
         private void Update()
         {
+            if (_changingModule || Console == null) return;
+
             if (ToolShortcut.WasPressed())
             {
                 if (_view?.IsMinimized == true)
@@ -204,37 +353,14 @@ namespace GameConsole
         {
             if (Instance != this) return;
 
+            _changingModule = true;
             try
             {
-                try
-                {
-                    Close();
-                }
-                finally
-                {
-                    try
-                    {
-                        _view?.Dispose();
-                    }
-                    finally
-                    {
-                        Macros?.Dispose();
-                    }
-                }
+                ReleaseModule(keepRegisteredFonts: false);
             }
             finally
             {
-                _bridge?.Detach();
-                _view = null;
-                try
-                {
-                    Config.Save();
-                }
-                finally
-                {
-                    Config.UnbindInputHistory();
-                    Instance = null;
-                }
+                Instance = null;
             }
         }
     }

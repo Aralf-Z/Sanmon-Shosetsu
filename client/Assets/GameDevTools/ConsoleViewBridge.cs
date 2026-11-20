@@ -6,7 +6,7 @@ using RedSaw.CommandLineInterface;
 namespace GameConsole
 {
     /// <summary> 使用独立日志服务的缓存, 转发原控制器的渲染和输入调用. </summary>
-    internal sealed class ConsoleViewBridge : IConsoleRenderer, IConsoleInput, IStructuredConsoleRenderer
+    internal sealed class ConsoleViewBridge : IConsoleRenderer, IConsoleInput, IStructuredConsoleRenderer, IDisposable
     {
         public ConsoleLogStore Logs => DevelopmentLogSystem.Logs;
 
@@ -100,6 +100,8 @@ namespace GameConsole
 
         private Action<string> _onTextChanged;
 
+        private bool _disposed;
+
         public void Attach(ToolkitView view)
         {
             _view = view;
@@ -110,6 +112,14 @@ namespace GameConsole
 
         /// <summary> 初始化失败或销毁时断开所有 UI 转发. </summary>
         public void Detach() => _view = null;
+
+        public void Dispose()
+        {
+            _disposed = true;
+            Detach();
+            _onSubmit = null;
+            _onTextChanged = null;
+        }
 
         public void BindOnSubmit(Action<string> callback) => _onSubmit = callback;
 
@@ -153,6 +163,8 @@ namespace GameConsole
 
         public void Clear()
         {
+            if (_disposed) return;
+
             if (_view != null)
             {
                 _view.Renderer.Clear();
@@ -163,7 +175,13 @@ namespace GameConsole
             }
         }
 
-        public void OutputLog(ConsoleLogRecord record) => DevelopmentLogSystem.Append(record);
+        public void OutputLog(ConsoleLogRecord record)
+        {
+            if (!_disposed)
+            {
+                DevelopmentLogSystem.Append(record);
+            }
+        }
 
         // 关闭期间 InputField 的失焦事件不能执行命令.
         private void Submit(string text)

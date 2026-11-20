@@ -38,6 +38,12 @@ namespace GameConsole.UI
 
             return _topics[topic];
         }
+
+        internal static void ReleaseCache()
+        {
+            _topics = null;
+            _version = -1;
+        }
     }
 
     /// <summary> 帮助入口使用的稳定标识, 不依赖显示标题. </summary>
