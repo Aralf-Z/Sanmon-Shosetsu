@@ -1,10 +1,14 @@
 # 开发工具内联图标
 
-在各语言的 `ui.json` 中注册文件键, 在 UI 文案中引用注册项:
+在各语言的 `ui.json` 的 `entries` 数组中注册文件键, 在 UI 文案中引用注册项:
 
 ```json
-"icon.pin": "pin",
-"ui.ContextMenu.Show.2": "{icon.pin} 置顶"
+{
+  "entries": [
+    { "key": "icon.pin", "value": "pin" },
+    { "key": "ui.ContextMenu.Show.2", "value": "{icon.pin} 置顶" }
+  ]
+}
 ```
 
 `pin` 为资源文件名, 不是翻译文本. 文件键仅使用英文字母, 数字, 下划线和连字符, 命名时与文件名保持相同大小写.

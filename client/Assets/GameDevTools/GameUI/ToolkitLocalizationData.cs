@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json.Linq;
 using GameConsole.UI;
+using UnityEngine;
 
 namespace GameConsole
 {
-    /// <summary> JSON 校验和格式化只处理数据, 不访问 Unity 或执行命令. </summary>
+    /// <summary> 读取语言模块并校验词条, 引用及格式占位符. </summary>
     internal static class ToolkitLocalizationData
     {
         private static readonly Regex _placeholder = new(@"(?<!\{)\{([A-Za-z_][A-Za-z0-9_]*)\}(?!\})", RegexOptions.Compiled);
@@ -19,17 +19,30 @@ namespace GameConsole
         {
             try
             {
-                var result = new Dictionary<string, string>(StringComparer.Ordinal);
-                var root = JObject.Parse(json, new JsonLoadSettings { DuplicatePropertyNameHandling = DuplicatePropertyNameHandling.Error });
+                var module = JsonUtility.FromJson<LanguageModule>(json);
+                var fields = JsonShape.ReadFields(json);
+                var entries = JsonShape.Require(fields, "entries", '[');
+                var result = new Dictionary<string, string>(module.entries.Length, StringComparer.Ordinal);
 
-                foreach (var property in root.Properties())
+                foreach (var item in JsonShape.ReadItems(entries))
                 {
-                    if (string.IsNullOrWhiteSpace(property.Name) || property.Value.Type != JTokenType.String)
+                    var entryFields = JsonShape.ReadFields(item);
+
+                    JsonShape.Require(entryFields, "key", '"');
+                    JsonShape.Require(entryFields, "value", '"');
+                }
+
+                foreach (var entry in module.entries)
+                {
+                    if (string.IsNullOrWhiteSpace(entry.key))
                     {
-                        throw new FormatException("Localization keys must have string values: " + property.Name);
+                        throw new FormatException("Empty localization key.");
                     }
 
-                    result.Add(property.Name, property.Value.Value<string>());
+                    if (!result.TryAdd(entry.key, entry.value))
+                    {
+                        throw new FormatException("Duplicate localization key: " + entry.key);
+                    }
                 }
 
                 return result;
@@ -133,5 +146,19 @@ namespace GameConsole
             .Cast<Match>()
             .Select(match => match.Groups[1].Value)
             .ToHashSet(StringComparer.Ordinal);
+
+        [Serializable]
+        private sealed class LanguageModule
+        {
+            public LanguageEntry[] entries;
+        }
+
+        [Serializable]
+        private sealed class LanguageEntry
+        {
+            public string key;
+
+            public string value;
+        }
     }
 }

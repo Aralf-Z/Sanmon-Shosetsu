@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Newtonsoft.Json;
 using UnityEngine;
 using GameConsole.Extension;
 using RedSaw.CommandLineInterface;
@@ -79,7 +78,12 @@ namespace GameConsole
         }
 
         /// <summary> 为 Inspector 提供独立的设置副本. </summary>
-        public static GameDevToolsConfig Snapshot() => JsonConvert.DeserializeObject<GameDevToolsConfig>(JsonConvert.SerializeObject(Data));
+        public static GameDevToolsConfig Snapshot()
+        {
+            var json = JsonUtility.ToJson(Data);
+
+            return JsonUtility.FromJson<GameDevToolsConfig>(json);
+        }
 
         public static void Reset()
         {
@@ -206,11 +210,35 @@ namespace GameConsole
                 return null;
             }
 
-            var loaded = JsonConvert.DeserializeObject<PersistentData>(json) ?? throw new JsonSerializationException("数据根节点不能为空.");
-            var ids = new HashSet<string>(StringComparer.Ordinal);
+            var loaded = new PersistentData();
 
+            JsonUtility.FromJsonOverwrite(json, loaded);
+            var fields = JsonShape.ReadFields(json);
+
+            JsonShape.Require(fields, "settings", '{');
+            var macros = JsonShape.Require(fields, "macros", '[');
+
+            JsonShape.Require(fields, "inputHistory", '[');
             Normalize(loaded.settings);
-            loaded.macros.RemoveAll(entry => entry == null || string.IsNullOrEmpty(entry.id) || entry.source == null || !ids.Add(entry.id));
+            var macroItems = JsonShape.ReadItems(macros).ToArray();
+            var ids = new HashSet<string>(StringComparer.Ordinal);
+            var position = 0;
+
+            if (macroItems.Length != loaded.macros.Count)
+            {
+                throw new FormatException("宏数据与存档条目数不一致.");
+            }
+
+            loaded.macros.RemoveAll(entry =>
+            {
+                var item = macroItems[position++];
+
+                if (entry == null || string.IsNullOrEmpty(entry.id) || entry.source == null || !JsonShape.IsKind(item, '{')) return true;
+
+                var macroFields = JsonShape.ReadFields(item);
+
+                return !macroFields.TryGetValue("source", out var source) || source.Value == "null" || !ids.Add(entry.id);
+            });
             return loaded;
         }
 
@@ -250,7 +278,7 @@ namespace GameConsole
                 var temporary = path + ".tmp";
 
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
-                File.WriteAllText(temporary, JsonConvert.SerializeObject(snapshot, Formatting.Indented));
+                File.WriteAllText(temporary, JsonUtility.ToJson(snapshot, true));
                 if (File.Exists(path))
                 {
                     var backup = _backupUnreadableFile ? $"{path}.{Guid.NewGuid():N}.corrupt" : null;
@@ -280,18 +308,17 @@ namespace GameConsole
             }
         }
 
+        [Serializable]
         private sealed class PersistentData
         {
-            [JsonProperty(Required = Required.Always)]
             public GameDevToolsConfig settings = new();
 
-            [JsonProperty(Required = Required.Always)]
             public List<MacroEntry> macros = new();
 
-            [JsonProperty(Required = Required.Always)]
             public List<string> inputHistory = new();
         }
 
+        [Serializable]
         private sealed class MacroEntry
         {
             public string id;
