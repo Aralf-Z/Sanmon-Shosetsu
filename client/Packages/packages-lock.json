@@ -5,7 +5,7 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "abf02db30ce7f036e15d6662fa140ec73ba79e8c"
+      "hash": "0643efa783fc22e1d1338cc9030602fa756ba426"
     },
     "com.code-philosophy.luban": {
       "version": "file:../CustomPackages/LubanRuntime",
@@ -47,6 +47,17 @@
       "source": "git",
       "dependencies": {},
       "hash": "b70c9d347d08658303cd174e422f4d7e92e767a0"
+    },
+    "com.sanmon.gamedevtools": {
+      "version": "https://github.com/Aralf-Z/UnityGameDevTools.git#master",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.unity.modules.uielements": "1.0.0",
+        "com.unity.modules.jsonserialize": "1.0.0",
+        "com.unity.modules.imgui": "1.0.0"
+      },
+      "hash": "8d33879bd68c8df49bd5673e108f6d3cd6e666a2"
     },
     "com.tuyoogame.yooasset": {
       "version": "file:../CustomPackages/YooAsset",
