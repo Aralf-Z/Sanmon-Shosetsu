@@ -209,8 +209,8 @@ private void Method1(int param1, float param2, string str)
 
 ### 边界与禁用
 
-- 纯数值运算指直接对已有数值进行比较, 选择或算术运算, 不调用方法或其他外部逻辑. 三目运算符推荐只用于纯数值运算.
-- 如果有非纯数值运算三目运算符, 必须换行;
+- 纯数值运算指直接对已有数值进行比较, 选择或算术运算, 不调用方法或其他外部逻辑. 三目运算符推荐用于纯数值运算.
+- 非纯数值运算或者数值运算比较复杂, 三目运算符必须换行;
 - 三目运算符禁止嵌套
 
 ```csharp
@@ -219,6 +219,9 @@ var result = isSuccess ? value + 1 : value - 1;
 var dmg = isCritical 
         ? DealCrit() 
         : DealNormal();
+var heal = isAlly
+        ? (casterHealRatio + allyHealRatio + 1) * number * selfHealRatio
+        : number * selfHealRatio;
 
 ```
 
